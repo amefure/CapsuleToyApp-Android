@@ -46,18 +46,23 @@ private fun RootNavContent() {
         bottomBar = {
             NavigationBar {
                 AppScreen.Tab.entries.forEach { tab ->
+                    //　最新の画面ルート情報を取得(変化したら再コンポーズされる)
                     val currentDestination = navController
                         .currentBackStackEntryAsState().value?.destination
 
                     NavigationBarItem(
+                        // 選択状態は現在のタブ状態で識別
                         selected = currentDestination?.route == tab.route(),
                         onClick = {
                             navController.navigate(tab.route()) {
-                                // Backstack が無限に積み上がらないように制御
+                                // バックスタックが無限に積み上がらないように制御
                                 popUpTo(navController.graph.findStartDestination().id) {
+                                    // popUpToで消された画面の状態を保存しておく
                                     saveState = true
                                 }
+                                // 今いる画面と同じルートに遷移しようとしたら、新しいインスタンスを積まずに再利用する
                                 launchSingleTop = true
+                                // saveStateで保存された状態があればそれを復元する
                                 restoreState = true
                             }
                         },
