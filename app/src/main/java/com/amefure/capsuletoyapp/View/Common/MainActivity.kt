@@ -1,4 +1,4 @@
-package com.amefure.capsuletoyapp.View
+package com.amefure.capsuletoyapp.View.Common
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -21,8 +21,10 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.amefure.capsuletoyapp.Models.Enum.AppScreen
+import com.amefure.capsuletoyapp.View.MyData.MyDataScreen
 import com.amefure.capsuletoyapp.View.Series.SeriesDetailScreen
 import com.amefure.capsuletoyapp.View.Series.SeriesListScreen
+import com.amefure.capsuletoyapp.View.Settings.SettingsScreen
 import com.amefure.capsuletoyapp.ui.theme.CapsuleToyAppTheme
 
 /** アプリのエントリーポイント */
