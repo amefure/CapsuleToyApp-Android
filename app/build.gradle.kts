@@ -2,7 +2,10 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
+    /** ksp */
     id("com.google.devtools.ksp")
+    /** Hilt */
+    id("com.google.dagger.hilt.android")
 }
 
 android {
@@ -59,12 +62,15 @@ dependencies {
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
 
-    // Compose Navigation
+    /** Compose Navigation */
     implementation(libs.androidx.navigation.compose)
 
+    /** Room(ローカルデータベース) */
     implementation(libs.androidx.room.runtime)
     implementation(libs.androidx.room.ktx)
-    // KSP を使ったコンパイラ
     ksp(libs.androidx.room.compiler)
 
+    /** Hilt(DI；依存性注入 */
+    implementation(libs.hilt.android)
+    ksp(libs.hilt.compiler)
 }
