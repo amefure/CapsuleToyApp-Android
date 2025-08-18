@@ -73,4 +73,6 @@ dependencies {
     /** Hilt(DI；依存性注入 */
     implementation(libs.hilt.android)
     ksp(libs.hilt.compiler)
+    /** Hilt for Navigation Compose */
+    implementation(libs.androidx.hilt.navigation.compose)
 }
