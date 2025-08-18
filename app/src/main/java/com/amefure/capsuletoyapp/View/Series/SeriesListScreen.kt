@@ -11,30 +11,62 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.SideEffect
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavHostController
+import com.amefure.capsuletoyapp.Models.Domain.Entity.Series
+import com.amefure.capsuletoyapp.Models.Enum.AppScreen
+import com.amefure.capsuletoyapp.ViewModel.SeriesViewModel
 
 @Composable
 fun SeriesListScreen(
-    onItemClick: (Int) -> Unit,
-    onSettingsClick: () -> Unit
+    navController: NavHostController,
+    viewModel: SeriesViewModel = hiltViewModel(),
 ) {
-    Column(modifier = Modifier
-        .fillMaxSize()
-        .padding(16.dp)) {
-        Text("Home Screen", style = MaterialTheme.typography.titleLarge)
+
+    SideEffect {
+        viewModel.fetchAllSeries()
+    }
+
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(16.dp)
+    ) {
+        Text("Home Screen" + viewModel.series.value?.size, style = MaterialTheme.typography.titleLarge)
         Spacer(modifier = Modifier.height(16.dp))
         (1..5).forEach { id ->
             Text(
                 text = "Item $id",
                 modifier = Modifier
                     .fillMaxWidth()
-                    .clickable { onItemClick(id) }
+                    .clickable {
+                        viewModel.addSeries(
+                            name = (id + 10).toString(),
+                            count = 5,
+                            amount = 100,
+                            memo = "メモ",
+                            capsuleToys = emptyList(),
+                            locations = emptyList(),
+                            categories = emptyList(),
+                        )
+                        // navController.navigate(AppScreen.SeriesDetail.route(id))
+                    }
                     .padding(8.dp)
             )
         }
+
         Spacer(modifier = Modifier.height(16.dp))
-        Button(onClick = onSettingsClick) {
+
+
+        Button(
+            onClick = {
+                navController.navigate(AppScreen.Tab.Settings.route())
+            }
+        ) {
             Text("Go to Settings")
         }
     }

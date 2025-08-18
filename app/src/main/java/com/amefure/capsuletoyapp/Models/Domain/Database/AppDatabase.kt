@@ -4,11 +4,14 @@ import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
+import androidx.room.TypeConverters
 import com.amefure.capsuletoyapp.Models.Domain.Dao.SeriesDao
 import com.amefure.capsuletoyapp.Models.Domain.Entity.CapsuleToy
 import com.amefure.capsuletoyapp.Models.Domain.Entity.Category
 import com.amefure.capsuletoyapp.Models.Domain.Entity.Location
+import com.amefure.capsuletoyapp.Models.Domain.Entity.Relation.SeriesCategoryCrossRef
 import com.amefure.capsuletoyapp.Models.Domain.Entity.Series
+import com.amefure.capsuletoyapp.Models.Domain.RoomConverters
 
 @Database(entities =
     [
@@ -16,10 +19,12 @@ import com.amefure.capsuletoyapp.Models.Domain.Entity.Series
         CapsuleToy::class,
         Category::class,
         Location::class,
+        SeriesCategoryCrossRef::class,
     ],
     version = 1,
     exportSchema = false
 )
+@TypeConverters(RoomConverters::class)
 abstract class AppDatabase : RoomDatabase() {
     abstract fun seriesDao(): SeriesDao
 
@@ -27,8 +32,11 @@ abstract class AppDatabase : RoomDatabase() {
 
         private const val DATABASE_NAME = "app_database"
 
+        // @Volatile => メモリ保存
         @Volatile
         private var INSTANCE: AppDatabase? = null
+
+        /** データベース取得 */
         fun getDatabase(context: Context): AppDatabase {
             return INSTANCE ?: synchronized(this) {
                 val instance = Room.databaseBuilder(

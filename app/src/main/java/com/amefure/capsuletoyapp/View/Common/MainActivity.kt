@@ -26,8 +26,10 @@ import com.amefure.capsuletoyapp.View.Series.SeriesDetailScreen
 import com.amefure.capsuletoyapp.View.Series.SeriesListScreen
 import com.amefure.capsuletoyapp.View.Settings.SettingsScreen
 import com.amefure.capsuletoyapp.ui.theme.CapsuleToyAppTheme
+import dagger.hilt.android.AndroidEntryPoint
 
 /** アプリのエントリーポイント */
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -95,11 +97,7 @@ private fun TabBarBottomWithNav(
         composable(
             route = AppScreen.Tab.Series.route()
         ) {
-            SeriesListScreen(onItemClick = { id ->
-                navController.navigate("detail/$id")
-            }, onSettingsClick = {
-                navController.navigate(AppScreen.Tab.Settings.route())
-            })
+            SeriesListScreen(navController)
         }
 
         composable(
@@ -110,16 +108,12 @@ private fun TabBarBottomWithNav(
             SeriesDetailScreen(itemId = itemId, onBack = { navController.popBackStack() })
         }
 
-        composable(
-            route = AppScreen.Tab.MyData.route(),
-        ) {
-            MyDataScreen(onBack = { navController.popBackStack() })
+        composable(route = AppScreen.Tab.MyData.route()) {
+            MyDataScreen(navController)
         }
 
-        composable(
-            route = AppScreen.Tab.Settings.route()
-        ) {
-            SettingsScreen(onBack = { navController.popBackStack() })
+        composable(route = AppScreen.Tab.Settings.route()) {
+            SettingsScreen(navController)
         }
     }
 }

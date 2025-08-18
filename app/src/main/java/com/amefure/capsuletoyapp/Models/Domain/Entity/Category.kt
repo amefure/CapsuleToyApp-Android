@@ -14,14 +14,3 @@ data class Category(
     /** 色(16進数) */
     val colorHex: String
 )
-
-
-/// Series と Category の中間テーブル
-@Entity(
-    tableName = "series_category_cross_ref",
-    primaryKeys = ["seriesId", "categoryId"]
-)
-data class SeriesCategoryCrossRef(
-    val seriesId: Long,
-    val categoryId: Long
-)

@@ -8,9 +8,9 @@ import androidx.room.Transaction
 import com.amefure.capsuletoyapp.Models.Domain.Entity.CapsuleToy
 import com.amefure.capsuletoyapp.Models.Domain.Entity.Category
 import com.amefure.capsuletoyapp.Models.Domain.Entity.Location
+import com.amefure.capsuletoyapp.Models.Domain.Entity.Relation.SeriesCategoryCrossRef
+import com.amefure.capsuletoyapp.Models.Domain.Entity.Relation.SeriesWithRelations
 import com.amefure.capsuletoyapp.Models.Domain.Entity.Series
-import com.amefure.capsuletoyapp.Models.Domain.Entity.SeriesCategoryCrossRef
-import com.amefure.capsuletoyapp.Models.Domain.Entity.SeriesWithRelations
 
 
 @Dao
@@ -25,7 +25,7 @@ interface SeriesDao {
     @Insert
     suspend fun insertLocations(locations: List<Location>)
 
-    @Insert
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertCategories(categories: List<Category>): List<Long>
 
     @Insert
@@ -33,7 +33,7 @@ interface SeriesDao {
 
     @Transaction
     @Query("SELECT * FROM ${Series.TABLE_NAME} WHERE id = :seriesId")
-    suspend fun getSeriesWithRelations(seriesId: Long): SeriesWithRelations
+    suspend fun fetchSingleSeries(seriesId: Long): SeriesWithRelations
 
     @Transaction
     @Query("SELECT * FROM ${Series.TABLE_NAME}")
@@ -41,6 +41,9 @@ interface SeriesDao {
 
     @Query("DELETE FROM ${Series.TABLE_NAME}")
     fun deleteAll()
+
+    @Query("DELETE FROM ${Series.TABLE_NAME} WHERE id = :seriesId")
+    fun deleteSeries(seriesId: Long)
 
 }
 

@@ -37,28 +37,3 @@ data class Series(
         public const val TABLE_NAME = "series_table"
     }
 }
-
-/** リレーション関係に合る各データクラスと紐づいた統合クラス  */
-data class SeriesWithRelations(
-    @Embedded val series: Series,
-
-    @Relation(
-        parentColumn = "id",
-        entityColumn = "seriesId"
-    )
-    val capsuleToys: List<CapsuleToy>,
-
-    @Relation(
-        parentColumn = "id",
-        entityColumn = "id",
-        associateBy = Junction(SeriesCategoryCrossRef::class)
-    )
-    val categories: List<Category>,
-
-    @Relation(
-        parentColumn = "id",
-        entityColumn = "seriesId"
-    )
-    val locations: List<Location>
-)
-

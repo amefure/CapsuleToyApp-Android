@@ -1,0 +1,46 @@
+package com.amefure.capsuletoyapp.Models.Domain.Entity.Relation
+
+import androidx.room.Embedded
+import androidx.room.Junction
+import androidx.room.Relation
+import com.amefure.capsuletoyapp.Models.Domain.Entity.CapsuleToy
+import com.amefure.capsuletoyapp.Models.Domain.Entity.Category
+import com.amefure.capsuletoyapp.Models.Domain.Entity.Location
+import com.amefure.capsuletoyapp.Models.Domain.Entity.Series
+
+/**
+ * リレーション関係に合る各データクラスと紐づいた統合クラス
+ * 一対多・・・[capsuleToys]、[locations]
+ * 多対多・・・[categories]
+ */
+data class SeriesWithRelations(
+    @Embedded val series: Series,
+
+    /***/
+    @Relation(
+        parentColumn = "id",
+        entityColumn = "seriesId"
+    )
+    var capsuleToys: List<CapsuleToy>,
+
+    @Relation(
+        // オリジナルSeriesクラスのID
+        parentColumn = "id",
+        // オリジナルCategoryクラスのID
+        entityColumn = "id",
+        associateBy = Junction(
+            // 多対多にするためにIDを管理するクラス
+            value = SeriesCategoryCrossRef::class,
+            parentColumn = "seriesId",
+            entityColumn = "categoryId"
+        )
+    )
+    var categories: List<Category>,
+
+    @Relation(
+        parentColumn = "id",
+        entityColumn = "seriesId"
+    )
+    var locations: List<Location>
+)
+
