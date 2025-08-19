@@ -23,6 +23,7 @@ import androidx.navigation.navArgument
 import com.amefure.capsuletoyapp.Models.Enum.AppScreen
 import com.amefure.capsuletoyapp.View.MyData.MyDataScreen
 import com.amefure.capsuletoyapp.View.Series.SeriesDetailScreen
+import com.amefure.capsuletoyapp.View.Series.SeriesInputScreen
 import com.amefure.capsuletoyapp.View.Series.SeriesListScreen
 import com.amefure.capsuletoyapp.View.Settings.SettingsScreen
 import com.amefure.capsuletoyapp.ui.theme.CapsuleToyAppTheme
@@ -105,7 +106,15 @@ private fun TabBarBottomWithNav(
             arguments = listOf(navArgument(AppScreen.SeriesDetail.ARG_ITEM_ID) { type = NavType.IntType })
         ) { backStackEntry ->
             val itemId = backStackEntry.arguments?.getInt(AppScreen.SeriesDetail.ARG_ITEM_ID) ?: 0
-            SeriesDetailScreen(itemId = itemId, onBack = { navController.popBackStack() })
+            SeriesDetailScreen(itemId, navController)
+        }
+
+        composable(
+            route = AppScreen.SeriesInput.route(),
+            arguments = listOf(navArgument(AppScreen.SeriesDetail.ARG_ITEM_ID) { type = NavType.IntType })
+        ) { backStackEntry ->
+            val itemId = backStackEntry.arguments?.getInt(AppScreen.SeriesDetail.ARG_ITEM_ID) ?: 0
+            SeriesInputScreen(itemId, navController)
         }
 
         composable(route = AppScreen.Tab.MyData.route()) {

@@ -16,13 +16,14 @@ import com.amefure.capsuletoyapp.Models.Domain.Entity.Series
 data class SeriesWithRelations(
     @Embedded val series: Series,
 
-    /***/
+    /** カプセルトイ */
     @Relation(
         parentColumn = "id",
         entityColumn = "seriesId"
     )
     var capsuleToys: List<CapsuleToy>,
 
+    /** カテゴリ */
     @Relation(
         // オリジナルSeriesクラスのID
         parentColumn = "id",
@@ -37,6 +38,7 @@ data class SeriesWithRelations(
     )
     var categories: List<Category>,
 
+    /** ロケーション */
     @Relation(
         parentColumn = "id",
         entityColumn = "seriesId"

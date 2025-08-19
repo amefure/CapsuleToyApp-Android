@@ -11,9 +11,13 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavHostController
 
 @Composable
-fun SeriesDetailScreen(itemId: Int, onBack: () -> Unit) {
+fun SeriesDetailScreen(
+    itemId: Int,
+    navController: NavHostController
+) {
     Column(modifier = Modifier
         .fillMaxSize()
         .padding(16.dp)) {
@@ -21,7 +25,11 @@ fun SeriesDetailScreen(itemId: Int, onBack: () -> Unit) {
         Spacer(modifier = Modifier.height(8.dp))
         Text("Item ID: $itemId", style = MaterialTheme.typography.bodyLarge)
         Spacer(modifier = Modifier.height(16.dp))
-        Button(onClick = onBack) {
+        Button(
+            onClick = {
+                navController.popBackStack()
+            }
+        ) {
             Text("Back")
         }
     }

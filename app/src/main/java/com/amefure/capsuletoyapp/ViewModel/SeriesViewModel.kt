@@ -1,8 +1,8 @@
 package com.amefure.capsuletoyapp.ViewModel
 
 import android.util.Log
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
+import androidx.compose.runtime.State
+import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.amefure.capsuletoyapp.Models.Domain.Entity.CapsuleToy
@@ -14,27 +14,36 @@ import com.amefure.capsuletoyapp.Repository.SeriesRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.setValue
 
 @HiltViewModel
 class SeriesViewModel @Inject constructor(
     private val repository: SeriesRepository
 ) : ViewModel() {
 
-    private val _series = MutableLiveData<List<SeriesWithRelations>>()
-    val series: LiveData<List<SeriesWithRelations>?> = _series
+    /**
+     *  ComposeなのでStateFlowではなくStateで保持する
+     *  これによりView側で変換を検知したタイミングでRecompositionされる
+     *  setのみprivateとする
+     *  by(プロパティデリゲート)を使用することで.valueを省略
+     */
+    public var series: List<SeriesWithRelations> by mutableStateOf(emptyList())
+        private set
 
     fun fetchSingleSeries(seriesId: Long) {
         viewModelScope.launch {
             val data = repository.fetchSingleSeries(seriesId)
-            _series.postValue(listOf(data))
+            series = listOf(data)
         }
+
     }
 
     fun fetchAllSeries() {
         viewModelScope.launch {
             Log.d("VM", "読み込み")
             val data = repository.fetchAllSeries()
-            _series.postValue(data)
+            series = data
         }
     }
 
@@ -65,3 +74,5 @@ class SeriesViewModel @Inject constructor(
         }
     }
 }
+
+

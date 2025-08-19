@@ -2,6 +2,7 @@ package com.amefure.capsuletoyapp.View.Series
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -12,12 +13,10 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.SideEffect
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
-import com.amefure.capsuletoyapp.Models.Domain.Entity.Series
 import com.amefure.capsuletoyapp.Models.Enum.AppScreen
 import com.amefure.capsuletoyapp.ViewModel.SeriesViewModel
 
@@ -26,8 +25,8 @@ fun SeriesListScreen(
     navController: NavHostController,
     viewModel: SeriesViewModel = hiltViewModel(),
 ) {
-
-    SideEffect {
+    // Compositionされたタイミングで実行する
+    LaunchedEffect(Unit) {
         viewModel.fetchAllSeries()
     }
 
@@ -36,31 +35,25 @@ fun SeriesListScreen(
             .fillMaxSize()
             .padding(16.dp)
     ) {
-        Text("Home Screen" + viewModel.series.value?.size, style = MaterialTheme.typography.titleLarge)
+
+        Text("Home Screen" + viewModel.series.size, style = MaterialTheme.typography.titleLarge)
         Spacer(modifier = Modifier.height(16.dp))
-        (1..5).forEach { id ->
-            Text(
-                text = "Item $id",
+        viewModel.series.forEach { series ->
+            Row(
                 modifier = Modifier
                     .fillMaxWidth()
                     .clickable {
-                        viewModel.addSeries(
-                            name = (id + 10).toString(),
-                            count = 5,
-                            amount = 100,
-                            memo = "メモ",
-                            capsuleToys = emptyList(),
-                            locations = emptyList(),
-                            categories = emptyList(),
-                        )
-                        // navController.navigate(AppScreen.SeriesDetail.route(id))
+                        navController.navigate(AppScreen.SeriesInput.inputRoute())
                     }
                     .padding(8.dp)
-            )
+            ) {
+                Text(
+                    text = series.series.name,
+                )
+            }
         }
 
         Spacer(modifier = Modifier.height(16.dp))
-
 
         Button(
             onClick = {
