@@ -19,7 +19,7 @@ data class Series(
     val count: Int,
 
     /** 金額 */
-    val amount: Int,
+    val amount: Int?,
 
     /** メモ */
     val memo: String,

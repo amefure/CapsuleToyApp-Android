@@ -9,11 +9,17 @@ import androidx.compose.runtime.Composable
 private val DarkColorScheme = darkColorScheme(
     primary = ExRed,
     onPrimary = ExWhite,
+    primaryContainer = ExBaseDark,
+    background = ExFoundationDark,
+    onBackground = ExTextDark
 )
 
 private val LightColorScheme = lightColorScheme(
     primary = ExRed,
     onPrimary = ExWhite,
+    primaryContainer = ExBase,
+    background = ExFoundation,
+    onBackground = ExText
 )
 
 @Composable

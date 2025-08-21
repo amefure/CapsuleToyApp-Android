@@ -1,7 +1,8 @@
-package com.amefure.capsuletoyapp.View.Components
+package com.amefure.capsuletoyapp.View.Components.Layout
 
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
@@ -10,7 +11,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.layout.ModifierLocalBeyondBoundsLayout
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import com.amefure.capsuletoyapp.View.Components.UIParts.CustomText
+import com.amefure.capsuletoyapp.View.Components.UIParts.ThemaIconButton
 
 
 @Composable
@@ -24,10 +29,10 @@ fun HeaderView(
     rightContentDescription: String? = null,
 ) {
     Row(
-        verticalAlignment = Alignment.CenterVertically
+        verticalAlignment = Alignment.CenterVertically,
     ) {
         if (leftImageVector != null) {
-            ThemaIconButton (
+            ThemaIconButton(
                 onClick = leftOnClick,
                 imageVector = leftImageVector,
                 contentDescription = leftContentDescription,
@@ -45,7 +50,10 @@ fun HeaderView(
         )
 
         if (title != null) {
-            Text(title)
+            CustomText(
+                text = title,
+                fontWeight = FontWeight.Bold,
+            )
         }
 
         Spacer(
@@ -53,7 +61,7 @@ fun HeaderView(
                 .weight(1f)
         )
         if (rightImageVector != null) {
-            ThemaIconButton (
+            ThemaIconButton(
                 onClick = rightOnClick,
                 imageVector = rightImageVector,
                 contentDescription = rightContentDescription,

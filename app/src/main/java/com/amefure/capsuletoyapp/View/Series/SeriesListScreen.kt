@@ -1,8 +1,8 @@
 package com.amefure.capsuletoyapp.View.Series
 
-import android.graphics.drawable.Icon
-import android.widget.ScrollView
-import android.widget.Scroller
+
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -11,23 +11,29 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
-import androidx.compose.material.icons.filled.Check
-import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.amefure.capsuletoyapp.Models.Enum.AppScreen
-import com.amefure.capsuletoyapp.View.Components.HeaderView
+import com.amefure.capsuletoyapp.View.Components.Layout.HeaderView
 import com.amefure.capsuletoyapp.ViewModel.SeriesViewModel
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontWeight
+import com.amefure.capsuletoyapp.R
+import com.amefure.capsuletoyapp.View.Components.UIParts.CustomText
+import com.amefure.capsuletoyapp.View.Components.UIParts.DataEmptyView
 
 @Composable
 fun SeriesListScreen(
@@ -55,37 +61,43 @@ fun SeriesListScreen(
             rightContentDescription = "新規シリーズ画面へ遷移"
         )
 
-        Spacer(modifier = Modifier.height(16.dp))
-
-        LazyColumn (
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(8.dp)
-        ) {
-            items(items = viewModel.series) { series ->
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .clickable {
-                            navController.navigate(AppScreen.SeriesInput.updateRoute(series.series.id.toInt()))
-                        }
-                        .padding(8.dp)
-                ) {
-                    Text(
-                        text = series.series.name,
-                    )
+        if (viewModel.series.isEmpty()) {
+            DataEmptyView()
+        } else {
+            LazyColumn (
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(8.dp)
+            ) {
+                items(items = viewModel.series) { series ->
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .clickable {
+                                navController.navigate(AppScreen.SeriesInput.updateRoute(series.series.id.toInt()))
+                            }
+                            .background(
+                                color = MaterialTheme.colorScheme.primaryContainer,
+                                shape = RoundedCornerShape(12.dp)
+                            )
+                            .padding(8.dp)
+                    ) {
+                        Image(
+                            painter = painterResource(id = R.drawable.no_image),
+                            contentDescription = "サンプル画像",
+                            modifier = Modifier.size(80.dp),
+                            contentScale = ContentScale.Fit
+                        )
+                        CustomText(
+                            text = series.series.name,
+                            fontWeight = FontWeight.Bold,
+                        )
+                    }
                 }
             }
         }
 
         Spacer(modifier = Modifier.height(16.dp))
 
-        Button(
-            onClick = {
-                navController.navigate(AppScreen.Tab.Settings.route())
-            }
-        ) {
-            Text("Go to Settings")
-        }
     }
 }

@@ -50,7 +50,7 @@ class SeriesViewModel @Inject constructor(
     fun addSeries(
         name: String,
         count: Int,
-        amount: Int,
+        amount: Int?,
         memo: String,
         capsuleToys: List<CapsuleToy> = emptyList(),
         locations: List<Location> = emptyList(),
