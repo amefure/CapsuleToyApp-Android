@@ -1,10 +1,12 @@
 package com.amefure.capsuletoyapp.View.Series
 
 import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -30,6 +32,7 @@ import com.amefure.capsuletoyapp.ViewModel.SeriesViewModel
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
@@ -49,23 +52,50 @@ fun SeriesInputScreen(
     var count: Int? by rememberSaveable { mutableStateOf(null) }
     var amount: Int? by rememberSaveable { mutableStateOf(null) }
     var memo by rememberSaveable { mutableStateOf("") }
+    var showSuccessDialog by remember { mutableStateOf(false) }
+    var showValidationDialog by remember { mutableStateOf(false) }
 
     Column(
         Modifier
-            .padding(20.dp)
+            .padding(16.dp)
     ) {
-        var showDialog by remember { mutableStateOf(false) }
 
-        if (showDialog) {
+
+        if (showSuccessDialog) {
             AlertDialog(
-                onDismissRequest = { showDialog = false },
+                onDismissRequest = {
+                    showSuccessDialog = false
+                    navController.popBackStack()
+                },
                 confirmButton = {
-                    TextButton(onClick = { showDialog = false }) {
-                        Text("OK")
+                    TextButton(
+                        onClick = {
+                            showSuccessDialog = false
+                            navController.popBackStack()
+                        }
+                    ) {
+                        CustomText("OK")
                     }
                 },
-                title = { Text("通知") },
-                text = { Text("保存が完了しました。") }
+                title = { CustomText("お知らせ") },
+                text = { CustomText("保存が完了しました。") }
+            )
+        }
+
+        if (showValidationDialog) {
+            AlertDialog(
+                onDismissRequest = { showValidationDialog = false },
+                confirmButton = {
+                    TextButton(
+                        onClick = {
+                            showValidationDialog = false
+                        }
+                    ) {
+                        CustomText("OK")
+                    }
+                },
+                title = { CustomText("お知らせ") },
+                text = { CustomText("名前と種類は必須入力です。") }
             )
         }
 
@@ -76,6 +106,10 @@ fun SeriesInputScreen(
             leftContentDescription = "画面を戻る",
             rightOnClick =
                 {
+                    if (name.isEmpty() || count == null|| count == 0) {
+                        showValidationDialog = true
+                        return@HeaderView
+                    }
                     viewModel.addSeries(
                         name = name,
                         count = count ?: 0,
@@ -85,8 +119,7 @@ fun SeriesInputScreen(
                         locations = emptyList(),
                         categories = emptyList(),
                     )
-                    showDialog = true
-                    navController.popBackStack()
+                    showSuccessDialog = true
                 },
             rightImageVector = Icons.Filled.Check,
             rightContentDescription = "シリーズ登録",
@@ -222,7 +255,8 @@ fun SeriesInputScreen(
         )
 
         CustomText(
-            text = "※ ガチャガチャのアイテムはシリーズを登録した後に、一覧からそのシリーズをタップすることで追加できます。"
+            text = "※ ガチャガチャのアイテムはシリーズを登録した後に、一覧からそのシリーズをタップすることで追加できます。",
+            maxLines = 3
         )
     }
 }

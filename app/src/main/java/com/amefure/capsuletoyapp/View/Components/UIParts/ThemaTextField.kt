@@ -2,6 +2,7 @@ package com.amefure.capsuletoyapp.View.Components.UIParts
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.TextField
@@ -14,6 +15,9 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.amefure.capsuletoyapp.ui.theme.ExText
 
+/**
+ * 背景が白色角丸影ありのテキスト入力ボックス
+ */
 @Composable
 fun ThemaTextFiled(
     value: String,
@@ -57,12 +61,13 @@ fun ThemaTextFiled(
         shape = RoundedCornerShape(8.dp),
         modifier = Modifier
             .fillMaxWidth()
+            .height(55.dp)
             .shadow(
                 elevation = 8.dp,
-                shape = RoundedCornerShape(16.dp),
+                shape = RoundedCornerShape(8.dp),
                 clip = false
             )
-            .background(Color.White, RoundedCornerShape(16.dp)),
+            .background(Color.White, RoundedCornerShape(8.dp)),
     )
 
 }

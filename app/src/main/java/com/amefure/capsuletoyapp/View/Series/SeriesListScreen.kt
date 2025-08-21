@@ -18,7 +18,6 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
@@ -74,7 +73,7 @@ fun SeriesListScreen(
                         modifier = Modifier
                             .fillMaxWidth()
                             .clickable {
-                                navController.navigate(AppScreen.SeriesInput.updateRoute(series.series.id.toInt()))
+                                navController.navigate(AppScreen.SeriesDetail.route(series.series.id.toInt()))
                             }
                             .background(
                                 color = MaterialTheme.colorScheme.primaryContainer,
