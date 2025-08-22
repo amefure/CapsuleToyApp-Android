@@ -1,8 +1,8 @@
 package com.amefure.capsuletoyapp.ViewModel
 
-import android.util.Log
-import androidx.compose.runtime.State
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.amefure.capsuletoyapp.Models.Domain.Entity.CapsuleToy
@@ -12,15 +12,15 @@ import com.amefure.capsuletoyapp.Models.Domain.Entity.Relation.SeriesWithRelatio
 import com.amefure.capsuletoyapp.Models.Domain.Entity.Series
 import com.amefure.capsuletoyapp.Repository.SeriesRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import javax.inject.Inject
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.setValue
 
 @HiltViewModel
-class SeriesViewModel @Inject constructor(
+class SeriesInputScreenViewModel @Inject constructor(
     private val repository: SeriesRepository
 ) : ViewModel() {
+
 
     /**
      *  ComposeなのでStateFlowではなくStateで保持する
@@ -28,26 +28,17 @@ class SeriesViewModel @Inject constructor(
      *  setのみprivateとする
      *  by(プロパティデリゲート)を使用することで.valueを省略
      */
-    public var series: List<SeriesWithRelations> by mutableStateOf(emptyList())
+    public var series: SeriesWithRelations? by mutableStateOf(null)
         private set
 
-    fun fetchSingleSeries(seriesId: Long) {
-        viewModelScope.launch {
+    public fun fetchSingleSeries(seriesId: Long) {
+        viewModelScope.launch(Dispatchers.IO) {
             val data = repository.fetchSingleSeries(seriesId)
-            series = listOf(data)
-        }
-
-    }
-
-    fun fetchAllSeries() {
-        viewModelScope.launch {
-            Log.d("VM", "読み込み")
-            val data = repository.fetchAllSeries()
             series = data
         }
     }
 
-    fun addSeries(
+    public fun addSeries(
         name: String,
         count: Int,
         amount: Int?,
@@ -63,14 +54,29 @@ class SeriesViewModel @Inject constructor(
             memo = memo,
             imagePath = null
         )
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             repository.insertSeries(series, capsuleToys, locations, categories)
         }
     }
 
-    fun deleteSeries(series: Series) {
-        viewModelScope.launch {
-            repository.deleteSeries(series)
+    public fun updateSeries(
+        name: String,
+        count: Int,
+        amount: Int?,
+        memo: String,
+        capsuleToys: List<CapsuleToy> = emptyList(),
+        locations: List<Location> = emptyList(),
+        categories: List<Category> = emptyList()
+    ) {
+        val series = Series(
+            name = name,
+            count = count,
+            amount = amount,
+            memo = memo,
+            imagePath = null
+        )
+        viewModelScope.launch(Dispatchers.IO) {
+            repository.insertSeries(series, capsuleToys, locations, categories)
         }
     }
 }

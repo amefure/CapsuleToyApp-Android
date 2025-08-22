@@ -32,7 +32,7 @@ sealed class AppScreen {
         const val ARG_ITEM_ID = "itemId"
 
         override fun route() = "detail/{$ARG_ITEM_ID}"
-        fun route(itemId: Int) = "detail/$itemId"
+        fun route(seriesId: Long) = "detail/$seriesId"
         override val title = "詳細画面"
     }
 
@@ -41,7 +41,7 @@ sealed class AppScreen {
 
         override fun route() = "input/{$ARG_ITEM_ID}"
         fun inputRoute() = "input/0"
-        fun updateRoute(itemId: Int) = "input/$itemId"
+        fun updateRoute(seriesId: Long) = "input/$seriesId"
         override val title = "登録・更新画面"
     }
 }

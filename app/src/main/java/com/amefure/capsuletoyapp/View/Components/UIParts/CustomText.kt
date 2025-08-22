@@ -1,8 +1,10 @@
 package com.amefure.capsuletoyapp.View.Components.UIParts
 
+import android.annotation.SuppressLint
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -23,7 +25,9 @@ fun CustomText(
     textSize: TextSize = TextSize.M,
     color: Color = MaterialTheme.colorScheme.onBackground,
     fontWeight: FontWeight = FontWeight.Normal,
-    maxLines: Int = 1
+    maxLines: Int = 1,
+    @SuppressLint("ModifierParameter")
+    modifier: Modifier = Modifier
 ) {
     val fontSize = when (textSize) {
         TextSize.SS -> 12.sp
@@ -43,6 +47,7 @@ fun CustomText(
             fontSize = fontSize,
             color = color,
             fontWeight = fontWeight
-        )
+        ),
+        modifier = modifier
     )
 }

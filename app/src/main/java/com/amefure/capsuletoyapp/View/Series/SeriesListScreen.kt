@@ -27,7 +27,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.amefure.capsuletoyapp.Models.Enum.AppScreen
 import com.amefure.capsuletoyapp.View.Components.Layout.HeaderView
-import com.amefure.capsuletoyapp.ViewModel.SeriesViewModel
+import com.amefure.capsuletoyapp.ViewModel.SeriesListScreenViewModel
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import com.amefure.capsuletoyapp.R
@@ -37,7 +37,7 @@ import com.amefure.capsuletoyapp.View.Components.UIParts.DataEmptyView
 @Composable
 fun SeriesListScreen(
     navController: NavHostController,
-    viewModel: SeriesViewModel = hiltViewModel(),
+    viewModel: SeriesListScreenViewModel = hiltViewModel(),
 ) {
     // Compositionされたタイミングで実行する
     LaunchedEffect(Unit) {
@@ -73,7 +73,7 @@ fun SeriesListScreen(
                         modifier = Modifier
                             .fillMaxWidth()
                             .clickable {
-                                navController.navigate(AppScreen.SeriesDetail.route(series.series.id.toInt()))
+                                navController.navigate(AppScreen.SeriesDetail.route(series.series.id))
                             }
                             .background(
                                 color = MaterialTheme.colorScheme.primaryContainer,

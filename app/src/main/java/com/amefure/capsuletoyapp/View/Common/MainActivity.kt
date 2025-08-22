@@ -103,18 +103,18 @@ private fun TabBarBottomWithNav(
 
         composable(
             route = AppScreen.SeriesDetail.route(),
-            arguments = listOf(navArgument(AppScreen.SeriesDetail.ARG_ITEM_ID) { type = NavType.IntType })
+            arguments = listOf(navArgument(AppScreen.SeriesDetail.ARG_ITEM_ID) { type = NavType.LongType })
         ) { backStackEntry ->
-            val itemId = backStackEntry.arguments?.getInt(AppScreen.SeriesDetail.ARG_ITEM_ID) ?: 0
-            SeriesDetailScreen(itemId, navController)
+            val seriesId: Long = backStackEntry.arguments?.getLong(AppScreen.SeriesDetail.ARG_ITEM_ID) ?: 0
+            SeriesDetailScreen(seriesId, navController)
         }
 
         composable(
             route = AppScreen.SeriesInput.route(),
-            arguments = listOf(navArgument(AppScreen.SeriesDetail.ARG_ITEM_ID) { type = NavType.IntType })
+            arguments = listOf(navArgument(AppScreen.SeriesDetail.ARG_ITEM_ID) { type = NavType.LongType })
         ) { backStackEntry ->
-            val itemId: Int = backStackEntry.arguments?.getInt(AppScreen.SeriesDetail.ARG_ITEM_ID) ?: 0
-            SeriesInputScreen(itemId, navController)
+            val seriesId: Long = backStackEntry.arguments?.getLong(AppScreen.SeriesDetail.ARG_ITEM_ID) ?: 0
+            SeriesInputScreen(seriesId, navController)
         }
 
         composable(route = AppScreen.Tab.MyData.route()) {
