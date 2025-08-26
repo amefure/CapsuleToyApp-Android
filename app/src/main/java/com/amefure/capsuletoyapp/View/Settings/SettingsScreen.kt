@@ -17,9 +17,11 @@ import androidx.navigation.NavHostController
 fun SettingsScreen(
     navController: NavHostController,
 ) {
-    Column(modifier = Modifier
+    Column(
+        modifier = Modifier
         .fillMaxSize()
-        .padding(16.dp)) {
+        .padding(16.dp)
+    ) {
         Text("Settings Screen", style = MaterialTheme.typography.titleLarge)
         Spacer(modifier = Modifier.height(16.dp))
         Button(

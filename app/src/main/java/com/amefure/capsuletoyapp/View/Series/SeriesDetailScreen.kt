@@ -17,6 +17,7 @@ import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
@@ -27,6 +28,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -34,11 +36,12 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.amefure.capsuletoyapp.Models.Enum.AppScreen
 import com.amefure.capsuletoyapp.View.Components.Layout.HeaderView
-import com.amefure.capsuletoyapp.View.Components.UIParts.CustomText
-import com.amefure.capsuletoyapp.View.Components.UIParts.TextSize
+import com.amefure.capsuletoyapp.View.Extension.CustomText
+import com.amefure.capsuletoyapp.View.Extension.TextSize
 import com.amefure.capsuletoyapp.View.Components.UIParts.WhiteBackStackView
 import com.amefure.capsuletoyapp.ViewModel.SeriesDetailScreenViewModel
 import com.amefure.capsuletoyapp.ui.theme.ExGold
+import com.amefure.capsuletoyapp.ui.theme.ExWhite
 
 @Composable
 fun SeriesDetailScreen(
@@ -56,9 +59,10 @@ fun SeriesDetailScreen(
     var showConfirmDialog by rememberSaveable { mutableStateOf(false) }
 
     Column(
+        horizontalAlignment = Alignment.CenterHorizontally,
         modifier = Modifier
             .fillMaxSize()
-            .padding(16.dp)
+            .padding(16.dp),
     ) {
 
         if (showSuccessDialog) {
@@ -140,10 +144,23 @@ fun SeriesDetailScreen(
         Button (
             onClick = {
                 showConfirmDialog = true
-            }
+            },
+            colors = ButtonDefaults.buttonColors(
+                containerColor = ExWhite
+            ),
+            shape = RoundedCornerShape(8.dp),
+            border = BorderStroke(
+                2.dp,
+                color = MaterialTheme.colorScheme.primary
+            ),
+            modifier = Modifier
+                .width(200.dp)
+                .height(50.dp)
         ) {
             CustomText(
-                "削除する"
+                "削除する",
+                color = MaterialTheme.colorScheme.primary,
+                fontWeight = FontWeight.Bold
             )
         }
     }

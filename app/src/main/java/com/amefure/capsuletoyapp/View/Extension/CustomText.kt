@@ -1,4 +1,4 @@
-package com.amefure.capsuletoyapp.View.Components.UIParts
+package com.amefure.capsuletoyapp.View.Extension
 
 import android.annotation.SuppressLint
 import androidx.compose.material3.MaterialTheme

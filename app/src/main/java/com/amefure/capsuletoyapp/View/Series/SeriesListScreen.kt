@@ -31,7 +31,7 @@ import com.amefure.capsuletoyapp.ViewModel.SeriesListScreenViewModel
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import com.amefure.capsuletoyapp.R
-import com.amefure.capsuletoyapp.View.Components.UIParts.CustomText
+import com.amefure.capsuletoyapp.View.Extension.CustomText
 import com.amefure.capsuletoyapp.View.Components.UIParts.DataEmptyView
 
 @Composable
