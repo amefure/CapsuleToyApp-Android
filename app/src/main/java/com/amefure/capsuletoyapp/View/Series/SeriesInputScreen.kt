@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
@@ -31,9 +32,11 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import com.amefure.capsuletoyapp.View.Components.Layout.HeaderView
-import com.amefure.capsuletoyapp.View.Components.UIParts.CustomText
-import com.amefure.capsuletoyapp.View.Components.UIParts.TextSize
+import com.amefure.capsuletoyapp.View.Extension.CustomText
+import com.amefure.capsuletoyapp.View.Extension.TextSize
 import com.amefure.capsuletoyapp.View.Components.UIParts.ThemaTextFiled
+import com.amefure.capsuletoyapp.View.Extension.AlertType
+import com.amefure.capsuletoyapp.View.Extension.CustomAlertDialog
 import com.amefure.capsuletoyapp.ViewModel.SeriesInputScreenViewModel
 import com.amefure.capsuletoyapp.ui.theme.ExGold
 
@@ -46,67 +49,35 @@ fun SeriesInputScreen(
 
     // Compositionされたタイミングで実行する
     LaunchedEffect(Unit) {
-        // IDが0Lなら取得しない
-        if (seriesId != 0L) {
-            viewModel.fetchSingleSeries(seriesId)
-        }
+        viewModel.fetchSingleSeries(seriesId)
     }
-
-    var name by rememberSaveable { mutableStateOf("") }
-    var count: Int? by rememberSaveable { mutableStateOf(null) }
-    var amount: Int? by rememberSaveable { mutableStateOf(null) }
-    var memo by rememberSaveable { mutableStateOf("") }
-    var showSuccessDialog by rememberSaveable { mutableStateOf(false) }
-    var showValidationDialog by rememberSaveable { mutableStateOf(false) }
 
     Column(
         Modifier
             .padding(16.dp)
     ) {
 
-        if (showSuccessDialog) {
-            AlertDialog(
-                onDismissRequest = {
-                    showSuccessDialog = false
-                    navController.popBackStack()
-                },
-                confirmButton = {
-                    TextButton(
-                        onClick = {
-                            showSuccessDialog = false
-                            navController.popBackStack()
-                        }
-                    ) {
-                        CustomText("OK")
-                    }
-                },
-                title = { CustomText("成功") },
-                text = {
-                    if (seriesId == 0L) {
-                        CustomText("「${name}」を登録しました。")
-                    } else {
-                        CustomText("更新しました。")
-                    }
+        CustomAlertDialog(
+            showFlag = viewModel.showSuccessDialog,
+            closeAction = {
+                viewModel.closeSuccessAlert()
+                navController.popBackStack()
+            },
+            message = {
+                if (seriesId == 0L) {
+                    CustomText("「${viewModel.name}」を登録しました。")
+                } else {
+                    CustomText("更新しました。")
                 }
-            )
-        }
+            }
+        )
 
-        if (showValidationDialog) {
-            AlertDialog(
-                onDismissRequest = { showValidationDialog = false },
-                confirmButton = {
-                    TextButton(
-                        onClick = {
-                            showValidationDialog = false
-                        }
-                    ) {
-                        CustomText("OK")
-                    }
-                },
-                title = { CustomText("お知らせ") },
-                text = { CustomText("名前と種類は必須入力です。") }
-            )
-        }
+        CustomAlertDialog(
+            showFlag = viewModel.showValidationDialog,
+            type = AlertType.FAILED,
+            closeAction = { viewModel.closeValidationAlert() },
+            message = { CustomText("名前と種類は必須入力です。") }
+        )
 
         HeaderView(
             title = if (seriesId == 0L) "シリーズ登録" else "シリーズ更新",
@@ -115,20 +86,11 @@ fun SeriesInputScreen(
             leftContentDescription = "画面を戻る",
             rightOnClick =
                 {
-                    if (name.isEmpty() || count == null|| count == 0) {
-                        showValidationDialog = true
-                        return@HeaderView
-                    }
-                    viewModel.addSeries(
-                        name = name,
-                        count = count ?: 0,
-                        amount = amount,
-                        memo = memo,
+                    viewModel.createOrUpdateSeries(
                         capsuleToys = emptyList(),
                         locations = emptyList(),
                         categories = emptyList(),
                     )
-                    showSuccessDialog = true
                 },
             rightImageVector = Icons.Filled.Check,
             rightContentDescription = "シリーズ登録",
@@ -141,7 +103,7 @@ fun SeriesInputScreen(
 
             OutlinedButton (
                 onClick = { /* TODO */ },
-                shape = RoundedCornerShape(12.dp),
+                shape = RoundedCornerShape(8.dp),
                 border = BorderStroke(2.dp, ExGold),
                 modifier = Modifier
                     .fillMaxWidth(0.5f)
@@ -164,27 +126,14 @@ fun SeriesInputScreen(
                     .weight(1f)
             ) {
 
-                CustomText(
-                    text = "金額",
-                    textSize = TextSize.S,
-                    fontWeight = FontWeight.Bold,
-                )
-
-                Spacer(
-                    modifier = Modifier
-                        .height(5.dp)
-                )
-
-                ThemaTextFiled(
-                    value = amount?.toString() ?: "",
+                ThemeInputBox(
+                    title = "金額",
+                    value = viewModel.amount?.toString() ?: "",
                     onValueChange = {
-                        amount = if (it.isEmpty()) null else it.toIntOrNull() ?: 0
+                        viewModel.amount = if (it.isEmpty()) null else it.toIntOrNull() ?: 0
                     },
                     placeholder = "例：300円",
-                    keyboardOptions = KeyboardOptions.Default.copy(
-                        keyboardType = KeyboardType.Number
-                    ),
-                    singleLine = true,
+                    isNumberOnly = true,
                 )
 
                 Spacer(
@@ -192,48 +141,25 @@ fun SeriesInputScreen(
                         .padding(vertical = 8.dp)
                 )
 
-                CustomText(
-                    text = "種類数",
-                    textSize = TextSize.S,
-                    fontWeight = FontWeight.Bold,
-                )
-
-                Spacer(
-                    modifier = Modifier
-                        .height(5.dp)
-                )
-
-                ThemaTextFiled(
-                    value = count?.toString() ?: "",
+                ThemeInputBox(
+                    title = "種類数",
+                    value = viewModel.count?.toString() ?: "",
                     onValueChange = {
-                        count = if (it.isEmpty()) null else it.toIntOrNull() ?: 0
+                        viewModel.count = if (it.isEmpty()) null else it.toIntOrNull() ?: 0
                     },
                     placeholder = "例：6種類",
-                    keyboardOptions = KeyboardOptions.Default.copy(
-                        keyboardType = KeyboardType.Number
-                    ),
-                    singleLine = true,
+                    isNumberOnly = true,
                 )
             }
         }
 
-        CustomText(
-            text = "シリーズ名",
-            textSize = TextSize.S,
-            fontWeight = FontWeight.Bold,
-        )
-        Spacer(
-            modifier = Modifier
-                .padding(vertical = 8.dp)
-        )
-
-        ThemaTextFiled(
-            value = name,
+        ThemeInputBox(
+            title =  "シリーズ名",
+            value = viewModel.name,
             onValueChange = {
-                name = it
+                viewModel.name = it
             },
-            placeholder = "例：△△シリーズ",
-            singleLine = true,
+            placeholder = "例：△△シリーズ"
         )
 
         Spacer(
@@ -242,20 +168,41 @@ fun SeriesInputScreen(
         )
 
         CustomText(
-            text = "MEMO",
+            text = "カテゴリ",
             textSize = TextSize.S,
             fontWeight = FontWeight.Bold,
         )
-        Spacer(
+
+        Spacer(modifier = Modifier.height(8.dp))
+
+        OutlinedButton (
+            onClick = { /* TODO */ },
+            shape = RoundedCornerShape(8.dp),
+            border = BorderStroke(2.dp, ExGold),
             modifier = Modifier
-                .padding(vertical = 8.dp)
+                .width(70.dp)
+                .height(40.dp),
+        ) {
+            Icon(
+                imageVector = Icons.Filled.Add,
+                contentDescription = "カテゴリ追加",
+                tint = ExGold,
+            )
+        }
+
+        Spacer(
+            Modifier.fillMaxWidth()
+                .padding(16.dp)
         )
 
-        ThemaTextFiled(
-            value = memo,
+
+        ThemeInputBox(
+            title = "MEMO",
+            value = viewModel.memo,
             onValueChange = {
-                memo = it
+                viewModel.memo = it
             },
+            singleLine = false
         )
 
         Spacer(
@@ -267,8 +214,44 @@ fun SeriesInputScreen(
         if (seriesId == 0L) {
             CustomText(
                 text = "※ ガチャガチャのアイテムはシリーズを登録した後に、一覧からそのシリーズをタップすることで追加できます。",
+                textSize = TextSize.S,
                 maxLines = 3
             )
         }
+    }
+}
+
+/**　サブラベル付き入力ボックス */
+@Composable
+private fun ThemeInputBox(
+    title: String,
+    value: String,
+    onValueChange: (String) -> Unit,
+    placeholder: String = "",
+    isNumberOnly: Boolean = false,
+    singleLine: Boolean = true,
+) {
+    Column {
+        CustomText(
+            text = title,
+            textSize = TextSize.S,
+            fontWeight = FontWeight.Bold,
+        )
+
+        Spacer(modifier = Modifier.height(8.dp))
+
+        ThemaTextFiled(
+            value = value,
+            onValueChange = onValueChange,
+            placeholder = placeholder,
+            keyboardOptions = if (isNumberOnly) {
+                KeyboardOptions.Default.copy(
+                    keyboardType = KeyboardType.Number
+                )
+            } else {
+                KeyboardOptions.Default
+            },
+            singleLine = singleLine,
+        )
     }
 }

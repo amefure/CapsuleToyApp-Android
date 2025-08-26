@@ -18,5 +18,13 @@ interface SeriesRepository {
         locations: List<Location>,
         categories: List<Category>
     )
+
+    suspend fun updateSeries(
+        seriesId: Long,
+        series: Series,
+        capsuleToys: List<CapsuleToy>,
+        locations: List<Location>,
+        categories: List<Category>
+    )
     suspend fun deleteSeries(series: Series)
 }

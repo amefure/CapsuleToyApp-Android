@@ -182,7 +182,7 @@ private fun ImageAndAmountSection(
 
         OutlinedButton (
             onClick = { /* TODO */ },
-            shape = RoundedCornerShape(12.dp),
+            shape = RoundedCornerShape(8.dp),
             border = BorderStroke(2.dp, ExGold),
             modifier = Modifier
                 .fillMaxWidth(0.5f)
