@@ -1,6 +1,7 @@
 package com.amefure.capsuletoyapp.View.Extension
 
 import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 
@@ -29,21 +30,36 @@ enum class AlertType {
 fun CustomAlertDialog(
     showFlag: Boolean,
     type: AlertType = AlertType.SUCCESS,
+    rightTitle: String = "OK",
     closeAction: () -> Unit,
+    cancelAction: (() -> Unit)? = null,
     message: @Composable () -> Unit
 ) {
     if (showFlag) {
         AlertDialog(
-            onDismissRequest = closeAction,
+            onDismissRequest = if(cancelAction != null) cancelAction else closeAction,
             confirmButton = {
                 TextButton(
                     onClick = closeAction
                 ) {
-                    CustomText("OK")
+                    if (type == AlertType.CONFIRM) {
+                        CustomText(
+                            rightTitle,
+                            color = MaterialTheme.colorScheme.primary
+                        )
+                    } else {
+                        CustomText(rightTitle)
+                    }
                 }
             },
             dismissButton = {
-                if (type == AlertType.CONFIRM) CustomText("キャンセル")
+                if (type == AlertType.CONFIRM) {
+                    TextButton(
+                        onClick = if(cancelAction != null) cancelAction else closeAction,
+                    ) {
+                        CustomText("キャンセル")
+                    }
+                }
             },
             title = { CustomText(type.title()) },
             text = message

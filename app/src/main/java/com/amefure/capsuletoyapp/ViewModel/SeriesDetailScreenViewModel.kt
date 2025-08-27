@@ -1,5 +1,6 @@
 package com.amefure.capsuletoyapp.ViewModel
 
+import androidx.annotation.MainThread
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -26,6 +27,12 @@ class SeriesDetailScreenViewModel @Inject constructor(
     public var series: SeriesWithRelations? by mutableStateOf(null)
         private set
 
+    public var showSuccessDialog by mutableStateOf(false)
+        private set
+    public var showConfirmDialog by mutableStateOf(false)
+        private set
+
+
     public fun fetchSingleSeries(seriesId: Long) {
         viewModelScope.launch(Dispatchers.IO) {
             val data = repository.fetchSingleSeries(seriesId)
@@ -38,6 +45,23 @@ class SeriesDetailScreenViewModel @Inject constructor(
         viewModelScope.launch(Dispatchers.IO) {
             repository.deleteSeries(series.series)
         }
+    }
+
+    @MainThread
+    public fun showSuccessAlert() {
+        showSuccessDialog = true
+    }
+    @MainThread
+    public fun showConfirmAlert() {
+        showConfirmDialog = true
+    }
+    @MainThread
+    public fun closeSuccessAlert() {
+        showSuccessDialog = false
+    }
+    @MainThread
+    public fun closeConfirmAlert() {
+        showConfirmDialog = false
     }
 }
 

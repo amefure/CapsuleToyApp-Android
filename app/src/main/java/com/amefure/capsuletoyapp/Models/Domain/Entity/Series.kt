@@ -13,19 +13,19 @@ data class Series(
     val id: Long = 0,
 
     /** シリーズ名 */
-    val name: String,
+    var name: String,
 
     /** アイテム数(手入力) */
-    val count: Int,
+    var count: Int,
 
     /** 金額 */
-    val amount: Int?,
+    var amount: Int?,
 
     /** メモ */
-    val memo: String,
+    var memo: String,
 
     /** 画像パス */
-    val imagePath: String?,
+    var imagePath: String?,
 
     /** 生成日 */
     val createdAt: Date = Date(),

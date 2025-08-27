@@ -5,6 +5,7 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Transaction
+import androidx.room.Update
 import com.amefure.capsuletoyapp.Models.Domain.Entity.CapsuleToy
 import com.amefure.capsuletoyapp.Models.Domain.Entity.Category
 import com.amefure.capsuletoyapp.Models.Domain.Entity.Location
@@ -30,6 +31,18 @@ interface SeriesDao {
 
     @Insert
     suspend fun insertSeriesCategoryCrossRef(crossRefs: List<SeriesCategoryCrossRef>)
+
+    @Update
+    suspend fun updateSeries(series: Series)
+
+    @Update
+    suspend fun updateCapsuleToy(toy: CapsuleToy)
+
+    @Update
+    suspend fun updateLocation(location: Location)
+
+    @Update
+    suspend fun updateCategory(category: Category)
 
     @Transaction
     @Query("SELECT * FROM ${Series.TABLE_NAME} WHERE id = :seriesId")

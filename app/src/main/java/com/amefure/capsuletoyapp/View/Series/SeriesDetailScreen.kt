@@ -39,6 +39,8 @@ import com.amefure.capsuletoyapp.View.Components.Layout.HeaderView
 import com.amefure.capsuletoyapp.View.Extension.CustomText
 import com.amefure.capsuletoyapp.View.Extension.TextSize
 import com.amefure.capsuletoyapp.View.Components.UIParts.WhiteBackStackView
+import com.amefure.capsuletoyapp.View.Extension.AlertType
+import com.amefure.capsuletoyapp.View.Extension.CustomAlertDialog
 import com.amefure.capsuletoyapp.ViewModel.SeriesDetailScreenViewModel
 import com.amefure.capsuletoyapp.ui.theme.ExGold
 import com.amefure.capsuletoyapp.ui.theme.ExWhite
@@ -55,8 +57,6 @@ fun SeriesDetailScreen(
         viewModel.fetchSingleSeries(seriesId)
     }
 
-    var showSuccessDialog by rememberSaveable { mutableStateOf(false) }
-    var showConfirmDialog by rememberSaveable { mutableStateOf(false) }
 
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -65,62 +65,36 @@ fun SeriesDetailScreen(
             .padding(16.dp),
     ) {
 
-        if (showSuccessDialog) {
-            AlertDialog(
-                onDismissRequest = {
-                    showSuccessDialog = false
-                    navController.popBackStack()
-                },
-                confirmButton = {
-                    TextButton(
-                        onClick = {
-                            showSuccessDialog = false
-                            navController.popBackStack()
-                        }
-                    ) {
-                        CustomText("OK")
-                    }
-                },
-                title = { CustomText("成功") },
-                text = { CustomText("削除しました。") }
-            )
-        }
+        CustomAlertDialog(
+            showFlag = viewModel.showSuccessDialog,
+            closeAction = {
+                viewModel.closeSuccessAlert()
+                navController.popBackStack()
+            },
+            message = {
+                CustomText("削除しました。")
+            }
+        )
 
-        if (showConfirmDialog) {
-            AlertDialog(
-                onDismissRequest = { showConfirmDialog = false },
-                confirmButton = {
-                    TextButton(
-                        onClick = {
-                            showConfirmDialog = false
-                            viewModel.deleteSeries()
-                            showSuccessDialog = true
-                        }
-                    ) {
-                        CustomText(
-                            "削除",
-                            color = MaterialTheme.colorScheme.primary
-                        )
-                    }
-                },
-                dismissButton = {
-                    TextButton(
-                        onClick = {
-                            showConfirmDialog = false
-                        }
-                    ) {
-                        CustomText("キャンセル")
-                    }
-                },
-                title = { CustomText("お知らせ") },
-                text = {
-                    CustomText(
-                        "このデータを削除しますか？\n削除すると登録した画像なども削除されます。",
-                        maxLines = 4
-                    )
-                }
-            )
-        }
+        CustomAlertDialog(
+            showFlag = viewModel.showConfirmDialog,
+            type = AlertType.CONFIRM,
+            rightTitle = "削除",
+            closeAction = {
+                viewModel.closeConfirmAlert()
+                viewModel.deleteSeries()
+                viewModel.showSuccessAlert()
+            },
+            cancelAction = {
+                viewModel.closeConfirmAlert()
+            },
+            message = {
+                CustomText(
+                    "このデータを削除しますか？\n削除すると登録した画像なども削除されます。",
+                    maxLines = 4
+                )
+            }
+        )
 
         HeaderView(
             title = viewModel.series?.series?.name ?: "シリーズ詳細",
@@ -143,7 +117,7 @@ fun SeriesDetailScreen(
 
         Button (
             onClick = {
-                showConfirmDialog = true
+                viewModel.showConfirmAlert()
             },
             colors = ButtonDefaults.buttonColors(
                 containerColor = ExWhite

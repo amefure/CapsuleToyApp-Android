@@ -20,7 +20,6 @@ interface SeriesRepository {
     )
 
     suspend fun updateSeries(
-        seriesId: Long,
         series: Series,
         capsuleToys: List<CapsuleToy>,
         locations: List<Location>,

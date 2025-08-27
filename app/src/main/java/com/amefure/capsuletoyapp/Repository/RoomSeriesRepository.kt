@@ -53,13 +53,29 @@ class RoomSeriesRepositoryImpl
     }
 
     override suspend fun updateSeries(
-        seriesId: Long,
         series: Series,
         capsuleToys: List<CapsuleToy>,
         locations: List<Location>,
         categories: List<Category>
     ) {
-        seriesDao.deleteSeries()
+        seriesDao.updateSeries(series)
+
+        if (capsuleToys.isNotEmpty()) {
+            capsuleToys.forEach {
+                seriesDao.updateCapsuleToy(it)
+            }
+        }
+
+        if (locations.isNotEmpty()) {
+            locations.forEach {
+                seriesDao.updateLocation(it)
+            }
+        }
+        if (categories.isNotEmpty()) {
+            categories.forEach {
+                seriesDao.updateCategory(it)
+            }
+        }
     }
 
     override suspend fun deleteSeries(series: Series) {

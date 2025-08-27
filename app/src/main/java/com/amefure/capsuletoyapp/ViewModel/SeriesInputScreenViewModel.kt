@@ -92,17 +92,25 @@ class SeriesInputScreenViewModel @Inject constructor(
             showValidationAlert()
             return
         }
-        val series = Series(
-            name = name,
-            count = count ?: 1,
-            amount = amount,
-            memo = memo,
-            imagePath = null
-        )
+
         viewModelScope.launch(Dispatchers.IO) {
-            if (seriesId == 0L) {
-                repository.insertSeries(series, capsuleToys, locations, categories)
-            } else {
+            series?.series?.let { series ->
+                // 更新
+                series.name = name
+                series.count = count ?: 1
+                series.amount = amount
+                series.memo = memo
+                series.imagePath = null
+                repository.updateSeries(series, capsuleToys, locations, categories)
+            } ?: run {
+                // 新規追加
+                val series = Series(
+                    name = name,
+                    count = count ?: 1,
+                    amount = amount,
+                    memo = memo,
+                    imagePath = null
+                )
                 repository.insertSeries(series, capsuleToys, locations, categories)
             }
             withContext(Dispatchers.Main) {

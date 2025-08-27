@@ -87,6 +87,7 @@ fun SeriesInputScreen(
             rightOnClick =
                 {
                     viewModel.createOrUpdateSeries(
+                        seriesId = seriesId,
                         capsuleToys = emptyList(),
                         locations = emptyList(),
                         categories = emptyList(),
