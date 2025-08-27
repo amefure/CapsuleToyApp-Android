@@ -1,6 +1,7 @@
-package com.amefure.capsuletoyapp.View.Series
+package com.amefure.capsuletoyapp.View.Series.Input
 
 import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -9,25 +10,22 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Check
-import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Icon
 import androidx.compose.material3.OutlinedButton
-import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.shadow
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
@@ -39,6 +37,7 @@ import com.amefure.capsuletoyapp.View.Extension.AlertType
 import com.amefure.capsuletoyapp.View.Extension.CustomAlertDialog
 import com.amefure.capsuletoyapp.ViewModel.SeriesInputScreenViewModel
 import com.amefure.capsuletoyapp.ui.theme.ExGold
+import com.amefure.capsuletoyapp.ui.theme.ExWhite
 
 @Composable
 fun SeriesInputScreen(
@@ -51,6 +50,10 @@ fun SeriesInputScreen(
     LaunchedEffect(Unit) {
         viewModel.fetchSingleSeries(seriesId)
     }
+
+
+    CategoryInputScreen(viewModel)
+
 
     Column(
         Modifier
@@ -89,8 +92,7 @@ fun SeriesInputScreen(
                     viewModel.createOrUpdateSeries(
                         seriesId = seriesId,
                         capsuleToys = emptyList(),
-                        locations = emptyList(),
-                        categories = emptyList(),
+                        locations = emptyList()
                     )
                 },
             rightImageVector = Icons.Filled.Check,
@@ -164,7 +166,8 @@ fun SeriesInputScreen(
         )
 
         Spacer(
-            Modifier.fillMaxWidth()
+            Modifier
+                .fillMaxWidth()
                 .padding(16.dp)
         )
 
@@ -176,8 +179,25 @@ fun SeriesInputScreen(
 
         Spacer(modifier = Modifier.height(8.dp))
 
+        LazyRow {
+            items(items = viewModel.categories) { category ->
+                CustomText(
+                    category.name,
+                    textSize = TextSize.S,
+                    color = ExWhite,
+                    modifier = Modifier
+                        .shadow(
+                            elevation = 8.dp,
+                            shape = RoundedCornerShape(8.dp),
+                            clip = false
+                        ).background(category.color, RoundedCornerShape(8.dp))
+                        .padding(5.dp)
+                )
+            }
+        }
+
         OutlinedButton (
-            onClick = { /* TODO */ },
+            onClick = { viewModel.showCategoryInputModal() },
             shape = RoundedCornerShape(8.dp),
             border = BorderStroke(2.dp, ExGold),
             modifier = Modifier
@@ -192,7 +212,8 @@ fun SeriesInputScreen(
         }
 
         Spacer(
-            Modifier.fillMaxWidth()
+            Modifier
+                .fillMaxWidth()
                 .padding(16.dp)
         )
 
@@ -207,7 +228,8 @@ fun SeriesInputScreen(
         )
 
         Spacer(
-            Modifier.fillMaxWidth()
+            Modifier
+                .fillMaxWidth()
                 .padding(16.dp)
         )
 
@@ -224,7 +246,7 @@ fun SeriesInputScreen(
 
 /**　サブラベル付き入力ボックス */
 @Composable
-private fun ThemeInputBox(
+fun ThemeInputBox(
     title: String,
     value: String,
     onValueChange: (String) -> Unit,

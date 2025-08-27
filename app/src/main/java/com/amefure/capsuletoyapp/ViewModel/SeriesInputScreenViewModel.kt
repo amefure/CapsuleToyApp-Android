@@ -1,9 +1,11 @@
 package com.amefure.capsuletoyapp.ViewModel
 
+import android.util.Log
 import androidx.annotation.MainThread
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.graphics.Color
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.amefure.capsuletoyapp.Models.Domain.Entity.CapsuleToy
@@ -37,6 +39,14 @@ class SeriesInputScreenViewModel @Inject constructor(
     public var count: Int? by mutableStateOf(null)
     public var amount: Int? by mutableStateOf(null)
     public var memo by mutableStateOf("")
+    public var categories: MutableList<Category> = mutableListOf()
+        private set
+
+    /** CategoryInputScreen */
+    public var categoryName by mutableStateOf("")
+
+    public var showCategoryInputModal by mutableStateOf(false)
+        private set
 
     public var showSuccessDialog by mutableStateOf(false)
         private set
@@ -48,21 +58,32 @@ class SeriesInputScreenViewModel @Inject constructor(
         // IDが0Lなら取得しない
         if (seriesId == 0L) return
         viewModelScope.launch(Dispatchers.IO) {
-            val data = repository.fetchSingleSeries(seriesId)
-            series = data
+            val entity = repository.fetchSingleSeries(seriesId)
+            series = entity
             withContext(Dispatchers.Main) {
-                applySeries(data.series)
+                applySeries(entity)
             }
         }
     }
 
     /** シリーズ情報をUIに反映する */
     @MainThread
-    private fun applySeries(series: Series) {
+    private fun applySeries(entity: SeriesWithRelations) {
+        val series = entity.series
         name = series.name
         count = series.count
         amount = series.amount
         memo = series.memo
+        categories = entity.categories.toMutableList()
+    }
+
+    @MainThread
+    public fun showCategoryInputModal() {
+        showCategoryInputModal = true
+    }
+    @MainThread
+    public fun closeCategoryInputModal() {
+        showCategoryInputModal = false
     }
 
     @MainThread
@@ -82,11 +103,11 @@ class SeriesInputScreenViewModel @Inject constructor(
         showValidationDialog = false
     }
 
+    /** SeriesInput画面から新規作成・更新する */
     public fun createOrUpdateSeries(
         seriesId: Long,
         capsuleToys: List<CapsuleToy> = emptyList(),
         locations: List<Location> = emptyList(),
-        categories: List<Category> = emptyList()
     ) {
         if (name.isEmpty() || count == null|| count == 0) {
             showValidationAlert()
@@ -117,6 +138,18 @@ class SeriesInputScreenViewModel @Inject constructor(
                 showSuccessAlert()
             }
         }
+    }
+
+    public fun addCategory(
+        name: String,
+        color: Color
+    ) {
+        val category = Category(
+            name = name,
+            color = color
+        )
+        categories.add(category)
+        Log.d("DDD", categories.size.toString())
     }
 }
 

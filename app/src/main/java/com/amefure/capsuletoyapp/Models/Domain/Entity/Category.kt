@@ -1,5 +1,6 @@
 package com.amefure.capsuletoyapp.Models.Domain.Entity
 
+import androidx.compose.ui.graphics.Color
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 
@@ -11,6 +12,6 @@ data class Category(
     val id: Long = 0L,
     /** カテゴリ名 */
     val name: String,
-    /** 色(16進数) */
-    val colorHex: String
+    /** 色 */
+    val color: Color
 )

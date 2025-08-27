@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
@@ -21,6 +22,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -33,6 +35,9 @@ import androidx.compose.ui.text.font.FontWeight
 import com.amefure.capsuletoyapp.R
 import com.amefure.capsuletoyapp.View.Extension.CustomText
 import com.amefure.capsuletoyapp.View.Components.UIParts.DataEmptyView
+import com.amefure.capsuletoyapp.View.Extension.TextSize
+import com.amefure.capsuletoyapp.ui.theme.ExWhite
+import kotlin.text.ifEmpty
 
 @Composable
 fun SeriesListScreen(
@@ -87,10 +92,30 @@ fun SeriesListScreen(
                             modifier = Modifier.size(80.dp),
                             contentScale = ContentScale.Fit
                         )
-                        CustomText(
-                            text = series.series.name,
-                            fontWeight = FontWeight.Bold,
-                        )
+                        Column {
+                            CustomText(
+                                text = series.series.name,
+                                fontWeight = FontWeight.Bold,
+                            )
+
+                            LazyRow {
+                                items(items = series.categories) { category ->
+                                    CustomText(
+                                        category.name,
+                                        textSize = TextSize.S,
+                                        color = ExWhite,
+                                        modifier = Modifier
+                                            .shadow(
+                                                elevation = 8.dp,
+                                                shape = RoundedCornerShape(8.dp),
+                                                clip = false
+                                            ).background(category.color, RoundedCornerShape(8.dp))
+                                            .padding(5.dp)
+                                    )
+                                }
+                            }
+                        }
+
                     }
                 }
             }

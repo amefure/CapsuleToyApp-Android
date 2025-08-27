@@ -37,7 +37,7 @@ fun CustomAlertDialog(
 ) {
     if (showFlag) {
         AlertDialog(
-            onDismissRequest = if(cancelAction != null) cancelAction else closeAction,
+            onDismissRequest = cancelAction ?: closeAction,
             confirmButton = {
                 TextButton(
                     onClick = closeAction
@@ -55,7 +55,7 @@ fun CustomAlertDialog(
             dismissButton = {
                 if (type == AlertType.CONFIRM) {
                     TextButton(
-                        onClick = if(cancelAction != null) cancelAction else closeAction,
+                        onClick = cancelAction ?: closeAction,
                     ) {
                         CustomText("キャンセル")
                     }

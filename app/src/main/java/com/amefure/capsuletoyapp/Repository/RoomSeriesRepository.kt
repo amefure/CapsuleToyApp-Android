@@ -34,7 +34,7 @@ class RoomSeriesRepositoryImpl
         categories: List<Category>
     ) {
         val seriesId = seriesDao.insertSeries(series)
-        Log.d("VM", seriesId.toString())
+        Log.d("シリーズID", seriesId.toString())
         if (capsuleToys.isNotEmpty()) {
             seriesDao.insertCapsuleToys(capsuleToys.map { it.copy(seriesId = seriesId) })
         }
@@ -46,6 +46,7 @@ class RoomSeriesRepositoryImpl
         if (categories.isNotEmpty()) {
             // Category を保存して id を取得
             val categoryIds = seriesDao.insertCategories(categories)
+            Log.d("カテゴリID", categoryIds.toString())
             // CrossRef を保存
             val crossRefs = categoryIds.map { SeriesCategoryCrossRef(seriesId, it) }
             seriesDao.insertSeriesCategoryCrossRef(crossRefs)

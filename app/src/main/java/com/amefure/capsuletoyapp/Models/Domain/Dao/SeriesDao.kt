@@ -17,19 +17,19 @@ import com.amefure.capsuletoyapp.Models.Domain.Entity.Series
 @Dao
 interface SeriesDao {
 
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insertSeries(series: Series): Long
 
-    @Insert
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insertCapsuleToys(toys: List<CapsuleToy>)
 
-    @Insert
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insertLocations(locations: List<Location>)
 
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insertCategories(categories: List<Category>): List<Long>
 
-    @Insert
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insertSeriesCategoryCrossRef(crossRefs: List<SeriesCategoryCrossRef>)
 
     @Update
