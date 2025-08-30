@@ -6,16 +6,16 @@ import androidx.room.Index
 import androidx.room.PrimaryKey
 
 @Entity(
-    tableName = "locations",
+    tableName = Location.TABLE_NAME,
     foreignKeys = [
         ForeignKey(
             entity = Series::class,
             parentColumns = ["id"],
-            childColumns = ["seriesId"],
+            childColumns = [Series.ID_KEY],
             onDelete = ForeignKey.CASCADE
         )
     ],
-    indices = [Index("seriesId")]
+    indices = [Index(Series.ID_KEY)]
 )
 data class Location(
     @PrimaryKey(autoGenerate = true)
@@ -28,4 +28,8 @@ data class Location(
     var latitude: Double?,
     /** 経度 (オプション) */
     var longitude: Double?
-)
+) {
+    companion object {
+        public const val TABLE_NAME = "locations"
+    }
+}

@@ -7,7 +7,6 @@ import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshots.SnapshotStateList
-import androidx.compose.runtime.toMutableStateList
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.amefure.capsuletoyapp.Models.Domain.Entity.CapsuleToy
@@ -53,7 +52,7 @@ class SeriesInputScreenViewModel @Inject constructor(
     /** シリーズIDで指定されたシリーズ情報を取得してUIに反映する */
     public fun fetchSingleSeries(seriesId: Long) {
         // IDが0Lなら取得しない
-        if (seriesId == 0L) return
+        if (seriesId == 0L || series != null) return
         viewModelScope.launch(Dispatchers.IO) {
             val entity = repository.fetchSingleSeries(seriesId)
             series = entity
@@ -96,7 +95,6 @@ class SeriesInputScreenViewModel @Inject constructor(
 
     /** SeriesInput画面から新規作成・更新する */
     public fun createOrUpdateSeries(
-        seriesId: Long,
         capsuleToys: List<CapsuleToy> = emptyList(),
         locations: List<Location> = emptyList(),
     ) {
@@ -123,7 +121,6 @@ class SeriesInputScreenViewModel @Inject constructor(
                     memo = memo,
                     imagePath = null
                 )
-                Log.d("DDDINSERT", categories.size.toString())
                 repository.insertSeries(series, capsuleToys, locations, categories)
             }
             withContext(Dispatchers.Main) {

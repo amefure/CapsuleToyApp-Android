@@ -11,7 +11,7 @@ import java.io.Serializable
  * Navigationでも値渡しするのでConvertersではなくSerializableにして
  */
 @Entity(
-    tableName = "categories",
+    tableName = Category.TABLE_NAME,
 )
 data class Category(
     @PrimaryKey(autoGenerate = true)
@@ -25,6 +25,8 @@ data class Category(
         get() = Color(colorArgb)
 
     companion object {
-       const val KEY = "category"
+        public const val TABLE_NAME = "categories"
+        public const val KEY = "category"
+        public const val ID_KEY = "categoryId"
     }
 }

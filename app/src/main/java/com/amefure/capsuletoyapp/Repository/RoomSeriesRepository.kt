@@ -1,7 +1,10 @@
 package com.amefure.capsuletoyapp.Repository
 
 import android.content.Context
-import android.util.Log
+import com.amefure.capsuletoyapp.Models.Domain.Dao.CapsuleToyDao
+import com.amefure.capsuletoyapp.Models.Domain.Dao.CategoryDao
+import com.amefure.capsuletoyapp.Models.Domain.Dao.LocationDao
+import com.amefure.capsuletoyapp.Models.Domain.Dao.SeriesCategoryCrossRefDao
 import com.amefure.capsuletoyapp.Models.Domain.Dao.SeriesDao
 import com.amefure.capsuletoyapp.Models.Domain.Database.AppDatabase
 import com.amefure.capsuletoyapp.Models.Domain.Entity.CapsuleToy
@@ -18,8 +21,15 @@ class RoomSeriesRepositoryImpl
 @Inject constructor(
     @ApplicationContext private val context: Context
 ) : SeriesRepository {
+
+    private val database = AppDatabase.getDatabase(context)
+
     /** Dao */
-    private val seriesDao: SeriesDao = AppDatabase.getDatabase(context).seriesDao()
+    private val seriesDao: SeriesDao = database.seriesDao()
+    private val capsuleToyDao: CapsuleToyDao = database.capsuleToyDao()
+    private val locationDao: LocationDao = database.locationDao()
+    private val categoryDao: CategoryDao = database.categoryDao()
+    private val seriesCategoryCrossRefDao: SeriesCategoryCrossRefDao = database.seriesCategoryCrossRefDao()
 
     override suspend fun fetchSingleSeries(seriesId: Long): SeriesWithRelations =
         seriesDao.fetchSingleSeries(seriesId)
@@ -34,22 +44,18 @@ class RoomSeriesRepositoryImpl
         categories: List<Category>
     ) {
         val seriesId = seriesDao.insertSeries(series)
-        Log.d("シリーズID", seriesId.toString())
         if (capsuleToys.isNotEmpty()) {
-            seriesDao.insertCapsuleToys(capsuleToys.map { it.copy(seriesId = seriesId) })
+            capsuleToyDao.insertCapsuleToys(capsuleToys.map { it.copy(seriesId = seriesId) })
         }
 
         if (locations.isNotEmpty()) {
-            seriesDao.insertLocations(locations.map { it.copy(seriesId = seriesId) })
+            locationDao.insertLocations(locations.map { it.copy(seriesId = seriesId) })
         }
 
         if (categories.isNotEmpty()) {
-            // Category を保存して id を取得
-            val categoryIds = seriesDao.insertCategories(categories)
-            Log.d("カテゴリID", categoryIds.toString())
-            // CrossRef を保存
+            val categoryIds = categoryDao.insertCategories(categories)
             val crossRefs = categoryIds.map { SeriesCategoryCrossRef(seriesId, it) }
-            seriesDao.insertSeriesCategoryCrossRef(crossRefs)
+            seriesCategoryCrossRefDao.insertSeriesCategoryCrossRef(crossRefs)
         }
     }
 
@@ -62,24 +68,26 @@ class RoomSeriesRepositoryImpl
         seriesDao.updateSeries(series)
 
         if (capsuleToys.isNotEmpty()) {
-            capsuleToys.forEach {
-                seriesDao.updateCapsuleToy(it)
-            }
+            capsuleToyDao.upsertCapsuleToys(capsuleToys)
         }
 
         if (locations.isNotEmpty()) {
-            locations.forEach {
-                seriesDao.updateLocation(it)
-            }
+            locationDao.upsertLocations(locations)
         }
         if (categories.isNotEmpty()) {
-            categories.forEach {
-                seriesDao.updateCategory(it)
-            }
+            // Category をUpsertして id を取得
+            val categoryIds = categoryDao.upsertCategories(categories)
+            // CrossRef をUpsertして id を取得
+            val crossRefs = categoryIds.map { SeriesCategoryCrossRef(series.id, it) }
+            seriesCategoryCrossRefDao.upsertSeriesCategoryCrossRefs(crossRefs)
+
+
+            val existingCrossRefs = seriesCategoryCrossRefDao.getCrossRefsForSeries(series.id)
+            val existingCategoryIds = existingCrossRefs.map { it.categoryId }
         }
     }
 
     override suspend fun deleteSeries(series: Series) {
-        seriesDao.deleteSeries(series.id)
+        seriesDao.deleteSeriesById(series.id)
     }
 }

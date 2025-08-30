@@ -7,16 +7,16 @@ import androidx.room.PrimaryKey
 import java.util.Date
 
 @Entity(
-    tableName = "capsule_toys",
+    tableName = CapsuleToy.TABLE_NAME,
     foreignKeys = [
         ForeignKey(
             entity = Series::class,
             parentColumns = ["id"],
-            childColumns = ["seriesId"],
+            childColumns = [Series.ID_KEY],
             onDelete = ForeignKey.CASCADE
         )
     ],
-    indices = [Index("seriesId")]
+    indices = [Index(Series.ID_KEY)]
 )
 data class CapsuleToy(
     @PrimaryKey(autoGenerate = true)
@@ -35,4 +35,8 @@ data class CapsuleToy(
     val imagePath: String?,
     /** 取得日 */
     val isGetAt: Date?,
-)
+) {
+    companion object {
+        public const val TABLE_NAME = "capsule_toys"
+    }
+}

@@ -110,6 +110,7 @@ fun CategoryInputScreen(
                     shape = RoundedCornerShape(8.dp),
                     clip = false
                 ).background(selectedColor, RoundedCornerShape(8.dp))
+                .height(40.dp)
                 .padding(10.dp)
         )
 

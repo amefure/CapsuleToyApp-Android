@@ -5,6 +5,10 @@ import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
+import com.amefure.capsuletoyapp.Models.Domain.Dao.CapsuleToyDao
+import com.amefure.capsuletoyapp.Models.Domain.Dao.CategoryDao
+import com.amefure.capsuletoyapp.Models.Domain.Dao.LocationDao
+import com.amefure.capsuletoyapp.Models.Domain.Dao.SeriesCategoryCrossRefDao
 import com.amefure.capsuletoyapp.Models.Domain.Dao.SeriesDao
 import com.amefure.capsuletoyapp.Models.Domain.Entity.CapsuleToy
 import com.amefure.capsuletoyapp.Models.Domain.Entity.Category
@@ -26,7 +30,12 @@ import com.amefure.capsuletoyapp.Models.Domain.RoomConverters
 )
 @TypeConverters(RoomConverters::class)
 abstract class AppDatabase : RoomDatabase() {
+
     abstract fun seriesDao(): SeriesDao
+    abstract fun capsuleToyDao(): CapsuleToyDao
+    abstract fun locationDao(): LocationDao
+    abstract fun categoryDao(): CategoryDao
+    abstract fun seriesCategoryCrossRefDao(): SeriesCategoryCrossRefDao
 
     companion object {
 

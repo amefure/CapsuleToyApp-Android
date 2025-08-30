@@ -19,7 +19,7 @@ data class SeriesWithRelations(
     /** カプセルトイ */
     @Relation(
         parentColumn = "id",
-        entityColumn = "seriesId"
+        entityColumn = Series.ID_KEY
     )
     var capsuleToys: List<CapsuleToy>,
 
@@ -32,8 +32,8 @@ data class SeriesWithRelations(
         associateBy = Junction(
             // 多対多にするためにIDを管理するクラス
             value = SeriesCategoryCrossRef::class,
-            parentColumn = "seriesId",
-            entityColumn = "categoryId"
+            parentColumn = Series.ID_KEY,
+            entityColumn = Category.ID_KEY
         )
     )
     var categories: List<Category>,
@@ -41,7 +41,7 @@ data class SeriesWithRelations(
     /** ロケーション */
     @Relation(
         parentColumn = "id",
-        entityColumn = "seriesId"
+        entityColumn = Series.ID_KEY
     )
     var locations: List<Location>
 )

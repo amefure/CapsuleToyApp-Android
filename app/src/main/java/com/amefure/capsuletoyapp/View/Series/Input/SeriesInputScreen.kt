@@ -51,6 +51,7 @@ fun SeriesInputScreen(
 ) {
 
     // Compositionされたタイミングで実行する
+    // 1回だけ発火して欲しいのでKeyは不変とする
     LaunchedEffect(Unit) {
         viewModel.fetchSingleSeries(seriesId)
     }
@@ -103,7 +104,6 @@ fun SeriesInputScreen(
             rightOnClick =
                 {
                     viewModel.createOrUpdateSeries(
-                        seriesId = seriesId,
                         capsuleToys = emptyList(),
                         locations = emptyList()
                     )
@@ -205,7 +205,9 @@ fun SeriesInputScreen(
                             shape = RoundedCornerShape(8.dp),
                             clip = false
                         ).background(category.color, RoundedCornerShape(8.dp))
+                        .height(40.dp)
                         .padding(10.dp)
+
                 )
             }
             item {

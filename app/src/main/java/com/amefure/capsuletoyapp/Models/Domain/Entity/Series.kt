@@ -35,5 +35,6 @@ data class Series(
 ) {
     companion object {
         public const val TABLE_NAME = "series_table"
+        public const val ID_KEY = "seriesId"
     }
 }
