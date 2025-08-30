@@ -101,10 +101,11 @@ fun SeriesListScreen(
                             LazyRow {
                                 items(items = series.categories) { category ->
                                     CustomText(
-                                        category.name,
-                                        textSize = TextSize.S,
+                                        text = category.name,
+                                        textSize = TextSize.MS,
                                         color = ExWhite,
                                         modifier = Modifier
+                                            .padding(horizontal = 4.dp)
                                             .shadow(
                                                 elevation = 8.dp,
                                                 shape = RoundedCornerShape(8.dp),

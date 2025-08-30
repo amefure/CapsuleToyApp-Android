@@ -49,104 +49,97 @@ fun CategoryInputScreen(
 ) {
     var selectedColor by remember { mutableStateOf(ExGold) }
 
-    Scaffold { innerPadding ->
-        Box(
-            Modifier.padding(innerPadding)
-        ) {
-            CustomAlertDialog(
-                showFlag = viewModel.showValidationDialog,
-                type = AlertType.FAILED,
-                closeAction = { viewModel.closeValidationAlert() },
-                message = { CustomText("名前は必須入力です。") }
-            )
+    CustomAlertDialog(
+        showFlag = viewModel.showValidationDialog,
+        type = AlertType.FAILED,
+        closeAction = { viewModel.closeValidationAlert() },
+        message = { CustomText("カテゴリ名は必須入力です。") }
+    )
 
-            Column(
-                horizontalAlignment = Alignment.CenterHorizontally,
-                modifier = Modifier
-                    .fillMaxHeight(0.93f)
-                    .fillMaxWidth()
-                    .padding(16.dp)
-                    .background(MaterialTheme.colorScheme.background)
-            ) {
-                HeaderView(
-                    title = "カテゴリ登録",
-                    leftOnClick = { navController.popBackStack() },
-                    leftImageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                    leftContentDescription = "画面を戻る",
-                    rightOnClick =
-                        {
-                            val category = viewModel.createCategory(
-                                color = selectedColor
-                            ) ?: return@HeaderView
-                            // 入力した値を戻り先にセット
-                            navController.previousBackStackEntry
-                                ?.savedStateHandle
-                                ?.set(Category.KEY, category)
+    Column(
+        horizontalAlignment = Alignment.CenterHorizontally,
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(16.dp)
+            .background(MaterialTheme.colorScheme.background)
+    ) {
+        HeaderView(
+            title = "カテゴリ登録",
+            leftOnClick = { navController.popBackStack() },
+            leftImageVector = Icons.AutoMirrored.Filled.ArrowBack,
+            leftContentDescription = "画面を戻る",
+            rightOnClick =
+                {
+                    val category = viewModel.createCategory(
+                        color = selectedColor
+                    ) ?: return@HeaderView
+                    // 入力した値を戻り先にセット
+                    navController.previousBackStackEntry
+                        ?.savedStateHandle
+                        ?.set(Category.KEY, category)
 
-                            navController.popBackStack()
-                        },
-                    rightImageVector = Icons.Filled.Check,
-                    rightContentDescription = "カテゴリ登録",
-                )
+                    navController.popBackStack()
+                },
+            rightImageVector = Icons.Filled.Check,
+            rightContentDescription = "カテゴリ登録",
+        )
 
-                Spacer(
-                    Modifier
-                        .fillMaxWidth()
-                        .padding(16.dp)
-                )
+        Spacer(
+            Modifier
+                .fillMaxWidth()
+                .padding(16.dp)
+        )
 
-                CustomText(
-                    text = "Preview",
-                    textSize = TextSize.S,
-                    fontWeight = FontWeight.Bold,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                )
+        CustomText(
+            text = "Preview",
+            textSize = TextSize.S,
+            fontWeight = FontWeight.Bold,
+            modifier = Modifier
+                .fillMaxWidth()
+        )
 
-                Spacer(modifier = Modifier.height(8.dp))
+        Spacer(modifier = Modifier.height(8.dp))
 
-                // 色のプレビュー
-                CustomText(
-                    viewModel.categoryName.ifEmpty { "カテゴリラベル名" },
-                    color = ExWhite,
-                    modifier = Modifier
-                        .shadow(
-                            elevation = 8.dp,
-                            shape = RoundedCornerShape(8.dp),
-                            clip = false
-                        ).background(selectedColor, RoundedCornerShape(8.dp))
-                        .padding(10.dp)
-                )
+        // 色のプレビュー
+        CustomText(
+            viewModel.categoryName.ifEmpty { "カテゴリラベル名" },
+            color = ExWhite,
+            modifier = Modifier
+                .shadow(
+                    elevation = 8.dp,
+                    shape = RoundedCornerShape(8.dp),
+                    clip = false
+                ).background(selectedColor, RoundedCornerShape(8.dp))
+                .padding(10.dp)
+        )
 
-                Spacer(modifier = Modifier.height(16.dp))
+        Spacer(modifier = Modifier.height(16.dp))
 
-                ThemeInputBox(
-                    title = "カテゴリラベル名",
-                    value = viewModel.categoryName,
-                    onValueChange = {
-                        viewModel.categoryName = it
-                    },
-                    singleLine = false
-                )
+        ThemeInputBox(
+            title = "カテゴリラベル名",
+            value = viewModel.categoryName,
+            onValueChange = {
+                viewModel.categoryName = it
+            },
+            singleLine = false
+        )
 
-                Spacer(modifier = Modifier.height(16.dp))
+        Spacer(modifier = Modifier.height(16.dp))
 
-                CustomText(
-                    text = "ラベルカラー",
-                    textSize = TextSize.S,
-                    fontWeight = FontWeight.Bold,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                )
+        CustomText(
+            text = "ラベルカラー",
+            textSize = TextSize.S,
+            fontWeight = FontWeight.Bold,
+            modifier = Modifier
+                .fillMaxWidth()
+        )
 
-                Spacer(modifier = Modifier.height(8.dp))
+        Spacer(modifier = Modifier.height(8.dp))
 
-                RGBColorPicker(
-                    initialColor = selectedColor,
-                    onColorChanged = { selectedColor = it }
-                )
-            }
-        }
+        RGBColorPicker(
+            initialColor = selectedColor,
+            onColorChanged = { selectedColor = it }
+        )
     }
 }
 

@@ -3,8 +3,11 @@ package com.amefure.capsuletoyapp.ViewModel
 import android.util.Log
 import androidx.annotation.MainThread
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
+import androidx.compose.runtime.snapshots.SnapshotStateList
+import androidx.compose.runtime.toMutableStateList
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.amefure.capsuletoyapp.Models.Domain.Entity.CapsuleToy
@@ -38,7 +41,8 @@ class SeriesInputScreenViewModel @Inject constructor(
     public var count: Int? by mutableStateOf(null)
     public var amount: Int? by mutableStateOf(null)
     public var memo by mutableStateOf("")
-    public var categories: MutableList<Category> = mutableListOf()
+    // コレクション型はSnapshotStateListで管理しないと要素の変化では再コンポーズされない
+    public var categories: SnapshotStateList<Category> = mutableStateListOf()
         private set
 
     public var showSuccessDialog by mutableStateOf(false)
@@ -67,7 +71,10 @@ class SeriesInputScreenViewModel @Inject constructor(
         count = series.count
         amount = series.amount
         memo = series.memo
-        categories = entity.categories.toMutableList()
+        // categories = entity.categories.toMutableStateList()
+        // SnapshotStateListなので上記では再Composeされないので明示的に空にして追加する
+        categories.clear()
+        categories.addAll(entity.categories)
     }
 
     @MainThread
@@ -106,7 +113,6 @@ class SeriesInputScreenViewModel @Inject constructor(
                 series.amount = amount
                 series.memo = memo
                 series.imagePath = null
-                Log.d("DDDUPDATEA", categories.size.toString())
                 repository.updateSeries(series, capsuleToys, locations, categories)
             } ?: run {
                 // 新規追加

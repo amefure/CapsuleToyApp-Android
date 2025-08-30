@@ -23,6 +23,7 @@ import androidx.compose.material3.OutlinedButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -191,36 +192,38 @@ fun SeriesInputScreen(
 
         Spacer(modifier = Modifier.height(8.dp))
 
-        LazyRow {
+        LazyRow{
             items(items = viewModel.categories) { category ->
                 CustomText(
-                    category.name,
+                    text = category.name,
                     textSize = TextSize.S,
                     color = ExWhite,
                     modifier = Modifier
+                        .padding(horizontal = 8.dp)
                         .shadow(
                             elevation = 8.dp,
                             shape = RoundedCornerShape(8.dp),
                             clip = false
                         ).background(category.color, RoundedCornerShape(8.dp))
-                        .padding(5.dp)
+                        .padding(10.dp)
                 )
             }
-        }
-
-        OutlinedButton (
-            onClick = { navController.navigate(AppScreen.CategoryInput.route()) },
-            shape = RoundedCornerShape(8.dp),
-            border = BorderStroke(2.dp, ExGold),
-            modifier = Modifier
-                .width(70.dp)
-                .height(40.dp),
-        ) {
-            Icon(
-                imageVector = Icons.Filled.Add,
-                contentDescription = "カテゴリ追加",
-                tint = ExGold,
-            )
+            item {
+                OutlinedButton (
+                    onClick = { navController.navigate(AppScreen.CategoryInput.route()) },
+                    shape = RoundedCornerShape(8.dp),
+                    border = BorderStroke(2.dp, ExGold),
+                    modifier = Modifier
+                        .width(70.dp)
+                        .height(40.dp),
+                ) {
+                    Icon(
+                        imageVector = Icons.Filled.Add,
+                        contentDescription = "カテゴリ追加",
+                        tint = ExGold,
+                    )
+                }
+            }
         }
 
         Spacer(
