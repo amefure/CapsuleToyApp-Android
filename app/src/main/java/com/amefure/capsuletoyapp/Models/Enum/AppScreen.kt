@@ -8,17 +8,17 @@ sealed class AppScreen {
     sealed class Tab : AppScreen() {
 
         data object Series : Tab() {
-            override fun route() = "Series"
+            override fun route() = "series"
             override val title = "ガチャガチャ"
         }
 
         data object MyData : Tab() {
-            override fun route() = "MyData"
+            override fun route() = "my_data"
             override val title = "MyData"
         }
 
         data object Settings : Tab() {
-            override fun route() = "Settings"
+            override fun route() = "settings"
             override val title = "Setting"
         }
 
@@ -43,6 +43,11 @@ sealed class AppScreen {
         fun inputRoute() = "input/0"
         fun updateRoute(seriesId: Long) = "input/$seriesId"
         override val title = "登録・更新画面"
+    }
+
+    data object CategoryInput : AppScreen() {
+        override fun route() = "category_input"
+        override val title = "カテゴリー登録"
     }
 }
 

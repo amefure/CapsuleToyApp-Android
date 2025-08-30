@@ -1,6 +1,7 @@
 package com.amefure.capsuletoyapp.View.Series.Input
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
@@ -13,10 +14,9 @@ import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Check
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.ModalBottomSheet
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Slider
 import androidx.compose.material3.SliderDefaults
-import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.ui.Alignment
@@ -25,32 +25,41 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import com.amefure.capsuletoyapp.View.Components.Layout.HeaderView
 import com.amefure.capsuletoyapp.View.Extension.CustomText
-import com.amefure.capsuletoyapp.ViewModel.SeriesInputScreenViewModel
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.text.font.FontWeight
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavHostController
+import com.amefure.capsuletoyapp.Models.Domain.Entity.Category
+import com.amefure.capsuletoyapp.View.Extension.AlertType
+import com.amefure.capsuletoyapp.View.Extension.CustomAlertDialog
 import com.amefure.capsuletoyapp.View.Extension.TextSize
+import com.amefure.capsuletoyapp.ViewModel.CategoryInputScreenViewModel
 import com.amefure.capsuletoyapp.ui.theme.ExGold
 import com.amefure.capsuletoyapp.ui.theme.ExWhite
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CategoryInputScreen(
-    viewModel: SeriesInputScreenViewModel
+    navController: NavHostController,
+    viewModel: CategoryInputScreenViewModel = hiltViewModel(),
 ) {
     var selectedColor by remember { mutableStateOf(ExGold) }
-    val sheetState = rememberModalBottomSheetState(
-        skipPartiallyExpanded = true
-    )
 
-    if (viewModel.showCategoryInputModal) {
-        ModalBottomSheet (
-            onDismissRequest = { viewModel.closeCategoryInputModal() },
-            sheetState = sheetState
+    Scaffold { innerPadding ->
+        Box(
+            Modifier.padding(innerPadding)
         ) {
+            CustomAlertDialog(
+                showFlag = viewModel.showValidationDialog,
+                type = AlertType.FAILED,
+                closeAction = { viewModel.closeValidationAlert() },
+                message = { CustomText("名前は必須入力です。") }
+            )
+
             Column(
                 horizontalAlignment = Alignment.CenterHorizontally,
                 modifier = Modifier
@@ -61,16 +70,20 @@ fun CategoryInputScreen(
             ) {
                 HeaderView(
                     title = "カテゴリ登録",
-                    leftOnClick = { viewModel.closeCategoryInputModal() },
+                    leftOnClick = { navController.popBackStack() },
                     leftImageVector = Icons.AutoMirrored.Filled.ArrowBack,
                     leftContentDescription = "画面を戻る",
                     rightOnClick =
                         {
-                            viewModel.addCategory(
-                                name = viewModel.categoryName,
+                            val category = viewModel.createCategory(
                                 color = selectedColor
-                            )
-                            viewModel.closeCategoryInputModal()
+                            ) ?: return@HeaderView
+                            // 入力した値を戻り先にセット
+                            navController.previousBackStackEntry
+                                ?.savedStateHandle
+                                ?.set(Category.KEY, category)
+
+                            navController.popBackStack()
                         },
                     rightImageVector = Icons.Filled.Check,
                     rightContentDescription = "カテゴリ登録",

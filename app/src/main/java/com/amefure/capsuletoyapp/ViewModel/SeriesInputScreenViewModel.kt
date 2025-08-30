@@ -5,7 +5,6 @@ import androidx.annotation.MainThread
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.graphics.Color
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.amefure.capsuletoyapp.Models.Domain.Entity.CapsuleToy
@@ -42,12 +41,6 @@ class SeriesInputScreenViewModel @Inject constructor(
     public var categories: MutableList<Category> = mutableListOf()
         private set
 
-    /** CategoryInputScreen */
-    public var categoryName by mutableStateOf("")
-
-    public var showCategoryInputModal by mutableStateOf(false)
-        private set
-
     public var showSuccessDialog by mutableStateOf(false)
         private set
     public var showValidationDialog by mutableStateOf(false)
@@ -78,25 +71,16 @@ class SeriesInputScreenViewModel @Inject constructor(
     }
 
     @MainThread
-    public fun showCategoryInputModal() {
-        showCategoryInputModal = true
-    }
-    @MainThread
-    public fun closeCategoryInputModal() {
-        showCategoryInputModal = false
-    }
-
-    @MainThread
     public fun showSuccessAlert() {
         showSuccessDialog = true
     }
     @MainThread
-    public fun showValidationAlert() {
-        showValidationDialog = true
-    }
-    @MainThread
     public fun closeSuccessAlert() {
         showSuccessDialog = false
+    }
+    @MainThread
+    public fun showValidationAlert() {
+        showValidationDialog = true
     }
     @MainThread
     public fun closeValidationAlert() {
@@ -122,6 +106,7 @@ class SeriesInputScreenViewModel @Inject constructor(
                 series.amount = amount
                 series.memo = memo
                 series.imagePath = null
+                Log.d("DDDUPDATEA", categories.size.toString())
                 repository.updateSeries(series, capsuleToys, locations, categories)
             } ?: run {
                 // 新規追加
@@ -132,6 +117,7 @@ class SeriesInputScreenViewModel @Inject constructor(
                     memo = memo,
                     imagePath = null
                 )
+                Log.d("DDDINSERT", categories.size.toString())
                 repository.insertSeries(series, capsuleToys, locations, categories)
             }
             withContext(Dispatchers.Main) {
@@ -141,15 +127,9 @@ class SeriesInputScreenViewModel @Inject constructor(
     }
 
     public fun addCategory(
-        name: String,
-        color: Color
+        category: Category
     ) {
-        val category = Category(
-            name = name,
-            color = color
-        )
         categories.add(category)
-        Log.d("DDD", categories.size.toString())
     }
 }
 

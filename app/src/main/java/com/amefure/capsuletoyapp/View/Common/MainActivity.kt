@@ -4,6 +4,11 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.slideInVertically
+import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
@@ -22,6 +27,7 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.amefure.capsuletoyapp.Models.Enum.AppScreen
 import com.amefure.capsuletoyapp.View.MyData.MyDataScreen
+import com.amefure.capsuletoyapp.View.Series.Input.CategoryInputScreen
 import com.amefure.capsuletoyapp.View.Series.SeriesDetailScreen
 import com.amefure.capsuletoyapp.View.Series.Input.SeriesInputScreen
 import com.amefure.capsuletoyapp.View.Series.SeriesListScreen
@@ -111,10 +117,41 @@ private fun TabBarBottomWithNav(
 
         composable(
             route = AppScreen.SeriesInput.route(),
-            arguments = listOf(navArgument(AppScreen.SeriesDetail.ARG_ITEM_ID) { type = NavType.LongType })
+            arguments = listOf(navArgument(AppScreen.SeriesDetail.ARG_ITEM_ID) { type = NavType.LongType }),
+            enterTransition = {
+                slideInVertically(
+                    // 下からスライド
+                    initialOffsetY = { fullHeight -> fullHeight },
+                )+ fadeIn()
+
+            },
+            exitTransition =  {
+                slideOutVertically(
+                    // 下にスライド
+                    targetOffsetY = { fullHeight -> fullHeight },
+                ) + fadeOut()
+            },
         ) { backStackEntry ->
             val seriesId: Long = backStackEntry.arguments?.getLong(AppScreen.SeriesDetail.ARG_ITEM_ID) ?: 0
             SeriesInputScreen(seriesId, navController)
+        }
+
+        composable(
+            route = AppScreen.CategoryInput.route(),
+            enterTransition = {
+                slideInVertically(
+                    // 下からスライド
+                    initialOffsetY = { fullHeight -> fullHeight },
+                ) + fadeIn()
+            },
+            exitTransition =  {
+                slideOutVertically(
+                    // 下にスライド
+                    targetOffsetY = { fullHeight -> fullHeight },
+                ) + fadeOut()
+            },
+        ) {
+            CategoryInputScreen(navController)
         }
 
         composable(route = AppScreen.Tab.MyData.route()) {

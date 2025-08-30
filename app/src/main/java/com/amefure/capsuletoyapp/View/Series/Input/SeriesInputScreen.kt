@@ -22,6 +22,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -29,6 +30,8 @@ import androidx.navigation.NavHostController
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
+import com.amefure.capsuletoyapp.Models.Domain.Entity.Category
+import com.amefure.capsuletoyapp.Models.Enum.AppScreen
 import com.amefure.capsuletoyapp.View.Components.Layout.HeaderView
 import com.amefure.capsuletoyapp.View.Extension.CustomText
 import com.amefure.capsuletoyapp.View.Extension.TextSize
@@ -51,9 +54,18 @@ fun SeriesInputScreen(
         viewModel.fetchSingleSeries(seriesId)
     }
 
+    val savedStateHandle = navController.currentBackStackEntry?.savedStateHandle
+    val category = savedStateHandle
+        ?.getStateFlow<Category?>(Category.KEY, null)
+        ?.collectAsState()
+        ?.value
 
-    CategoryInputScreen(viewModel)
-
+    // 値が変わるたびにViewModel側に登録
+    LaunchedEffect(category) {
+        category?.let {
+            viewModel.addCategory(it)
+        }
+    }
 
     Column(
         Modifier
@@ -197,7 +209,7 @@ fun SeriesInputScreen(
         }
 
         OutlinedButton (
-            onClick = { viewModel.showCategoryInputModal() },
+            onClick = { navController.navigate(AppScreen.CategoryInput.route()) },
             shape = RoundedCornerShape(8.dp),
             border = BorderStroke(2.dp, ExGold),
             modifier = Modifier
