@@ -14,7 +14,7 @@ import com.amefure.capsuletoyapp.Models.Domain.Entity.Category
 import com.amefure.capsuletoyapp.Models.Domain.Entity.Location
 import com.amefure.capsuletoyapp.Models.Domain.Entity.Relation.SeriesWithRelations
 import com.amefure.capsuletoyapp.Models.Domain.Entity.Series
-import com.amefure.capsuletoyapp.Repository.SeriesRepository
+import com.amefure.capsuletoyapp.Repository.Interface.SeriesRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch

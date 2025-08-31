@@ -1,4 +1,4 @@
-package com.amefure.capsuletoyapp.Repository
+package com.amefure.capsuletoyapp.Repository.Impl
 
 import android.content.Context
 import com.amefure.capsuletoyapp.Models.Domain.Dao.CapsuleToyDao
@@ -13,6 +13,7 @@ import com.amefure.capsuletoyapp.Models.Domain.Entity.Location
 import com.amefure.capsuletoyapp.Models.Domain.Entity.Relation.SeriesCategoryCrossRef
 import com.amefure.capsuletoyapp.Models.Domain.Entity.Relation.SeriesWithRelations
 import com.amefure.capsuletoyapp.Models.Domain.Entity.Series
+import com.amefure.capsuletoyapp.Repository.Interface.SeriesRepository
 import dagger.hilt.android.qualifiers.ApplicationContext
 import javax.inject.Inject
 

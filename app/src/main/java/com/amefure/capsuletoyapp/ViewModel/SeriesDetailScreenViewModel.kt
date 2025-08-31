@@ -7,7 +7,7 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.amefure.capsuletoyapp.Models.Domain.Entity.Relation.SeriesWithRelations
-import com.amefure.capsuletoyapp.Repository.SeriesRepository
+import com.amefure.capsuletoyapp.Repository.Interface.SeriesRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch

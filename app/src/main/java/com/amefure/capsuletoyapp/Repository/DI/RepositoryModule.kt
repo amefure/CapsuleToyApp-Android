@@ -1,7 +1,7 @@
 package com.amefure.capsuletoyapp.Repository.DI
 
-import com.amefure.capsuletoyapp.Repository.RoomSeriesRepositoryImpl
-import com.amefure.capsuletoyapp.Repository.SeriesRepository
+import com.amefure.capsuletoyapp.Repository.Impl.RoomSeriesRepositoryImpl
+import com.amefure.capsuletoyapp.Repository.Interface.SeriesRepository
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
