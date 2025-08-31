@@ -19,6 +19,12 @@ interface SeriesDao {
     @Update
     suspend fun updateSeries(series: Series)
 
+    @Query("DELETE FROM ${Series.TABLE_NAME}")
+    fun deleteAll()
+
+    @Query("DELETE FROM ${Series.TABLE_NAME} WHERE id = :seriesId")
+    suspend fun deleteSeriesById(seriesId: Long)
+
     @Transaction
     @Query("SELECT * FROM ${Series.TABLE_NAME} WHERE id = :seriesId")
     suspend fun fetchSingleSeries(seriesId: Long): SeriesWithRelations
@@ -26,11 +32,5 @@ interface SeriesDao {
     @Transaction
     @Query("SELECT * FROM ${Series.TABLE_NAME}")
     suspend fun fetchAll(): List<SeriesWithRelations>
-
-    @Query("DELETE FROM ${Series.TABLE_NAME}")
-    fun deleteAll()
-
-    @Query("DELETE FROM ${Series.TABLE_NAME} WHERE id = :seriesId")
-    suspend fun deleteSeriesById(seriesId: Long)
 }
 

@@ -134,6 +134,12 @@ class SeriesInputScreenViewModel @Inject constructor(
     ) {
         categories.add(category)
     }
+
+    public fun removeCategory(
+        category: Category
+    ) {
+        categories.remove(category)
+    }
 }
 
 

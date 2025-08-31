@@ -13,7 +13,10 @@ interface CategoryDao {
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insertCategories(categories: List<Category>): List<Long>
 
-    /** Upsert == あればUpdateなければInsert */
+    /**
+     * Upsert == あればUpdateなければInsert
+     * @Returns - InsertしたID値(Updateでは-1が固定で返る)
+     */
     @Upsert
     suspend fun upsertCategories(categories: List<Category>): List<Long>
 

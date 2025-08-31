@@ -11,6 +11,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 
 
@@ -22,15 +23,19 @@ fun ThemaIconButton(
     onClick: () -> Unit,
     imageVector: ImageVector,
     contentDescription: String?,
+    baseSize: Dp = 50.dp,
+    iconSize: Dp = 24.dp
 ) {
     IconButton (
         onClick = onClick,
         colors = IconButtonDefaults.iconButtonColors(
-            containerColor = MaterialTheme.colorScheme.primary,   // 背景色
-            contentColor = MaterialTheme.colorScheme.onPrimary    // テキスト/Iconの色
+            // 背景色
+            containerColor = MaterialTheme.colorScheme.primary,
+            // テキスト/Iconの色
+            contentColor = MaterialTheme.colorScheme.onPrimary
         ),
         modifier = Modifier
-            .size(50.dp)
+            .size(baseSize)
             // 影を2重でかけて濃くする
             .shadow(8.dp, CircleShape, clip = false)
             .shadow(8.dp, CircleShape, clip = false)
@@ -39,6 +44,8 @@ fun ThemaIconButton(
         Icon(
             imageVector = imageVector,
             contentDescription = contentDescription,
+            modifier = Modifier
+                .size(iconSize)
         )
     }
 }

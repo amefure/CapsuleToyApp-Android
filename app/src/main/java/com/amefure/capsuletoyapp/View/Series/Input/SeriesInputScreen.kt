@@ -2,23 +2,29 @@ package com.amefure.capsuletoyapp.View.Series.Input
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Check
+import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -26,6 +32,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.graphics.Color
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.compose.ui.text.font.FontWeight
@@ -34,6 +41,7 @@ import androidx.compose.ui.unit.dp
 import com.amefure.capsuletoyapp.Models.Domain.Entity.Category
 import com.amefure.capsuletoyapp.Models.Enum.AppScreen
 import com.amefure.capsuletoyapp.View.Components.Layout.HeaderView
+import com.amefure.capsuletoyapp.View.Components.UIParts.ThemaIconButton
 import com.amefure.capsuletoyapp.View.Extension.CustomText
 import com.amefure.capsuletoyapp.View.Extension.TextSize
 import com.amefure.capsuletoyapp.View.Components.UIParts.ThemaTextFiled
@@ -194,21 +202,45 @@ fun SeriesInputScreen(
 
         LazyRow{
             items(items = viewModel.categories) { category ->
-                CustomText(
-                    text = category.name,
-                    textSize = TextSize.S,
-                    color = ExWhite,
+                Box(
                     modifier = Modifier
                         .padding(horizontal = 8.dp)
-                        .shadow(
-                            elevation = 8.dp,
-                            shape = RoundedCornerShape(8.dp),
-                            clip = false
-                        ).background(category.color, RoundedCornerShape(8.dp))
-                        .height(40.dp)
-                        .padding(10.dp)
+                        .padding(vertical = 12.dp)
+                ) {
+                    // カテゴリ名のUI
+                    CustomText(
+                        text = category.name,
+                        textSize = TextSize.S,
+                        color = ExWhite,
+                        modifier = Modifier
+                            .padding(horizontal = 8.dp)
+                            .shadow(
+                                elevation = 8.dp,
+                                shape = RoundedCornerShape(8.dp),
+                                clip = false
+                            )
+                            .background(category.color, RoundedCornerShape(8.dp))
+                            .height(40.dp)
+                            .padding(10.dp)
+                            .align(Alignment.CenterStart)
+                    )
 
-                )
+                    Box(
+                        modifier = Modifier
+                            .align(Alignment.TopEnd)
+                            .offset(x = 12.dp, y = (-16).dp)
+                    ) {
+                        ThemaIconButton(
+                            onClick = {
+                                viewModel.removeCategory(category)
+                            },
+                            imageVector = Icons.Default.Delete,
+                            contentDescription = "削除",
+                            baseSize = 36.dp,
+                            iconSize = 20.dp
+                        )
+                    }
+                }
             }
             item {
                 OutlinedButton (
@@ -216,6 +248,8 @@ fun SeriesInputScreen(
                     shape = RoundedCornerShape(8.dp),
                     border = BorderStroke(2.dp, ExGold),
                     modifier = Modifier
+                        .padding(horizontal = 8.dp)
+                        .padding(vertical = 12.dp)
                         .width(70.dp)
                         .height(40.dp),
                 ) {

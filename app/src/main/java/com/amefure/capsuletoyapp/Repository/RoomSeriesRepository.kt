@@ -1,6 +1,7 @@
 package com.amefure.capsuletoyapp.Repository
 
 import android.content.Context
+import android.util.Log
 import com.amefure.capsuletoyapp.Models.Domain.Dao.CapsuleToyDao
 import com.amefure.capsuletoyapp.Models.Domain.Dao.CategoryDao
 import com.amefure.capsuletoyapp.Models.Domain.Dao.LocationDao
@@ -75,15 +76,29 @@ class RoomSeriesRepositoryImpl
             locationDao.upsertLocations(locations)
         }
         if (categories.isNotEmpty()) {
-            // Category をUpsertして id を取得
-            val categoryIds = categoryDao.upsertCategories(categories)
+            // Upsertで更新 or 新規追加を行い新規追加したIDを取得する
+            // 更新されたものは-1が返るため除外する
+            val insertIds = categoryDao.upsertCategories(categories).filter { it != -1L }
+            // 更新対象だったIDを取得(新規追加はIDが0になっている)
+            val updateIds = categories.map { it.id }.filter { it != 0L }
+            // 追加・更新したIDリスト
+            val categoryIds = (insertIds + updateIds).toSet()
             // CrossRef をUpsertして id を取得
             val crossRefs = categoryIds.map { SeriesCategoryCrossRef(series.id, it) }
             seriesCategoryCrossRefDao.upsertSeriesCategoryCrossRefs(crossRefs)
 
-
-            val existingCrossRefs = seriesCategoryCrossRefDao.getCrossRefsForSeries(series.id)
-            val existingCategoryIds = existingCrossRefs.map { it.categoryId }
+            // すでに登録済みの対象のseriesIdのSeriesCategoryCrossRefを取得
+            val existingCategoryIds = seriesCategoryCrossRefDao.getCrossRefsForSeries(series.id).map { it.categoryId }
+            // 今回削除対象となる CategoryId
+            val toDeleteCategoryIds = existingCategoryIds - categoryIds
+            seriesCategoryCrossRefDao.deleteSeriesCategoryCrossRefs(series.id, toDeleteCategoryIds.toList())
+            toDeleteCategoryIds.forEach { categoryId ->
+                // 対象のカテゴリIDの参照がすでになければカテゴリ自体を削除する
+                val refCount = seriesCategoryCrossRefDao.countCrossRefsForCategory(categoryId)
+                if (refCount == 0) {
+                    categoryDao.deleteCategoryById(categoryId)
+                }
+            }
         }
     }
 
