@@ -10,13 +10,12 @@ plugins {
 
 android {
     namespace = "com.amefure.capsuletoyapp"
-    compileSdk = 35
+    compileSdk = 36
 
     defaultConfig {
         applicationId = "com.amefure.capsuletoyapp"
         minSdk = 34
-        //noinspection OldTargetApi
-        targetSdk = 35
+        targetSdk = 36
         versionCode = 1
         versionName = "1.0"
 
