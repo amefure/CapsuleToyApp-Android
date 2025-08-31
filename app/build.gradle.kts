@@ -70,9 +70,17 @@ dependencies {
     implementation(libs.androidx.room.ktx)
     ksp(libs.androidx.room.compiler)
 
-    /** Hilt(DI；依存性注入 */
+    /** Hilt(DI；依存性注入) */
     implementation(libs.hilt.android)
     ksp(libs.hilt.compiler)
     /** Hilt for Navigation Compose */
     implementation(libs.androidx.hilt.navigation.compose)
+
+    /** CameraX(カメラ機能) */
+    implementation(libs.androidx.camera.core)
+    implementation(libs.androidx.camera.camera2)
+    // CameraX のライフサイクル連動ライブラリ
+    implementation(libs.androidx.camera.lifecycle)
+    // CameraX 用の UI コンポーネント（CameraView）を提供
+    implementation(libs.androidx.camera.view)
 }
