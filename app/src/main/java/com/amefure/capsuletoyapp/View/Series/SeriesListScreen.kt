@@ -106,6 +106,7 @@ fun SeriesListScreen(
                                         color = ExWhite,
                                         modifier = Modifier
                                             .padding(horizontal = 4.dp)
+                                            .height(25.dp)
                                             .shadow(
                                                 elevation = 8.dp,
                                                 shape = RoundedCornerShape(8.dp),

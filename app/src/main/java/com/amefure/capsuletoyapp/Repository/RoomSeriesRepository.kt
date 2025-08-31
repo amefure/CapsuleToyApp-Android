@@ -1,7 +1,6 @@
 package com.amefure.capsuletoyapp.Repository
 
 import android.content.Context
-import android.util.Log
 import com.amefure.capsuletoyapp.Models.Domain.Dao.CapsuleToyDao
 import com.amefure.capsuletoyapp.Models.Domain.Dao.CategoryDao
 import com.amefure.capsuletoyapp.Models.Domain.Dao.LocationDao
