@@ -1,6 +1,13 @@
 package com.amefure.capsuletoyapp.View.Series.Input
 
+import android.app.Activity
+import android.content.Intent
+import android.graphics.Bitmap
+import android.provider.MediaStore
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -15,7 +22,6 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
@@ -24,7 +30,6 @@ import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -32,7 +37,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
-import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.asImageBitmap
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.compose.ui.text.font.FontWeight
@@ -74,6 +79,18 @@ fun SeriesInputScreen(
     LaunchedEffect(category) {
         category?.let {
             viewModel.addCategory(it)
+        }
+    }
+
+    val thumbnail = viewModel.thumbnail
+
+    // ActivityResultLauncher を Compose で記憶
+    val launcher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.StartActivityForResult()
+    ) { result ->
+        if (result.resultCode == Activity.RESULT_OK) {
+            val bitmap = result.data?.extras?.get("data") as? Bitmap
+            viewModel.onImageCaptured(bitmap)
         }
     }
 
@@ -119,6 +136,16 @@ fun SeriesInputScreen(
             rightImageVector = Icons.Filled.Check,
             rightContentDescription = "シリーズ登録",
         )
+
+        // 撮影した画像を表示
+        thumbnail?.let { bitmap ->
+            Image(
+                bitmap = bitmap.asImageBitmap(),
+                contentDescription = "撮影した写真",
+                modifier = Modifier.size(200.dp)
+            )
+        }
+
         Row(
             modifier = Modifier
                 .fillMaxWidth()
@@ -126,7 +153,10 @@ fun SeriesInputScreen(
         ) {
 
             OutlinedButton (
-                onClick = { /* TODO */ },
+                onClick = {
+                    val intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
+                    launcher.launch(intent)
+                },
                 shape = RoundedCornerShape(8.dp),
                 border = BorderStroke(2.dp, ExGold),
                 modifier = Modifier

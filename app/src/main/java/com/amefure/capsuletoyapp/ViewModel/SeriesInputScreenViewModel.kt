@@ -1,6 +1,6 @@
 package com.amefure.capsuletoyapp.ViewModel
 
-import android.util.Log
+import android.graphics.Bitmap
 import androidx.annotation.MainThread
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
@@ -40,6 +40,10 @@ class SeriesInputScreenViewModel @Inject constructor(
     public var count: Int? by mutableStateOf(null)
     public var amount: Int? by mutableStateOf(null)
     public var memo by mutableStateOf("")
+
+    /** カメラで撮影した画像を保持 */
+    public var thumbnail: Bitmap? by mutableStateOf(null)
+
     // コレクション型はSnapshotStateListで管理しないと要素の変化では再コンポーズされない
     public var categories: SnapshotStateList<Category> = mutableStateListOf()
         private set
@@ -127,6 +131,11 @@ class SeriesInputScreenViewModel @Inject constructor(
                 showSuccessAlert()
             }
         }
+    }
+
+    /** カメラで撮影した画像を格納 */
+    public fun onImageCaptured(bitmap: Bitmap?) {
+        thumbnail = bitmap
     }
 
     public fun addCategory(
