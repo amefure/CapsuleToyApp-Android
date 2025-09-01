@@ -14,6 +14,7 @@ import com.amefure.capsuletoyapp.Models.Domain.Entity.Category
 import com.amefure.capsuletoyapp.Models.Domain.Entity.Location
 import com.amefure.capsuletoyapp.Models.Domain.Entity.Relation.SeriesWithRelations
 import com.amefure.capsuletoyapp.Models.Domain.Entity.Series
+import com.amefure.capsuletoyapp.Repository.Interface.ImageRepository
 import com.amefure.capsuletoyapp.Repository.Interface.SeriesRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -23,7 +24,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class SeriesInputScreenViewModel @Inject constructor(
-    private val repository: SeriesRepository
+    private val repository: SeriesRepository,
+    private val imageFileRepository: ImageRepository
 ) : ViewModel() {
 
     /**
@@ -74,6 +76,7 @@ class SeriesInputScreenViewModel @Inject constructor(
         count = series.count
         amount = series.amount
         memo = series.memo
+        thumbnail = imageFileRepository.fetchImage(series.imagePath)
         // categories = entity.categories.toMutableStateList()
         // SnapshotStateListなので上記では再Composeされないので明示的に空にして追加する
         categories.clear()
@@ -109,12 +112,13 @@ class SeriesInputScreenViewModel @Inject constructor(
 
         viewModelScope.launch(Dispatchers.IO) {
             series?.series?.let { series ->
+                val imagePath = imageFileRepository.saveBitmapToInternalStorage(thumbnail, series.id.toString())
                 // 更新
                 series.name = name
                 series.count = count ?: 1
                 series.amount = amount
                 series.memo = memo
-                series.imagePath = null
+                series.imagePath = imagePath
                 repository.updateSeries(series, capsuleToys, locations, categories)
             } ?: run {
                 // 新規追加
@@ -125,7 +129,12 @@ class SeriesInputScreenViewModel @Inject constructor(
                     memo = memo,
                     imagePath = null
                 )
-                repository.insertSeries(series, capsuleToys, locations, categories)
+                val seriesId = repository.insertSeries(series, capsuleToys, locations, categories)
+                val imagePath = imageFileRepository.saveBitmapToInternalStorage(thumbnail, seriesId.toString())
+                imagePath?.let {
+                    series.imagePath = imagePath
+                    repository.updateImagePathSeries(seriesId, imagePath)
+                }
             }
             withContext(Dispatchers.Main) {
                 showSuccessAlert()

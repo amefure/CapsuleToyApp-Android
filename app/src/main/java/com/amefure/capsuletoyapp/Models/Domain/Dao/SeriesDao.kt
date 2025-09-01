@@ -19,6 +19,9 @@ interface SeriesDao {
     @Update
     suspend fun updateSeries(series: Series)
 
+    @Query("UPDATE ${Series.TABLE_NAME} SET imagePath = :imagePath WHERE id = :id")
+    suspend fun updateImagePath(id: Long, imagePath: String)
+
     @Query("DELETE FROM ${Series.TABLE_NAME}")
     fun deleteAll()
 

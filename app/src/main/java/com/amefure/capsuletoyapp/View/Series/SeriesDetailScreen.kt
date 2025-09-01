@@ -1,8 +1,11 @@
 package com.amefure.capsuletoyapp.View.Series
 
+import android.graphics.Bitmap
 import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
@@ -34,6 +37,9 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.graphics.ImageBitmap
+import androidx.compose.ui.graphics.asImageBitmap
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -115,6 +121,7 @@ fun SeriesDetailScreen(
 
         // 画像表示と金額種類数表示セクション
         ImageAndAmountSection(
+            viewModel.fetchImage(),
             (viewModel.series?.series?.amount ?: 0).toString(),
             (viewModel.series?.series?.count ?: 0).toString(),
         )
@@ -172,6 +179,7 @@ fun SeriesDetailScreen(
  */
 @Composable
 private fun ImageAndAmountSection(
+    bitmap: Bitmap?,
     amount: String,
     count: String
 ) {
@@ -181,20 +189,42 @@ private fun ImageAndAmountSection(
             .padding(vertical = 16.dp)
     ) {
 
-        OutlinedButton (
-            onClick = { /* TODO */ },
-            shape = RoundedCornerShape(8.dp),
-            border = BorderStroke(2.dp, ExGold),
-            modifier = Modifier
-                .fillMaxWidth(0.5f)
-                .aspectRatio(1f),
-        ) {
-            Icon(
-                imageVector = Icons.Filled.Add,
-                contentDescription = "画像追加",
-                tint = ExGold,
-            )
+        bitmap?.let {
+            Button(
+                onClick = {
+                },
+                shape = RoundedCornerShape(8.dp),
+                modifier = Modifier
+                    .fillMaxWidth(0.5f)
+                    .aspectRatio(1f),
+                contentPadding = PaddingValues(0.dp)
+            ) {
+                Image(
+                    bitmap = bitmap.asImageBitmap(),
+                    contentDescription = "撮影した写真",
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .aspectRatio(1f),
+                    contentScale = ContentScale.Crop
+                )
+            }
+        } ?: run {
+            OutlinedButton (
+                onClick = { /* TODO */ },
+                shape = RoundedCornerShape(8.dp),
+                border = BorderStroke(2.dp, ExGold),
+                modifier = Modifier
+                    .fillMaxWidth(0.5f)
+                    .aspectRatio(1f),
+            ) {
+                Icon(
+                    imageVector = Icons.Filled.Add,
+                    contentDescription = "画像追加",
+                    tint = ExGold,
+                )
+            }
         }
+
 
         Spacer(
             modifier = Modifier

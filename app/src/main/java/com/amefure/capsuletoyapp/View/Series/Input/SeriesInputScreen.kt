@@ -11,9 +11,11 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
@@ -29,6 +31,7 @@ import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.Delete
+import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.runtime.Composable
@@ -38,6 +41,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.asImageBitmap
+import androidx.compose.ui.layout.ContentScale
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.compose.ui.text.font.FontWeight
@@ -137,37 +141,51 @@ fun SeriesInputScreen(
             rightContentDescription = "シリーズ登録",
         )
 
-        // 撮影した画像を表示
-        thumbnail?.let { bitmap ->
-            Image(
-                bitmap = bitmap.asImageBitmap(),
-                contentDescription = "撮影した写真",
-                modifier = Modifier.size(200.dp)
-            )
-        }
-
         Row(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(vertical = 16.dp)
         ) {
 
-            OutlinedButton (
-                onClick = {
-                    val intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
-                    launcher.launch(intent)
-                },
-                shape = RoundedCornerShape(8.dp),
-                border = BorderStroke(2.dp, ExGold),
-                modifier = Modifier
-                    .fillMaxWidth(0.5f)
-                    .aspectRatio(1f),
-            ) {
-                Icon(
-                    imageVector = Icons.Filled.Add,
-                    contentDescription = "画像追加",
-                    tint = ExGold,
-                )
+            thumbnail?.let { bitmap ->
+                Button(
+                    onClick = {
+                        val intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
+                        launcher.launch(intent)
+                    },
+                    shape = RoundedCornerShape(8.dp),
+                    modifier = Modifier
+                        .fillMaxWidth(0.5f)
+                        .aspectRatio(1f),
+                    contentPadding = PaddingValues(0.dp)
+                ) {
+                    Image(
+                        bitmap = bitmap.asImageBitmap(),
+                        contentDescription = "撮影した写真",
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .aspectRatio(1f),
+                        contentScale = ContentScale.Crop
+                    )
+                }
+            } ?: run {
+                OutlinedButton (
+                    onClick = {
+                        val intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
+                        launcher.launch(intent)
+                    },
+                    shape = RoundedCornerShape(8.dp),
+                    border = BorderStroke(2.dp, ExGold),
+                    modifier = Modifier
+                        .fillMaxWidth(0.5f)
+                        .aspectRatio(1f),
+                ) {
+                    Icon(
+                        imageVector = Icons.Filled.Add,
+                        contentDescription = "画像追加",
+                        tint = ExGold,
+                    )
+                }
             }
 
             Spacer(

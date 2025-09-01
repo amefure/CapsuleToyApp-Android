@@ -1,5 +1,6 @@
 package com.amefure.capsuletoyapp.ViewModel
 
+import android.graphics.Bitmap
 import androidx.annotation.MainThread
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -7,6 +8,7 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.amefure.capsuletoyapp.Models.Domain.Entity.Relation.SeriesWithRelations
+import com.amefure.capsuletoyapp.Repository.Interface.ImageRepository
 import com.amefure.capsuletoyapp.Repository.Interface.SeriesRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -15,7 +17,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class SeriesDetailScreenViewModel @Inject constructor(
-    private val repository: SeriesRepository
+    private val repository: SeriesRepository,
+    private val imageFileRepository: ImageRepository
 ) : ViewModel() {
 
     /**
@@ -32,6 +35,8 @@ class SeriesDetailScreenViewModel @Inject constructor(
     public var showConfirmDialog by mutableStateOf(false)
         private set
 
+    public fun fetchImage(): Bitmap? =
+        imageFileRepository.fetchImage(series?.series?.imagePath)
 
     public fun fetchSingleSeries(seriesId: Long) {
         viewModelScope.launch(Dispatchers.IO) {

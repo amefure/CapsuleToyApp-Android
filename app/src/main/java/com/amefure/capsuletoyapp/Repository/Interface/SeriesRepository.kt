@@ -17,7 +17,7 @@ interface SeriesRepository {
         capsuleToys: List<CapsuleToy>,
         locations: List<Location>,
         categories: List<Category>
-    )
+    ): Long
 
     suspend fun updateSeries(
         series: Series,
@@ -25,5 +25,11 @@ interface SeriesRepository {
         locations: List<Location>,
         categories: List<Category>
     )
+
+    suspend fun updateImagePathSeries(
+        seriesId: Long,
+        imagePath: String
+    )
+
     suspend fun deleteSeries(series: Series)
 }

@@ -1,6 +1,8 @@
 package com.amefure.capsuletoyapp.Repository.DI
 
+import com.amefure.capsuletoyapp.Repository.Impl.ImageFileRepositoryImpl
 import com.amefure.capsuletoyapp.Repository.Impl.RoomSeriesRepositoryImpl
+import com.amefure.capsuletoyapp.Repository.Interface.ImageRepository
 import com.amefure.capsuletoyapp.Repository.Interface.SeriesRepository
 import dagger.Module
 import dagger.Provides
@@ -21,4 +23,9 @@ object RepositoryModule {
     fun provideSeriesRepository(
         impl: RoomSeriesRepositoryImpl
     ): SeriesRepository = impl
+
+    @Provides
+    fun provideImageFileRepository(
+        impl: ImageFileRepositoryImpl
+    ): ImageRepository = impl
 }

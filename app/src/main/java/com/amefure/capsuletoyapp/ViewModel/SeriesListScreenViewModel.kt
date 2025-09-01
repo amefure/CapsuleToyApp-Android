@@ -1,5 +1,6 @@
 package com.amefure.capsuletoyapp.ViewModel
 
+import android.graphics.Bitmap
 import android.util.Log
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
@@ -11,11 +12,13 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.setValue
+import com.amefure.capsuletoyapp.Repository.Interface.ImageRepository
 import kotlinx.coroutines.Dispatchers
 
 @HiltViewModel
 class SeriesListScreenViewModel @Inject constructor(
-    private val repository: SeriesRepository
+    private val repository: SeriesRepository,
+    private val imageFileRepository: ImageRepository
 ) : ViewModel() {
 
     /**
@@ -29,11 +32,13 @@ class SeriesListScreenViewModel @Inject constructor(
 
     public fun fetchAllSeries() {
         viewModelScope.launch(Dispatchers.IO) {
-            Log.d("VM", "読み込み")
             val data = repository.fetchAllSeries()
             series = data
         }
     }
+
+    public fun fetchImage(imagePath: String?): Bitmap? =
+        imageFileRepository.fetchImage(imagePath)
 }
 
 

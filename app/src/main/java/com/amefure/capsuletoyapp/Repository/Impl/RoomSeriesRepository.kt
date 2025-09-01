@@ -43,7 +43,7 @@ class RoomSeriesRepositoryImpl
         capsuleToys: List<CapsuleToy>,
         locations: List<Location>,
         categories: List<Category>
-    ) {
+    ): Long {
         val seriesId = seriesDao.insertSeries(series)
         if (capsuleToys.isNotEmpty()) {
             capsuleToyDao.insertCapsuleToys(capsuleToys.map { it.copy(seriesId = seriesId) })
@@ -58,6 +58,7 @@ class RoomSeriesRepositoryImpl
             val crossRefs = categoryIds.map { SeriesCategoryCrossRef(seriesId, it) }
             seriesCategoryCrossRefDao.insertSeriesCategoryCrossRef(crossRefs)
         }
+        return seriesId
     }
 
     override suspend fun updateSeries(
@@ -100,6 +101,13 @@ class RoomSeriesRepositoryImpl
                 }
             }
         }
+    }
+
+    override suspend fun updateImagePathSeries(
+        seriesId: Long,
+        imagePath: String
+    ) {
+        seriesDao.updateImagePath(seriesId, imagePath)
     }
 
     override suspend fun deleteSeries(series: Series) {
