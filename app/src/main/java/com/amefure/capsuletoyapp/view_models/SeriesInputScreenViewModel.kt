@@ -1,4 +1,4 @@
-package com.amefure.capsuletoyapp.viewmodels
+package com.amefure.capsuletoyapp.view_models
 
 import android.content.Context
 import android.graphics.Bitmap

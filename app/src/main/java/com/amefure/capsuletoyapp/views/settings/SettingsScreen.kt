@@ -1,4 +1,4 @@
-package com.amefure.capsuletoyapp.views.Settings
+package com.amefure.capsuletoyapp.views.settings
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer

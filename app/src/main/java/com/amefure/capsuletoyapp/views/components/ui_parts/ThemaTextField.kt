@@ -1,4 +1,4 @@
-package com.amefure.capsuletoyapp.views.Components.UIParts
+package com.amefure.capsuletoyapp.views.components.ui_parts
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -13,7 +13,6 @@ import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import com.amefure.capsuletoyapp.views.Extension.CustomText
 import com.amefure.capsuletoyapp.ui.theme.ExText
 
 /**

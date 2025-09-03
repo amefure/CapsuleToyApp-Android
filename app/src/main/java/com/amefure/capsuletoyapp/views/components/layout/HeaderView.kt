@@ -1,4 +1,4 @@
-package com.amefure.capsuletoyapp.views.Components.Layout
+package com.amefure.capsuletoyapp.views.components.layout
 
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -11,8 +11,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import com.amefure.capsuletoyapp.views.Extension.CustomText
-import com.amefure.capsuletoyapp.views.Components.UIParts.ThemaIconButton
+import com.amefure.capsuletoyapp.views.components.ui_parts.CustomText
+import com.amefure.capsuletoyapp.views.components.ui_parts.ThemaIconButton
 
 
 @Composable

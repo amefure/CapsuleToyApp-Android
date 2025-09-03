@@ -1,4 +1,4 @@
-package com.amefure.capsuletoyapp.views.Components.UIParts
+package com.amefure.capsuletoyapp.views.components.ui_parts
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement

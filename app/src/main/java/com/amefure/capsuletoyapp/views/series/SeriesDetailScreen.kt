@@ -1,4 +1,4 @@
-package com.amefure.capsuletoyapp.views.Series
+package com.amefure.capsuletoyapp.views.series
 
 import android.graphics.Bitmap
 import androidx.compose.foundation.BorderStroke
@@ -38,13 +38,13 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.amefure.capsuletoyapp.models.Enum.AppScreen
-import com.amefure.capsuletoyapp.views.Components.Layout.HeaderView
-import com.amefure.capsuletoyapp.views.Extension.CustomText
-import com.amefure.capsuletoyapp.views.Extension.TextSize
-import com.amefure.capsuletoyapp.views.Components.UIParts.WhiteBackStackView
-import com.amefure.capsuletoyapp.views.Extension.AlertType
-import com.amefure.capsuletoyapp.views.Extension.CustomAlertDialog
-import com.amefure.capsuletoyapp.viewmodels.SeriesDetailScreenViewModel
+import com.amefure.capsuletoyapp.views.components.layout.HeaderView
+import com.amefure.capsuletoyapp.views.components.ui_parts.CustomText
+import com.amefure.capsuletoyapp.views.components.ui_parts.TextSize
+import com.amefure.capsuletoyapp.views.components.ui_parts.WhiteBackStackView
+import com.amefure.capsuletoyapp.views.components.ui_parts.AlertType
+import com.amefure.capsuletoyapp.views.components.ui_parts.CustomAlertDialog
+import com.amefure.capsuletoyapp.view_models.SeriesDetailScreenViewModel
 import com.amefure.capsuletoyapp.ui.theme.ExGold
 import com.amefure.capsuletoyapp.ui.theme.ExWhite
 

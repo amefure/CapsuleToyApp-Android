@@ -1,4 +1,4 @@
-package com.amefure.capsuletoyapp.views.Series.Input
+package com.amefure.capsuletoyapp.views.series.input
 
 import android.net.Uri
 import androidx.activity.compose.rememberLauncherForActivityResult
@@ -45,14 +45,14 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import com.amefure.capsuletoyapp.models.Domain.Entity.Category
 import com.amefure.capsuletoyapp.models.Enum.AppScreen
-import com.amefure.capsuletoyapp.views.Components.Layout.HeaderView
-import com.amefure.capsuletoyapp.views.Components.UIParts.ThemaIconButton
-import com.amefure.capsuletoyapp.views.Extension.CustomText
-import com.amefure.capsuletoyapp.views.Extension.TextSize
-import com.amefure.capsuletoyapp.views.Components.UIParts.ThemaTextFiled
-import com.amefure.capsuletoyapp.views.Extension.AlertType
-import com.amefure.capsuletoyapp.views.Extension.CustomAlertDialog
-import com.amefure.capsuletoyapp.viewmodels.SeriesInputScreenViewModel
+import com.amefure.capsuletoyapp.views.components.layout.HeaderView
+import com.amefure.capsuletoyapp.views.components.ui_parts.ThemaIconButton
+import com.amefure.capsuletoyapp.views.components.ui_parts.CustomText
+import com.amefure.capsuletoyapp.views.components.ui_parts.TextSize
+import com.amefure.capsuletoyapp.views.components.ui_parts.ThemaTextFiled
+import com.amefure.capsuletoyapp.views.components.ui_parts.AlertType
+import com.amefure.capsuletoyapp.views.components.ui_parts.CustomAlertDialog
+import com.amefure.capsuletoyapp.view_models.SeriesInputScreenViewModel
 import com.amefure.capsuletoyapp.ui.theme.ExGold
 import com.amefure.capsuletoyapp.ui.theme.ExWhite
 

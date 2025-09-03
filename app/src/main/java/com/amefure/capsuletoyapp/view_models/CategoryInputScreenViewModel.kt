@@ -1,4 +1,4 @@
-package com.amefure.capsuletoyapp.viewmodels
+package com.amefure.capsuletoyapp.view_models
 
 import androidx.annotation.MainThread
 import androidx.compose.runtime.getValue

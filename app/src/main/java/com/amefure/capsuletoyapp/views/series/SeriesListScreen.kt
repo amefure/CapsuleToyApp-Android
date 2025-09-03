@@ -1,4 +1,4 @@
-package com.amefure.capsuletoyapp.views.Series
+package com.amefure.capsuletoyapp.views.series
 
 
 import androidx.compose.foundation.Image
@@ -30,14 +30,14 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.amefure.capsuletoyapp.models.Enum.AppScreen
-import com.amefure.capsuletoyapp.views.Components.Layout.HeaderView
-import com.amefure.capsuletoyapp.viewmodels.SeriesListScreenViewModel
+import com.amefure.capsuletoyapp.views.components.layout.HeaderView
+import com.amefure.capsuletoyapp.view_models.SeriesListScreenViewModel
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import com.amefure.capsuletoyapp.R
-import com.amefure.capsuletoyapp.views.Extension.CustomText
-import com.amefure.capsuletoyapp.views.Components.UIParts.DataEmptyView
-import com.amefure.capsuletoyapp.views.Extension.TextSize
+import com.amefure.capsuletoyapp.views.components.ui_parts.CustomText
+import com.amefure.capsuletoyapp.views.components.ui_parts.DataEmptyView
+import com.amefure.capsuletoyapp.views.components.ui_parts.TextSize
 import com.amefure.capsuletoyapp.ui.theme.ExWhite
 
 @Composable

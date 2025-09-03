@@ -1,4 +1,4 @@
-package com.amefure.capsuletoyapp.views.Series.Input
+package com.amefure.capsuletoyapp.views.series.input
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
@@ -20,8 +20,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
-import com.amefure.capsuletoyapp.views.Components.Layout.HeaderView
-import com.amefure.capsuletoyapp.views.Extension.CustomText
+import com.amefure.capsuletoyapp.views.components.layout.HeaderView
+import com.amefure.capsuletoyapp.views.components.ui_parts.CustomText
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -31,10 +31,10 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.amefure.capsuletoyapp.models.Domain.Entity.Category
-import com.amefure.capsuletoyapp.views.Extension.AlertType
-import com.amefure.capsuletoyapp.views.Extension.CustomAlertDialog
-import com.amefure.capsuletoyapp.views.Extension.TextSize
-import com.amefure.capsuletoyapp.viewmodels.CategoryInputScreenViewModel
+import com.amefure.capsuletoyapp.views.components.ui_parts.AlertType
+import com.amefure.capsuletoyapp.views.components.ui_parts.CustomAlertDialog
+import com.amefure.capsuletoyapp.views.components.ui_parts.TextSize
+import com.amefure.capsuletoyapp.view_models.CategoryInputScreenViewModel
 import com.amefure.capsuletoyapp.ui.theme.ExGold
 import com.amefure.capsuletoyapp.ui.theme.ExWhite
 

@@ -1,4 +1,4 @@
-package com.amefure.capsuletoyapp.views.Extension
+package com.amefure.capsuletoyapp.views.components.ui_parts
 
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.MaterialTheme

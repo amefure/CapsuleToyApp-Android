@@ -25,12 +25,12 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.amefure.capsuletoyapp.models.Enum.AppScreen
-import com.amefure.capsuletoyapp.views.MyData.MyDataScreen
-import com.amefure.capsuletoyapp.views.Series.Input.CategoryInputScreen
-import com.amefure.capsuletoyapp.views.Series.SeriesDetailScreen
-import com.amefure.capsuletoyapp.views.Series.Input.SeriesInputScreen
-import com.amefure.capsuletoyapp.views.Series.SeriesListScreen
-import com.amefure.capsuletoyapp.views.Settings.SettingsScreen
+import com.amefure.capsuletoyapp.views.mydata.MyDataScreen
+import com.amefure.capsuletoyapp.views.series.input.CategoryInputScreen
+import com.amefure.capsuletoyapp.views.series.SeriesDetailScreen
+import com.amefure.capsuletoyapp.views.series.input.SeriesInputScreen
+import com.amefure.capsuletoyapp.views.series.SeriesListScreen
+import com.amefure.capsuletoyapp.views.settings.SettingsScreen
 import com.amefure.capsuletoyapp.ui.theme.CapsuleToyAppTheme
 import dagger.hilt.android.AndroidEntryPoint
 

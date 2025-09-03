@@ -1,4 +1,4 @@
-package com.amefure.capsuletoyapp.views.MyData
+package com.amefure.capsuletoyapp.views.mydata
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -7,8 +7,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
-import com.amefure.capsuletoyapp.views.Components.Layout.HeaderView
-import com.amefure.capsuletoyapp.views.Components.UIParts.DataEmptyView
+import com.amefure.capsuletoyapp.views.components.layout.HeaderView
+import com.amefure.capsuletoyapp.views.components.ui_parts.DataEmptyView
 
 @Composable
 fun MyDataScreen(
