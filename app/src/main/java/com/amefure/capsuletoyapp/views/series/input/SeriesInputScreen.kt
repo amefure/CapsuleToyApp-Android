@@ -6,6 +6,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -21,13 +22,17 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.filled.AccountBox
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.Delete
+import androidx.compose.material.icons.filled.Phone
+import androidx.compose.material.icons.filled.PlayArrow
 import androidx.compose.material3.Button
+import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.Icon
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.runtime.Composable
@@ -65,6 +70,7 @@ fun SeriesInputScreen(
     // Compositionされたタイミングで実行する
     // 1回だけ発火して欲しいのでKeyは不変とする
     LaunchedEffect(Unit) {
+        viewModel.preparePhotoUri()
         viewModel.fetchSingleSeries(seriesId)
     }
 
@@ -153,10 +159,7 @@ fun SeriesInputScreen(
             thumbnail?.let { bitmap ->
                 Button(
                     onClick = {
-                        // ギャラリー起動
-                        viewModel.photoUri?.let { imageLauncher.launch("image/*") }
-                        // カメラ起動
-                        // viewModel.photoUri?.let { cameraLauncher.launch(it) }
+                        viewModel.expanded = true
                     },
                     shape = RoundedCornerShape(8.dp),
                     modifier = Modifier
@@ -176,10 +179,7 @@ fun SeriesInputScreen(
             } ?: run {
                 OutlinedButton (
                     onClick = {
-                        // ギャラリー起動
-                        // viewModel.photoUri?.let { imageLauncher.launch("image/*") }
-                        // カメラ起動
-                        viewModel.photoUri?.let { cameraLauncher.launch(it) }
+                        viewModel.expanded = true
                     },
                     shape = RoundedCornerShape(8.dp),
                     border = BorderStroke(2.dp, ExGold),
@@ -193,6 +193,52 @@ fun SeriesInputScreen(
                         tint = ExGold,
                     )
                 }
+            }
+
+            DropdownMenu(
+                expanded = viewModel.expanded,
+                onDismissRequest = { viewModel.expanded = false }
+            ) {
+                DropdownMenuItem(
+                    text = {
+                        Row(
+                            verticalAlignment = Alignment.CenterVertically,
+                            horizontalArrangement = Arrangement.spacedBy(8.dp)
+                        ) {
+                            CustomText("カメラを起動する")
+                            Icon(
+                                imageVector = Icons.Filled.PlayArrow,
+                                contentDescription = "Camera"
+                            )
+                        }
+
+                    },
+                    onClick = {
+                        viewModel.expanded = false
+                        // カメラ起動
+                        viewModel.photoUri?.let { cameraLauncher.launch(it) }
+                    }
+                )
+
+                DropdownMenuItem(
+                    text = {
+                        Row(
+                            verticalAlignment = Alignment.CenterVertically,
+                            horizontalArrangement = Arrangement.spacedBy(8.dp)
+                        ) {
+                            CustomText("写真から選択する")
+                            Icon(
+                                imageVector = Icons.Default.AccountBox,
+                                contentDescription = "Gallery"
+                            )
+                        }
+                    },
+                    onClick = {
+                        viewModel.expanded = false
+                        // ギャラリー起動
+                        viewModel.photoUri?.let { imageLauncher.launch("image/*") }
+                    }
+                )
             }
 
             Spacer(

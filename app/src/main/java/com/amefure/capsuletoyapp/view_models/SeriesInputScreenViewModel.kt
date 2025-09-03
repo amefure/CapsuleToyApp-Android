@@ -48,6 +48,9 @@ class SeriesInputScreenViewModel @Inject constructor(
     public var amount: Int? by mutableStateOf(null)
     public var memo by mutableStateOf("")
 
+    /** ドロップダウンメニューの開閉フラグ */
+    public var expanded by mutableStateOf(false)
+
     /** カメラで撮影した画像を保持 */
     public var thumbnail: Bitmap? by mutableStateOf(null)
 
@@ -58,6 +61,10 @@ class SeriesInputScreenViewModel @Inject constructor(
     public var showSuccessDialog by mutableStateOf(false)
         private set
     public var showValidationDialog by mutableStateOf(false)
+        private set
+
+    /** 一時保存用のURI */
+    public var photoUri: Uri? = null
         private set
 
     private val imageService = ImageService(context)
@@ -88,23 +95,6 @@ class SeriesInputScreenViewModel @Inject constructor(
         // SnapshotStateListなので上記では再Composeされないので明示的に空にして追加する
         categories.clear()
         categories.addAll(entity.categories)
-    }
-
-    @MainThread
-    public fun showSuccessAlert() {
-        showSuccessDialog = true
-    }
-    @MainThread
-    public fun closeSuccessAlert() {
-        showSuccessDialog = false
-    }
-    @MainThread
-    public fun showValidationAlert() {
-        showValidationDialog = true
-    }
-    @MainThread
-    public fun closeValidationAlert() {
-        showValidationDialog = false
     }
 
     /** SeriesInput画面から新規作成・更新する */
@@ -149,20 +139,18 @@ class SeriesInputScreenViewModel @Inject constructor(
         }
     }
 
-    public var photoUri: Uri? = null
-        private set
-
-    private fun preparePhotoUri() {
+    /** 一時保存用のURIを構築 */
+    public fun preparePhotoUri() {
         photoUri = imageService.createTempPhotoUri()
     }
 
     /** カメラで撮影した画像を格納 */
     public fun onCameraCaptured() {
-        preparePhotoUri()
         val photoUri = photoUri ?: return
         thumbnail = imageService.decodeUriToBitmap(photoUri)
     }
 
+    /** ギャラリーから選択された画像を格納 */
     public fun onGalleryImageSelected(uri: Uri) {
         thumbnail = imageService.decodeUriToBitmap(uri)
     }
@@ -177,6 +165,23 @@ class SeriesInputScreenViewModel @Inject constructor(
         category: Category
     ) {
         categories.remove(category)
+    }
+
+    @MainThread
+    public fun showSuccessAlert() {
+        showSuccessDialog = true
+    }
+    @MainThread
+    public fun closeSuccessAlert() {
+        showSuccessDialog = false
+    }
+    @MainThread
+    public fun showValidationAlert() {
+        showValidationDialog = true
+    }
+    @MainThread
+    public fun closeValidationAlert() {
+        showValidationDialog = false
     }
 }
 
