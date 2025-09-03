@@ -1,9 +1,6 @@
 package com.amefure.capsuletoyapp.View.Series.Input
 
-import android.app.Activity
-import android.content.Intent
-import android.graphics.Bitmap
-import android.provider.MediaStore
+import android.net.Uri
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.BorderStroke
@@ -20,7 +17,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
@@ -88,13 +84,21 @@ fun SeriesInputScreen(
 
     val thumbnail = viewModel.thumbnail
 
-    // ActivityResultLauncher を Compose で記憶
-    val launcher = rememberLauncherForActivityResult(
-        contract = ActivityResultContracts.StartActivityForResult()
-    ) { result ->
-        if (result.resultCode == Activity.RESULT_OK) {
-            val bitmap = result.data?.extras?.get("data") as? Bitmap
-            viewModel.onImageCaptured(bitmap)
+    // カメラ起動ランチャー
+    val cameraLauncher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.TakePicture()
+    ) { success ->
+        if (success) {
+            viewModel.onCameraCaptured()
+        }
+    }
+
+    // ギャラリー起動ランチャー
+    val imageLauncher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.GetContent()
+    ) { uri: Uri? ->
+        uri?.let {
+            viewModel.onGalleryImageSelected(it)
         }
     }
 
@@ -150,8 +154,10 @@ fun SeriesInputScreen(
             thumbnail?.let { bitmap ->
                 Button(
                     onClick = {
-                        val intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
-                        launcher.launch(intent)
+                        // ギャラリー起動
+                        viewModel.photoUri?.let { imageLauncher.launch("image/*") }
+                        // カメラ起動
+                        // viewModel.photoUri?.let { cameraLauncher.launch(it) }
                     },
                     shape = RoundedCornerShape(8.dp),
                     modifier = Modifier
@@ -171,8 +177,10 @@ fun SeriesInputScreen(
             } ?: run {
                 OutlinedButton (
                     onClick = {
-                        val intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
-                        launcher.launch(intent)
+                        // ギャラリー起動
+                        // viewModel.photoUri?.let { imageLauncher.launch("image/*") }
+                        // カメラ起動
+                        viewModel.photoUri?.let { cameraLauncher.launch(it) }
                     },
                     shape = RoundedCornerShape(8.dp),
                     border = BorderStroke(2.dp, ExGold),

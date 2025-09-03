@@ -1,6 +1,8 @@
 package com.amefure.capsuletoyapp.ViewModel
 
+import android.content.Context
 import android.graphics.Bitmap
+import android.net.Uri
 import androidx.annotation.MainThread
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
@@ -16,7 +18,9 @@ import com.amefure.capsuletoyapp.Models.Domain.Entity.Relation.SeriesWithRelatio
 import com.amefure.capsuletoyapp.Models.Domain.Entity.Series
 import com.amefure.capsuletoyapp.Repository.Interface.ImageRepository
 import com.amefure.capsuletoyapp.Repository.Interface.SeriesRepository
+import com.amefure.capsuletoyapp.services.ImageService
 import dagger.hilt.android.lifecycle.HiltViewModel
+import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -25,7 +29,8 @@ import javax.inject.Inject
 @HiltViewModel
 class SeriesInputScreenViewModel @Inject constructor(
     private val repository: SeriesRepository,
-    private val imageFileRepository: ImageRepository
+    private val imageFileRepository: ImageRepository,
+    @ApplicationContext private val context: Context
 ) : ViewModel() {
 
     /**
@@ -54,6 +59,8 @@ class SeriesInputScreenViewModel @Inject constructor(
         private set
     public var showValidationDialog by mutableStateOf(false)
         private set
+
+    private val imageService = ImageService(context)
 
     /** シリーズIDで指定されたシリーズ情報を取得してUIに反映する */
     public fun fetchSingleSeries(seriesId: Long) {
@@ -142,9 +149,22 @@ class SeriesInputScreenViewModel @Inject constructor(
         }
     }
 
+    public var photoUri: Uri? = null
+        private set
+
+    private fun preparePhotoUri() {
+        photoUri = imageService.createTempPhotoUri()
+    }
+
     /** カメラで撮影した画像を格納 */
-    public fun onImageCaptured(bitmap: Bitmap?) {
-        thumbnail = bitmap
+    public fun onCameraCaptured() {
+        preparePhotoUri()
+        val photoUri = photoUri ?: return
+        thumbnail = imageService.decodeUriToBitmap(photoUri)
+    }
+
+    public fun onGalleryImageSelected(uri: Uri) {
+        thumbnail = imageService.decodeUriToBitmap(uri)
     }
 
     public fun addCategory(

@@ -1,0 +1,5 @@
+<!-- カメラ撮影機能用の一時ファイル保存用URIパス -->
+<!-- AndroidManifestでproviderとして定義 -->
+<paths>
+    <cache-path name="cache" path="." />
+</paths>
