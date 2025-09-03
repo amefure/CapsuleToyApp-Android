@@ -41,20 +41,19 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import com.amefure.capsuletoyapp.models.Domain.Entity.Category
 import com.amefure.capsuletoyapp.models.Enum.AppScreen
 import com.amefure.capsuletoyapp.views.components.layout.HeaderView
-import com.amefure.capsuletoyapp.views.components.ui_parts.ThemaIconButton
+import com.amefure.capsuletoyapp.views.components.ui_parts.ThemeIconButton
 import com.amefure.capsuletoyapp.views.components.ui_parts.CustomText
 import com.amefure.capsuletoyapp.views.components.ui_parts.TextSize
-import com.amefure.capsuletoyapp.views.components.ui_parts.ThemaTextFiled
 import com.amefure.capsuletoyapp.views.components.ui_parts.AlertType
 import com.amefure.capsuletoyapp.views.components.ui_parts.CustomAlertDialog
 import com.amefure.capsuletoyapp.view_models.SeriesInputScreenViewModel
 import com.amefure.capsuletoyapp.ui.theme.ExGold
 import com.amefure.capsuletoyapp.ui.theme.ExWhite
+import com.amefure.capsuletoyapp.views.components.ui_parts.ThemeInputBox
 
 @Composable
 fun SeriesInputScreen(
@@ -286,7 +285,7 @@ fun SeriesInputScreen(
                             .align(Alignment.TopEnd)
                             .offset(x = 12.dp, y = (-16).dp)
                     ) {
-                        ThemaIconButton(
+                        ThemeIconButton(
                             onClick = {
                                 viewModel.removeCategory(category)
                             },
@@ -351,37 +350,3 @@ fun SeriesInputScreen(
     }
 }
 
-/**　サブラベル付き入力ボックス */
-@Composable
-fun ThemeInputBox(
-    title: String,
-    value: String,
-    onValueChange: (String) -> Unit,
-    placeholder: String = "",
-    isNumberOnly: Boolean = false,
-    singleLine: Boolean = true,
-) {
-    Column {
-        CustomText(
-            text = title,
-            textSize = TextSize.S,
-            fontWeight = FontWeight.Bold,
-        )
-
-        Spacer(modifier = Modifier.height(8.dp))
-
-        ThemaTextFiled(
-            value = value,
-            onValueChange = onValueChange,
-            placeholder = placeholder,
-            keyboardOptions = if (isNumberOnly) {
-                KeyboardOptions.Default.copy(
-                    keyboardType = KeyboardType.Number
-                )
-            } else {
-                KeyboardOptions.Default
-            },
-            singleLine = singleLine,
-        )
-    }
-}

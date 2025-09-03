@@ -19,7 +19,7 @@ import com.amefure.capsuletoyapp.ui.theme.ExText
  * 背景が白色角丸影ありのテキスト入力ボックス
  */
 @Composable
-fun ThemaTextFiled(
+fun ThemeTextFiled(
     value: String,
     onValueChange: (String) -> Unit,
     label: String? = null,

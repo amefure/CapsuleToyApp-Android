@@ -37,6 +37,7 @@ import com.amefure.capsuletoyapp.views.components.ui_parts.TextSize
 import com.amefure.capsuletoyapp.view_models.CategoryInputScreenViewModel
 import com.amefure.capsuletoyapp.ui.theme.ExGold
 import com.amefure.capsuletoyapp.ui.theme.ExWhite
+import com.amefure.capsuletoyapp.views.components.ui_parts.ThemeInputBox
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable

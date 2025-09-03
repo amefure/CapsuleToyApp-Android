@@ -12,7 +12,7 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.amefure.capsuletoyapp.views.components.ui_parts.CustomText
-import com.amefure.capsuletoyapp.views.components.ui_parts.ThemaIconButton
+import com.amefure.capsuletoyapp.views.components.ui_parts.ThemeIconButton
 
 
 @Composable
@@ -29,7 +29,7 @@ fun HeaderView(
         verticalAlignment = Alignment.CenterVertically,
     ) {
         if (leftImageVector != null) {
-            ThemaIconButton(
+            ThemeIconButton(
                 onClick = leftOnClick,
                 imageVector = leftImageVector,
                 contentDescription = leftContentDescription,
@@ -58,7 +58,7 @@ fun HeaderView(
                 .weight(1f)
         )
         if (rightImageVector != null) {
-            ThemaIconButton(
+            ThemeIconButton(
                 onClick = rightOnClick,
                 imageVector = rightImageVector,
                 contentDescription = rightContentDescription,

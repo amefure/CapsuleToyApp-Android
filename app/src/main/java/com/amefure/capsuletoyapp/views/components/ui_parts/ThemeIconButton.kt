@@ -19,7 +19,7 @@ import androidx.compose.ui.unit.dp
  * テーマアイコンボタン(丸)
  */
 @Composable
-fun ThemaIconButton(
+fun ThemeIconButton(
     onClick: () -> Unit,
     imageVector: ImageVector,
     contentDescription: String?,
