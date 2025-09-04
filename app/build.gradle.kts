@@ -85,4 +85,7 @@ dependencies {
     implementation(libs.androidx.camera.lifecycle)
     // CameraX 用の UI コンポーネント（CameraView）を提供
     implementation(libs.androidx.camera.view)
+
+    /** マテリアルアイコン全読み込み */
+    implementation(libs.androidx.material.icons.extended)
 }

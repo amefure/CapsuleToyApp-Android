@@ -26,8 +26,10 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.AccountBox
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.CameraAlt
 import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.Delete
+import androidx.compose.material.icons.filled.Image
 import androidx.compose.material.icons.filled.Phone
 import androidx.compose.material.icons.filled.PlayArrow
 import androidx.compose.material3.Button
@@ -207,7 +209,7 @@ fun SeriesInputScreen(
                         ) {
                             CustomText("カメラを起動する")
                             Icon(
-                                imageVector = Icons.Filled.PlayArrow,
+                                imageVector = Icons.Default.CameraAlt,
                                 contentDescription = "Camera"
                             )
                         }
@@ -228,7 +230,7 @@ fun SeriesInputScreen(
                         ) {
                             CustomText("写真から選択する")
                             Icon(
-                                imageVector = Icons.Default.AccountBox,
+                                imageVector = Icons.Default.Image,
                                 contentDescription = "Gallery"
                             )
                         }
