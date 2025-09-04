@@ -24,7 +24,10 @@ android {
 
     buildTypes {
         release {
-            isMinifyEnabled = false
+            // ProGuard(コードの縮小、最適化、難読化)を有効にするフラグ
+            isMinifyEnabled = true
+            // リソースの縮小を有効にするフラグ
+            isShrinkResources = true
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
