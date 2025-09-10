@@ -1,9 +1,15 @@
 package com.amefure.capsuletoyapp.views.Common
 
+import android.Manifest
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
+import android.provider.Settings
 import androidx.activity.ComponentActivity
+import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.slideInVertically
@@ -14,8 +20,11 @@ import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
@@ -32,6 +41,9 @@ import com.amefure.capsuletoyapp.views.series.input.SeriesInputScreen
 import com.amefure.capsuletoyapp.views.series.SeriesListScreen
 import com.amefure.capsuletoyapp.views.settings.SettingsScreen
 import com.amefure.capsuletoyapp.ui.theme.CapsuleToyAppTheme
+import com.amefure.capsuletoyapp.view_models.RootEnvironment
+import com.amefure.capsuletoyapp.views.components.ui_parts.AlertType
+import com.amefure.capsuletoyapp.views.components.ui_parts.CustomAlertDialog
 import dagger.hilt.android.AndroidEntryPoint
 
 /** アプリのエントリーポイント */
@@ -50,8 +62,54 @@ class MainActivity : ComponentActivity() {
 }
 
 @Composable
-private fun RootNavContent() {
+private fun RootNavContent(
+    rootEnvironment: RootEnvironment = hiltViewModel(),
+) {
     val navController = rememberNavController()
+
+    val context = LocalContext.current
+
+    val launcher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.RequestMultiplePermissions()
+    ) { permissions ->
+        val fineLocation = permissions[Manifest.permission.ACCESS_FINE_LOCATION] ?: false
+        val coarseLocation = permissions[Manifest.permission.ACCESS_COARSE_LOCATION] ?: false
+
+        if (fineLocation && coarseLocation) {
+            // Toast.makeText(context, "許可されました", Toast.LENGTH_SHORT).show()
+        } else {
+            // 否認されていた場合は警告アラートを出す
+            rootEnvironment.showPermissionAlertDialog()
+        }
+    }
+
+    LaunchedEffect(Unit) {
+        // 位置情報のパーミッション許可がされていないなら申請を出す
+        if (!rootEnvironment.isGrantedLocationPermission()) {
+            launcher.launch(
+                arrayOf(
+                    Manifest.permission.ACCESS_FINE_LOCATION,
+                    Manifest.permission.ACCESS_COARSE_LOCATION,
+                )
+            )
+        }
+    }
+
+    CustomAlertDialog(
+        showFlag = rootEnvironment.isShowPermissionAlertDialog,
+        type = AlertType.CONFIRM,
+        rightTitle = "設定を開く",
+        rightAction = {
+            // 設定アプリを開く
+            val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS).apply {
+                data = Uri.fromParts("package", context.packageName, null)
+            }
+            context.startActivity(intent)
+            rootEnvironment.closePermissionAlertDialog()
+        },
+        message = "位置情報が有効にされていないため一部機能が使用できません。"
+    )
+
     Scaffold(
         bottomBar = {
             NavigationBar {

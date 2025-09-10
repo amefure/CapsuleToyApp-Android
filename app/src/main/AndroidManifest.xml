@@ -2,6 +2,11 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <!-- 正確な位置(GPS) -->
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <!-- おおよその位置(Wi-Fiやネットワーク) -->
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+
     <application
         android:name=".views.Common.App"
         android:allowBackup="true"

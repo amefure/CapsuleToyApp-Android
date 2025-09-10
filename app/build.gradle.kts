@@ -88,4 +88,7 @@ dependencies {
 
     /** マテリアルアイコン全読み込み */
     implementation(libs.androidx.material.icons.extended)
+
+    /** 位置情報取得 */
+    implementation(libs.play.services.location)
 }
