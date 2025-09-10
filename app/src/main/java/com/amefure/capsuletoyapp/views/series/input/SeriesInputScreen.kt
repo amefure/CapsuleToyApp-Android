@@ -24,14 +24,11 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
-import androidx.compose.material.icons.filled.AccountBox
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.CameraAlt
 import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Image
-import androidx.compose.material.icons.filled.Phone
-import androidx.compose.material.icons.filled.PlayArrow
 import androidx.compose.material3.Button
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
@@ -116,24 +113,22 @@ fun SeriesInputScreen(
 
         CustomAlertDialog(
             showFlag = viewModel.showSuccessDialog,
-            closeAction = {
+            rightAction = {
                 viewModel.closeSuccessAlert()
                 navController.popBackStack()
             },
-            message = {
-                if (seriesId == 0L) {
-                    CustomText("「${viewModel.name}」を登録しました。")
-                } else {
-                    CustomText("更新しました。")
-                }
+            message = if (seriesId == 0L) {
+                "「${viewModel.name}」を登録しました。"
+            } else {
+                "更新しました。"
             }
         )
 
         CustomAlertDialog(
             showFlag = viewModel.showValidationDialog,
             type = AlertType.FAILED,
-            closeAction = { viewModel.closeValidationAlert() },
-            message = { CustomText("名前と種類は必須入力です。") }
+            rightAction = { viewModel.closeValidationAlert() },
+            message = "名前と種類は必須入力です。"
         )
 
         HeaderView(

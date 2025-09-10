@@ -70,20 +70,18 @@ fun SeriesDetailScreen(
 
         CustomAlertDialog(
             showFlag = viewModel.showSuccessDialog,
-            closeAction = {
+            rightAction = {
                 viewModel.closeSuccessAlert()
                 navController.popBackStack()
             },
-            message = {
-                CustomText("削除しました。")
-            }
+            message = "削除しました。"
         )
 
         CustomAlertDialog(
             showFlag = viewModel.showConfirmDialog,
             type = AlertType.CONFIRM,
             rightTitle = "削除",
-            closeAction = {
+            rightAction = {
                 viewModel.closeConfirmAlert()
                 viewModel.deleteSeries()
                 viewModel.showSuccessAlert()
@@ -91,12 +89,7 @@ fun SeriesDetailScreen(
             cancelAction = {
                 viewModel.closeConfirmAlert()
             },
-            message = {
-                CustomText(
-                    "このデータを削除しますか？\n削除すると登録した画像なども削除されます。",
-                    maxLines = 4
-                )
-            }
+            message = "このデータを削除しますか？\n削除すると登録した画像なども削除されます。"
         )
 
         HeaderView(

@@ -50,8 +50,8 @@ fun CategoryInputScreen(
     CustomAlertDialog(
         showFlag = viewModel.showValidationDialog,
         type = AlertType.FAILED,
-        closeAction = { viewModel.closeValidationAlert() },
-        message = { CustomText("カテゴリ名は必須入力です。") }
+        rightAction = { viewModel.closeValidationAlert() },
+        message = "カテゴリ名は必須入力です。"
     )
 
     Column(

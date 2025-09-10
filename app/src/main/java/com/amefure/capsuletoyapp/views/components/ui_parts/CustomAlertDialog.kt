@@ -31,16 +31,16 @@ fun CustomAlertDialog(
     showFlag: Boolean,
     type: AlertType = AlertType.SUCCESS,
     rightTitle: String = "OK",
-    closeAction: () -> Unit,
+    rightAction: () -> Unit,
     cancelAction: (() -> Unit)? = null,
-    message: @Composable () -> Unit
+    message: String
 ) {
     if (showFlag) {
         AlertDialog(
-            onDismissRequest = cancelAction ?: closeAction,
+            onDismissRequest = cancelAction ?: rightAction,
             confirmButton = {
                 TextButton(
-                    onClick = closeAction
+                    onClick = rightAction
                 ) {
                     if (type == AlertType.CONFIRM) {
                         CustomText(
@@ -55,14 +55,19 @@ fun CustomAlertDialog(
             dismissButton = {
                 if (type == AlertType.CONFIRM) {
                     TextButton(
-                        onClick = cancelAction ?: closeAction,
+                        onClick = cancelAction ?: rightAction,
                     ) {
                         CustomText("キャンセル")
                     }
                 }
             },
             title = { CustomText(type.title()) },
-            text = message
+            text = {
+                CustomText(
+                    text = message,
+                    maxLines = 4
+                )
+            }
         )
     }
 }
