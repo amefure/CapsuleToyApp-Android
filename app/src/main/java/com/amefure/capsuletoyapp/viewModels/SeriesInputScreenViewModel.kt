@@ -16,7 +16,7 @@ import com.amefure.capsuletoyapp.models.domain.entity.Category
 import com.amefure.capsuletoyapp.models.domain.entity.Location
 import com.amefure.capsuletoyapp.models.domain.entity.Series
 import com.amefure.capsuletoyapp.models.domain.entity.relation.SeriesWithRelations
-import com.amefure.capsuletoyapp.repositories.`interface`.ImageRepository
+import com.amefure.capsuletoyapp.repositories.repositoryInterface.ImageRepository
 import com.amefure.capsuletoyapp.repositories.repositoryInterface.SeriesRepository
 import com.amefure.capsuletoyapp.services.ImageService
 import dagger.hilt.android.lifecycle.HiltViewModel

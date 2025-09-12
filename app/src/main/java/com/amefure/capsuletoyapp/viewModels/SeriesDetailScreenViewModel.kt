@@ -8,7 +8,7 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.amefure.capsuletoyapp.models.domain.entity.relation.SeriesWithRelations
-import com.amefure.capsuletoyapp.repositories.`interface`.ImageRepository
+import com.amefure.capsuletoyapp.repositories.repositoryInterface.ImageRepository
 import com.amefure.capsuletoyapp.repositories.repositoryInterface.SeriesRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
