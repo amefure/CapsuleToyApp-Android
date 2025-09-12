@@ -1,3 +1,5 @@
+import java.util.Properties
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
@@ -7,6 +9,11 @@ plugins {
     /** Hilt */
     id("com.google.dagger.hilt.android")
 }
+
+// 秘匿情報を読み込む
+val secretPropertiesFile = rootProject.file("secret.properties")
+val secretProperties = Properties()
+secretProperties.load(secretPropertiesFile.inputStream())
 
 android {
     namespace = "com.amefure.capsuletoyapp"
@@ -23,11 +30,20 @@ android {
     }
 
     buildTypes {
+        debug {
+            applicationIdSuffix = ".debug"
+            isDebuggable = true
+            manifestPlaceholders["ADMOB_APP_ID"] = secretProperties["ADMOB_APP_ID_TEST"] ?: ""
+            manifestPlaceholders["GOOGLE_MAP_API_KEY"] = secretProperties["GOOGLE_MAP_API_KEY"] ?: ""
+        }
         release {
             // ProGuard(コードの縮小、最適化、難読化)を有効にするフラグ
             isMinifyEnabled = true
             // リソースの縮小を有効にするフラグ
             isShrinkResources = true
+            manifestPlaceholders["ADMOB_APP_ID"] =  secretProperties["ADMOB_APP_ID_PROD"] ?: ""
+            manifestPlaceholders["GOOGLE_MAP_API_KEY"] = secretProperties["GOOGLE_MAP_API_KEY"] ?: ""
+
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
@@ -91,4 +107,7 @@ dependencies {
 
     /** 位置情報取得 */
     implementation(libs.play.services.location)
+
+    /** Google Maps Compose */
+    implementation(libs.maps.compose)
 }
