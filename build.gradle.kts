@@ -5,8 +5,8 @@ plugins {
     alias(libs.plugins.kotlin.compose) apply false
     /** ksp (Kotlinのバージョンに合わせて導入する) */
     id("com.google.devtools.ksp") version "2.1.10-1.0.31" apply false
-    /** Hilt */
-    id("com.google.dagger.hilt.android") version "2.57.1" apply false
+    /** Hilt 2.57.1にするとビルドエラーになった */
+    id("com.google.dagger.hilt.android") version "2.56.2" apply false
     /** Spotless */
     id("com.diffplug.spotless") version "7.2.1"
 }
