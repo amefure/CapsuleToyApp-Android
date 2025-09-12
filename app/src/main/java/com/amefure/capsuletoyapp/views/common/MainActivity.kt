@@ -1,4 +1,4 @@
-package com.amefure.capsuletoyapp.views.Common
+package com.amefure.capsuletoyapp.views.common
 
 import android.Manifest
 import android.content.Intent
@@ -33,17 +33,17 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
-import com.amefure.capsuletoyapp.models.Enum.AppScreen
-import com.amefure.capsuletoyapp.views.mydata.MyDataScreen
-import com.amefure.capsuletoyapp.views.series.input.CategoryInputScreen
-import com.amefure.capsuletoyapp.views.series.SeriesDetailScreen
-import com.amefure.capsuletoyapp.views.series.input.SeriesInputScreen
-import com.amefure.capsuletoyapp.views.series.SeriesListScreen
-import com.amefure.capsuletoyapp.views.settings.SettingsScreen
+import com.amefure.capsuletoyapp.models.enum.AppScreen
 import com.amefure.capsuletoyapp.ui.theme.CapsuleToyAppTheme
-import com.amefure.capsuletoyapp.view_models.RootEnvironment
-import com.amefure.capsuletoyapp.views.components.ui_parts.AlertType
-import com.amefure.capsuletoyapp.views.components.ui_parts.CustomAlertDialog
+import com.amefure.capsuletoyapp.viewModels.RootEnvironment
+import com.amefure.capsuletoyapp.views.components.uiParts.AlertType
+import com.amefure.capsuletoyapp.views.components.uiParts.CustomAlertDialog
+import com.amefure.capsuletoyapp.views.mydata.MyDataScreen
+import com.amefure.capsuletoyapp.views.series.SeriesDetailScreen
+import com.amefure.capsuletoyapp.views.series.SeriesListScreen
+import com.amefure.capsuletoyapp.views.series.input.CategoryInputScreen
+import com.amefure.capsuletoyapp.views.series.input.SeriesInputScreen
+import com.amefure.capsuletoyapp.views.settings.SettingsScreen
 import dagger.hilt.android.AndroidEntryPoint
 
 /** アプリのエントリーポイント */
@@ -70,7 +70,7 @@ private fun RootNavContent(
     val context = LocalContext.current
 
     val launcher = rememberLauncherForActivityResult(
-        contract = ActivityResultContracts.RequestMultiplePermissions()
+        contract = ActivityResultContracts.RequestMultiplePermissions(),
     ) { permissions ->
         val fineLocation = permissions[Manifest.permission.ACCESS_FINE_LOCATION] ?: false
         val coarseLocation = permissions[Manifest.permission.ACCESS_COARSE_LOCATION] ?: false
@@ -90,7 +90,7 @@ private fun RootNavContent(
                 arrayOf(
                     Manifest.permission.ACCESS_FINE_LOCATION,
                     Manifest.permission.ACCESS_COARSE_LOCATION,
-                )
+                ),
             )
         }
     }
@@ -107,14 +107,14 @@ private fun RootNavContent(
             context.startActivity(intent)
             rootEnvironment.closePermissionAlertDialog()
         },
-        message = "位置情報が有効にされていないため一部機能が使用できません。"
+        message = "位置情報が有効にされていないため一部機能が使用できません。",
     )
 
     Scaffold(
         bottomBar = {
             NavigationBar {
                 AppScreen.Tab.entries.forEach { tab ->
-                    //　最新の画面ルート情報を取得(変化したら再コンポーズされる)
+                    // 　最新の画面ルート情報を取得(変化したら再コンポーズされる)
                     val currentDestination = navController
                         .currentBackStackEntryAsState().value?.destination
 
@@ -135,15 +135,15 @@ private fun RootNavContent(
                             }
                         },
                         label = { Text(tab.title) },
-                        icon = { /* アイコンを追加したければここに */ }
+                        icon = { /* アイコンを追加したければここに */ },
                     )
                 }
             }
-        }
+        },
     ) { innerPadding ->
         TabBarBottomWithNav(
             navController = navController,
-            modifier = Modifier.padding(innerPadding)
+            modifier = Modifier.padding(innerPadding),
         )
     }
 }
@@ -151,22 +151,22 @@ private fun RootNavContent(
 @Composable
 private fun TabBarBottomWithNav(
     navController: NavHostController,
-    modifier: Modifier
+    modifier: Modifier,
 ) {
     NavHost(
         navController = navController,
         startDestination = AppScreen.Tab.Series.route(),
-        modifier = modifier
+        modifier = modifier,
     ) {
         composable(
-            route = AppScreen.Tab.Series.route()
+            route = AppScreen.Tab.Series.route(),
         ) {
             SeriesListScreen(navController)
         }
 
         composable(
             route = AppScreen.SeriesDetail.route(),
-            arguments = listOf(navArgument(AppScreen.SeriesDetail.ARG_ITEM_ID) { type = NavType.LongType })
+            arguments = listOf(navArgument(AppScreen.SeriesDetail.ARG_ITEM_ID) { type = NavType.LongType }),
         ) { backStackEntry ->
             val seriesId: Long = backStackEntry.arguments?.getLong(AppScreen.SeriesDetail.ARG_ITEM_ID) ?: 0
             SeriesDetailScreen(seriesId, navController)
@@ -179,10 +179,9 @@ private fun TabBarBottomWithNav(
                 slideInVertically(
                     // 下からスライド
                     initialOffsetY = { fullHeight -> fullHeight },
-                )+ fadeIn()
-
+                ) + fadeIn()
             },
-            exitTransition =  {
+            exitTransition = {
                 slideOutVertically(
                     // 下にスライド
                     targetOffsetY = { fullHeight -> fullHeight },
@@ -201,7 +200,7 @@ private fun TabBarBottomWithNav(
                     initialOffsetY = { fullHeight -> fullHeight },
                 ) + fadeIn()
             },
-            exitTransition =  {
+            exitTransition = {
                 slideOutVertically(
                     // 下にスライド
                     targetOffsetY = { fullHeight -> fullHeight },
@@ -220,7 +219,6 @@ private fun TabBarBottomWithNav(
         }
     }
 }
-
 
 @Preview(showBackground = true)
 @Composable

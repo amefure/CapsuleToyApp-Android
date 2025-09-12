@@ -41,12 +41,12 @@ android {
             isMinifyEnabled = true
             // リソースの縮小を有効にするフラグ
             isShrinkResources = true
-            manifestPlaceholders["ADMOB_APP_ID"] =  secretProperties["ADMOB_APP_ID_PROD"] ?: ""
+            manifestPlaceholders["ADMOB_APP_ID"] = secretProperties["ADMOB_APP_ID_PROD"] ?: ""
             manifestPlaceholders["GOOGLE_MAP_API_KEY"] = secretProperties["GOOGLE_MAP_API_KEY"] ?: ""
 
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
-                "proguard-rules.pro"
+                "proguard-rules.pro",
             )
         }
     }

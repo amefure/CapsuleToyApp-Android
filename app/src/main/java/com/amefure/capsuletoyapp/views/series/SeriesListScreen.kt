@@ -31,13 +31,13 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.amefure.capsuletoyapp.R
-import com.amefure.capsuletoyapp.models.Enum.AppScreen
+import com.amefure.capsuletoyapp.models.enum.AppScreen
 import com.amefure.capsuletoyapp.ui.theme.ExWhite
-import com.amefure.capsuletoyapp.view_models.SeriesListScreenViewModel
+import com.amefure.capsuletoyapp.viewModels.SeriesListScreenViewModel
 import com.amefure.capsuletoyapp.views.components.layout.HeaderView
-import com.amefure.capsuletoyapp.views.components.ui_parts.CustomText
-import com.amefure.capsuletoyapp.views.components.ui_parts.DataEmptyView
-import com.amefure.capsuletoyapp.views.components.ui_parts.TextSize
+import com.amefure.capsuletoyapp.views.components.uiParts.CustomText
+import com.amefure.capsuletoyapp.views.components.uiParts.DataEmptyView
+import com.amefure.capsuletoyapp.views.components.uiParts.TextSize
 
 @Composable
 fun SeriesListScreen(

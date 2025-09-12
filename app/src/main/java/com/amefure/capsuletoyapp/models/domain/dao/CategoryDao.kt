@@ -1,0 +1,25 @@
+package com.amefure.capsuletoyapp.models.domain.dao
+
+import androidx.room.Dao
+import androidx.room.Insert
+import androidx.room.OnConflictStrategy
+import androidx.room.Query
+import androidx.room.Upsert
+import com.amefure.capsuletoyapp.models.domain.entity.Category
+
+@Dao
+interface CategoryDao {
+
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    suspend fun insertCategories(categories: List<Category>): List<Long>
+
+    /**
+     * Upsert == あればUpdateなければInsert
+     * @Returns - InsertしたID値(Updateでは-1が固定で返る)
+     */
+    @Upsert
+    suspend fun upsertCategories(categories: List<Category>): List<Long>
+
+    @Query("DELETE FROM ${Category.TABLE_NAME} WHERE id = :categoryId")
+    suspend fun deleteCategoryById(categoryId: Long)
+}

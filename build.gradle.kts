@@ -29,8 +29,8 @@ spotless {
                     // インデントのスペース数を指定（4スペース）
                     "indent_size" to "4",
                     // ファイル末尾に改行を強制
-                    "insert_final_newline" to "true"
-                )
+                    "insert_final_newline" to "true",
+                ),
             )
     }
 

@@ -28,16 +28,16 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
-import com.amefure.capsuletoyapp.models.Domain.Entity.Category
+import com.amefure.capsuletoyapp.models.domain.entity.Category
 import com.amefure.capsuletoyapp.ui.theme.ExGold
 import com.amefure.capsuletoyapp.ui.theme.ExWhite
-import com.amefure.capsuletoyapp.view_models.CategoryInputScreenViewModel
+import com.amefure.capsuletoyapp.viewModels.CategoryInputScreenViewModel
 import com.amefure.capsuletoyapp.views.components.layout.HeaderView
-import com.amefure.capsuletoyapp.views.components.ui_parts.AlertType
-import com.amefure.capsuletoyapp.views.components.ui_parts.CustomAlertDialog
-import com.amefure.capsuletoyapp.views.components.ui_parts.CustomText
-import com.amefure.capsuletoyapp.views.components.ui_parts.TextSize
-import com.amefure.capsuletoyapp.views.components.ui_parts.ThemeInputBox
+import com.amefure.capsuletoyapp.views.components.uiParts.AlertType
+import com.amefure.capsuletoyapp.views.components.uiParts.CustomAlertDialog
+import com.amefure.capsuletoyapp.views.components.uiParts.CustomText
+import com.amefure.capsuletoyapp.views.components.uiParts.TextSize
+import com.amefure.capsuletoyapp.views.components.uiParts.ThemeInputBox
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
