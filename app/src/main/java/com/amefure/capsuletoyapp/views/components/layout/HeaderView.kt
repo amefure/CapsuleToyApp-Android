@@ -14,7 +14,6 @@ import androidx.compose.ui.unit.dp
 import com.amefure.capsuletoyapp.views.components.ui_parts.CustomText
 import com.amefure.capsuletoyapp.views.components.ui_parts.ThemeIconButton
 
-
 @Composable
 fun HeaderView(
     title: String? = null,
@@ -37,13 +36,13 @@ fun HeaderView(
         } else {
             Spacer(
                 modifier = Modifier
-                    .size(50.dp)
+                    .size(50.dp),
             )
         }
 
         Spacer(
             modifier = Modifier
-                .weight(1f)
+                .weight(1f),
         )
 
         if (title != null) {
@@ -55,7 +54,7 @@ fun HeaderView(
 
         Spacer(
             modifier = Modifier
-                .weight(1f)
+                .weight(1f),
         )
         if (rightImageVector != null) {
             ThemeIconButton(
@@ -66,7 +65,7 @@ fun HeaderView(
         } else {
             Spacer(
                 modifier = Modifier
-                    .size(50.dp)
+                    .size(50.dp),
             )
         }
     }

@@ -11,7 +11,7 @@ private val DarkColorScheme = darkColorScheme(
     onPrimary = ExWhite,
     primaryContainer = ExBaseDark,
     background = ExFoundationDark,
-    onBackground = ExTextDark
+    onBackground = ExTextDark,
 )
 
 private val LightColorScheme = lightColorScheme(
@@ -19,13 +19,13 @@ private val LightColorScheme = lightColorScheme(
     onPrimary = ExWhite,
     primaryContainer = ExBase,
     background = ExFoundation,
-    onBackground = ExText
+    onBackground = ExText,
 )
 
 @Composable
 fun CapsuleToyAppTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
-    content: @Composable () -> Unit
+    content: @Composable () -> Unit,
 ) {
     // dynamicColorSchemeは反映させない
     val colorScheme = when {
@@ -36,6 +36,6 @@ fun CapsuleToyAppTheme(
     MaterialTheme(
         colorScheme = colorScheme,
         typography = Typography,
-        content = content
+        content = content,
     )
 }

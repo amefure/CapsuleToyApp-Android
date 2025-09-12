@@ -18,7 +18,6 @@ import com.google.maps.android.compose.rememberCameraPositionState
 fun MyDataScreen(
     navController: NavHostController,
 ) {
-
 //    Column(
 //        modifier = Modifier
 //            .fillMaxSize()
@@ -31,12 +30,12 @@ fun MyDataScreen(
 //            rightImageVector = null,
 //        )
 
-        //DataEmptyView()
+    // DataEmptyView()
 //    }
 }
+
 @Composable
 fun MapScreen() {
-
     val skyTree = LatLng(35.710063, 139.8107)
 
     // 地図の初期位置
@@ -49,13 +48,13 @@ fun MapScreen() {
         modifier = Modifier.fillMaxSize(),
         cameraPositionState = cameraPositionState,
         uiSettings = MapUiSettings(zoomControlsEnabled = false),
-        properties = MapProperties(mapType = MapType.NORMAL)
+        properties = MapProperties(mapType = MapType.NORMAL),
     ) {
         // マーカーを追加
         Marker(
             state = MarkerState(position = skyTree),
             title = "東京スカイツリー",
-            snippet = "東京都墨田区押上一丁目1番2号"
+            snippet = "東京都墨田区押上一丁目1番2号",
         )
     }
 }

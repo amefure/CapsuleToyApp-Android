@@ -15,28 +15,28 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Slider
 import androidx.compose.material3.SliderDefaults
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableFloatStateOf
-import androidx.compose.ui.Alignment
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.unit.dp
-import com.amefure.capsuletoyapp.views.components.layout.HeaderView
-import com.amefure.capsuletoyapp.views.components.ui_parts.CustomText
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.amefure.capsuletoyapp.models.Domain.Entity.Category
-import com.amefure.capsuletoyapp.views.components.ui_parts.AlertType
-import com.amefure.capsuletoyapp.views.components.ui_parts.CustomAlertDialog
-import com.amefure.capsuletoyapp.views.components.ui_parts.TextSize
-import com.amefure.capsuletoyapp.view_models.CategoryInputScreenViewModel
 import com.amefure.capsuletoyapp.ui.theme.ExGold
 import com.amefure.capsuletoyapp.ui.theme.ExWhite
+import com.amefure.capsuletoyapp.view_models.CategoryInputScreenViewModel
+import com.amefure.capsuletoyapp.views.components.layout.HeaderView
+import com.amefure.capsuletoyapp.views.components.ui_parts.AlertType
+import com.amefure.capsuletoyapp.views.components.ui_parts.CustomAlertDialog
+import com.amefure.capsuletoyapp.views.components.ui_parts.CustomText
+import com.amefure.capsuletoyapp.views.components.ui_parts.TextSize
 import com.amefure.capsuletoyapp.views.components.ui_parts.ThemeInputBox
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -51,7 +51,7 @@ fun CategoryInputScreen(
         showFlag = viewModel.showValidationDialog,
         type = AlertType.FAILED,
         rightAction = { viewModel.closeValidationAlert() },
-        message = "カテゴリ名は必須入力です。"
+        message = "カテゴリ名は必須入力です。",
     )
 
     Column(
@@ -59,7 +59,7 @@ fun CategoryInputScreen(
         modifier = Modifier
             .fillMaxWidth()
             .padding(16.dp)
-            .background(MaterialTheme.colorScheme.background)
+            .background(MaterialTheme.colorScheme.background),
     ) {
         HeaderView(
             title = "カテゴリ登録",
@@ -67,17 +67,17 @@ fun CategoryInputScreen(
             leftImageVector = Icons.AutoMirrored.Filled.ArrowBack,
             leftContentDescription = "画面を戻る",
             rightOnClick =
-                {
-                    val category = viewModel.createCategory(
-                        color = selectedColor
-                    ) ?: return@HeaderView
-                    // 入力した値を戻り先にセット
-                    navController.previousBackStackEntry
-                        ?.savedStateHandle
-                        ?.set(Category.KEY, category)
+            {
+                val category = viewModel.createCategory(
+                    color = selectedColor,
+                ) ?: return@HeaderView
+                // 入力した値を戻り先にセット
+                navController.previousBackStackEntry
+                    ?.savedStateHandle
+                    ?.set(Category.KEY, category)
 
-                    navController.popBackStack()
-                },
+                navController.popBackStack()
+            },
             rightImageVector = Icons.Filled.Check,
             rightContentDescription = "カテゴリ登録",
         )
@@ -85,7 +85,7 @@ fun CategoryInputScreen(
         Spacer(
             Modifier
                 .fillMaxWidth()
-                .padding(16.dp)
+                .padding(16.dp),
         )
 
         CustomText(
@@ -93,7 +93,7 @@ fun CategoryInputScreen(
             textSize = TextSize.S,
             fontWeight = FontWeight.Bold,
             modifier = Modifier
-                .fillMaxWidth()
+                .fillMaxWidth(),
         )
 
         Spacer(modifier = Modifier.height(8.dp))
@@ -106,10 +106,10 @@ fun CategoryInputScreen(
                 .shadow(
                     elevation = 8.dp,
                     shape = RoundedCornerShape(8.dp),
-                    clip = false
+                    clip = false,
                 ).background(selectedColor, RoundedCornerShape(8.dp))
                 .height(40.dp)
-                .padding(10.dp)
+                .padding(10.dp),
         )
 
         Spacer(modifier = Modifier.height(16.dp))
@@ -120,7 +120,7 @@ fun CategoryInputScreen(
             onValueChange = {
                 viewModel.categoryName = it
             },
-            singleLine = false
+            singleLine = false,
         )
 
         Spacer(modifier = Modifier.height(16.dp))
@@ -130,14 +130,14 @@ fun CategoryInputScreen(
             textSize = TextSize.S,
             fontWeight = FontWeight.Bold,
             modifier = Modifier
-                .fillMaxWidth()
+                .fillMaxWidth(),
         )
 
         Spacer(modifier = Modifier.height(8.dp))
 
         RGBColorPicker(
             initialColor = selectedColor,
-            onColorChanged = { selectedColor = it }
+            onColorChanged = { selectedColor = it },
         )
     }
 }
@@ -146,7 +146,7 @@ fun CategoryInputScreen(
 private fun RGBColorPicker(
     modifier: Modifier = Modifier,
     initialColor: Color,
-    onColorChanged: (Color) -> Unit
+    onColorChanged: (Color) -> Unit,
 ) {
     // rememberSaveableではColor型は保存できないのでrememberにする
     var red by remember { mutableFloatStateOf(initialColor.red) }
@@ -157,9 +157,8 @@ private fun RGBColorPicker(
         modifier = modifier
             .padding(16.dp)
             .fillMaxWidth(),
-        horizontalAlignment = Alignment.CenterHorizontally
+        horizontalAlignment = Alignment.CenterHorizontally,
     ) {
-
         // R
         CustomText("Red: ${(red * 255).toInt()}")
         Slider(
@@ -171,8 +170,8 @@ private fun RGBColorPicker(
             valueRange = 0f..1f,
             colors = SliderDefaults.colors(
                 thumbColor = Color.Red,
-                activeTrackColor = Color.Red
-            )
+                activeTrackColor = Color.Red,
+            ),
         )
 
         // G
@@ -186,8 +185,8 @@ private fun RGBColorPicker(
             valueRange = 0f..1f,
             colors = SliderDefaults.colors(
                 thumbColor = Color.Green,
-                activeTrackColor = Color.Green
-            )
+                activeTrackColor = Color.Green,
+            ),
         )
 
         // B
@@ -201,8 +200,8 @@ private fun RGBColorPicker(
             valueRange = 0f..1f,
             colors = SliderDefaults.colors(
                 thumbColor = Color.Blue,
-                activeTrackColor = Color.Blue
-            )
+                activeTrackColor = Color.Blue,
+            ),
         )
     }
 }

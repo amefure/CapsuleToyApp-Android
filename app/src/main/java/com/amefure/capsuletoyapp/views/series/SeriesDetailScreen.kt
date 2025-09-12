@@ -38,15 +38,15 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.amefure.capsuletoyapp.models.Enum.AppScreen
+import com.amefure.capsuletoyapp.ui.theme.ExGold
+import com.amefure.capsuletoyapp.ui.theme.ExWhite
+import com.amefure.capsuletoyapp.view_models.SeriesDetailScreenViewModel
 import com.amefure.capsuletoyapp.views.components.layout.HeaderView
+import com.amefure.capsuletoyapp.views.components.ui_parts.AlertType
+import com.amefure.capsuletoyapp.views.components.ui_parts.CustomAlertDialog
 import com.amefure.capsuletoyapp.views.components.ui_parts.CustomText
 import com.amefure.capsuletoyapp.views.components.ui_parts.TextSize
 import com.amefure.capsuletoyapp.views.components.ui_parts.WhiteBackStackView
-import com.amefure.capsuletoyapp.views.components.ui_parts.AlertType
-import com.amefure.capsuletoyapp.views.components.ui_parts.CustomAlertDialog
-import com.amefure.capsuletoyapp.view_models.SeriesDetailScreenViewModel
-import com.amefure.capsuletoyapp.ui.theme.ExGold
-import com.amefure.capsuletoyapp.ui.theme.ExWhite
 
 @Composable
 fun SeriesDetailScreen(
@@ -54,12 +54,10 @@ fun SeriesDetailScreen(
     navController: NavHostController,
     viewModel: SeriesDetailScreenViewModel = hiltViewModel(),
 ) {
-
     // Compositionされたタイミングで実行する
     LaunchedEffect(Unit) {
         viewModel.fetchSingleSeries(seriesId)
     }
-
 
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -67,14 +65,13 @@ fun SeriesDetailScreen(
             .fillMaxSize()
             .padding(16.dp),
     ) {
-
         CustomAlertDialog(
             showFlag = viewModel.showSuccessDialog,
             rightAction = {
                 viewModel.closeSuccessAlert()
                 navController.popBackStack()
             },
-            message = "削除しました。"
+            message = "削除しました。",
         )
 
         CustomAlertDialog(
@@ -89,7 +86,7 @@ fun SeriesDetailScreen(
             cancelAction = {
                 viewModel.closeConfirmAlert()
             },
-            message = "このデータを削除しますか？\n削除すると登録した画像なども削除されます。"
+            message = "このデータを削除しますか？\n削除すると登録した画像なども削除されます。",
         )
 
         HeaderView(
@@ -98,9 +95,9 @@ fun SeriesDetailScreen(
             leftImageVector = Icons.AutoMirrored.Filled.ArrowBack,
             leftContentDescription = "画面を戻る",
             rightOnClick =
-                {
-                   navController.navigate(AppScreen.SeriesInput.updateRoute(seriesId))
-                },
+            {
+                navController.navigate(AppScreen.SeriesInput.updateRoute(seriesId))
+            },
             rightImageVector = Icons.Filled.Edit,
             rightContentDescription = "シリーズ更新画面遷移",
         )
@@ -115,7 +112,7 @@ fun SeriesDetailScreen(
         LazyRow(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(vertical = 10.dp)
+                .padding(vertical = 10.dp),
         ) {
             items(items = viewModel.series?.categories ?: emptyList()) { category ->
                 CustomText(
@@ -127,34 +124,34 @@ fun SeriesDetailScreen(
                         .shadow(
                             elevation = 8.dp,
                             shape = RoundedCornerShape(8.dp),
-                            clip = false
+                            clip = false,
                         ).background(category.color, RoundedCornerShape(8.dp))
                         .height(40.dp)
-                        .padding(10.dp)
+                        .padding(10.dp),
                 )
             }
         }
 
-        Button (
+        Button(
             onClick = {
                 viewModel.showConfirmAlert()
             },
             colors = ButtonDefaults.buttonColors(
-                containerColor = ExWhite
+                containerColor = ExWhite,
             ),
             shape = RoundedCornerShape(8.dp),
             border = BorderStroke(
                 2.dp,
-                color = MaterialTheme.colorScheme.primary
+                color = MaterialTheme.colorScheme.primary,
             ),
             modifier = Modifier
                 .width(200.dp)
-                .height(50.dp)
+                .height(50.dp),
         ) {
             CustomText(
                 "削除する",
                 color = MaterialTheme.colorScheme.primary,
-                fontWeight = FontWeight.Bold
+                fontWeight = FontWeight.Bold,
             )
         }
     }
@@ -167,14 +164,13 @@ fun SeriesDetailScreen(
 private fun ImageAndAmountSection(
     bitmap: Bitmap?,
     amount: String,
-    count: String
+    count: String,
 ) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(vertical = 16.dp)
+            .padding(vertical = 16.dp),
     ) {
-
         bitmap?.let {
             Button(
                 onClick = {
@@ -183,7 +179,7 @@ private fun ImageAndAmountSection(
                 modifier = Modifier
                     .fillMaxWidth(0.5f)
                     .aspectRatio(1f),
-                contentPadding = PaddingValues(0.dp)
+                contentPadding = PaddingValues(0.dp),
             ) {
                 Image(
                     bitmap = bitmap.asImageBitmap(),
@@ -191,11 +187,11 @@ private fun ImageAndAmountSection(
                     modifier = Modifier
                         .fillMaxSize()
                         .aspectRatio(1f),
-                    contentScale = ContentScale.Crop
+                    contentScale = ContentScale.Crop,
                 )
             }
         } ?: run {
-            OutlinedButton (
+            OutlinedButton(
                 onClick = { /* TODO */ },
                 shape = RoundedCornerShape(8.dp),
                 border = BorderStroke(2.dp, ExGold),
@@ -211,17 +207,15 @@ private fun ImageAndAmountSection(
             }
         }
 
-
         Spacer(
             modifier = Modifier
-                .padding(horizontal = 8.dp)
+                .padding(horizontal = 8.dp),
         )
 
         Column(
             modifier = Modifier
-                .weight(1f)
+                .weight(1f),
         ) {
-
             CustomText(
                 text = "金額",
                 textSize = TextSize.S,
@@ -230,14 +224,13 @@ private fun ImageAndAmountSection(
 
             Spacer(
                 modifier = Modifier
-                    .height(5.dp)
+                    .height(5.dp),
             )
 
             WhiteBackStackView {
-
                 Spacer(
                     modifier = Modifier
-                        .width(12.dp) // TextSize.SSと同等
+                        .width(12.dp), // TextSize.SSと同等
                 )
 
                 CustomText(
@@ -246,7 +239,7 @@ private fun ImageAndAmountSection(
                     fontWeight = FontWeight.Bold,
                     color = MaterialTheme.colorScheme.primary,
                     modifier = Modifier
-                        .padding(horizontal = 5.dp)
+                        .padding(horizontal = 5.dp),
                 )
 
                 CustomText(
@@ -255,10 +248,9 @@ private fun ImageAndAmountSection(
                 )
             }
 
-
             Spacer(
                 modifier = Modifier
-                    .padding(vertical = 8.dp)
+                    .padding(vertical = 8.dp),
             )
 
             CustomText(
@@ -269,10 +261,9 @@ private fun ImageAndAmountSection(
 
             Spacer(
                 modifier = Modifier
-                    .height(5.dp)
+                    .height(5.dp),
             )
             WhiteBackStackView {
-
                 CustomText(
                     text = "全",
                     textSize = TextSize.SS,
@@ -284,7 +275,7 @@ private fun ImageAndAmountSection(
                     fontWeight = FontWeight.Bold,
                     color = MaterialTheme.colorScheme.primary,
                     modifier = Modifier
-                        .padding(horizontal = 5.dp)
+                        .padding(horizontal = 5.dp),
                 )
                 CustomText(
                     text = "種",

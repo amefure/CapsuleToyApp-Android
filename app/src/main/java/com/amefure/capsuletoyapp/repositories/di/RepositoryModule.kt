@@ -21,11 +21,11 @@ object RepositoryModule {
 
     @Provides // 対象のインターフェースにどの実態を渡すかを定義する
     fun provideSeriesRepository(
-        impl: RoomSeriesRepositoryImpl
+        impl: RoomSeriesRepositoryImpl,
     ): SeriesRepository = impl
 
     @Provides
     fun provideImageFileRepository(
-        impl: ImageFileRepositoryImpl
+        impl: ImageFileRepositoryImpl,
     ): ImageRepository = impl
 }

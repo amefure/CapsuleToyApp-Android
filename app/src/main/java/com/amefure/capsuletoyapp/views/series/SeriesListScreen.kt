@@ -1,6 +1,5 @@
 package com.amefure.capsuletoyapp.views.series
 
-
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -26,19 +25,19 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
-import com.amefure.capsuletoyapp.models.Enum.AppScreen
-import com.amefure.capsuletoyapp.views.components.layout.HeaderView
-import com.amefure.capsuletoyapp.view_models.SeriesListScreenViewModel
-import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.font.FontWeight
 import com.amefure.capsuletoyapp.R
+import com.amefure.capsuletoyapp.models.Enum.AppScreen
+import com.amefure.capsuletoyapp.ui.theme.ExWhite
+import com.amefure.capsuletoyapp.view_models.SeriesListScreenViewModel
+import com.amefure.capsuletoyapp.views.components.layout.HeaderView
 import com.amefure.capsuletoyapp.views.components.ui_parts.CustomText
 import com.amefure.capsuletoyapp.views.components.ui_parts.DataEmptyView
 import com.amefure.capsuletoyapp.views.components.ui_parts.TextSize
-import com.amefure.capsuletoyapp.ui.theme.ExWhite
 
 @Composable
 fun SeriesListScreen(
@@ -53,9 +52,8 @@ fun SeriesListScreen(
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .padding(16.dp)
+            .padding(16.dp),
     ) {
-
         HeaderView(
             title = "ガチャガチャシリーズ一覧",
             leftImageVector = null,
@@ -63,16 +61,16 @@ fun SeriesListScreen(
                 navController.navigate(AppScreen.SeriesInput.inputRoute())
             },
             rightImageVector = Icons.Filled.Add,
-            rightContentDescription = "新規シリーズ画面へ遷移"
+            rightContentDescription = "新規シリーズ画面へ遷移",
         )
 
         if (viewModel.series.isEmpty()) {
             DataEmptyView()
         } else {
-            LazyColumn (
+            LazyColumn(
                 modifier = Modifier
                     .fillMaxSize()
-                    .padding(8.dp)
+                    .padding(8.dp),
             ) {
                 items(items = viewModel.series) { series ->
                     Row(
@@ -83,9 +81,9 @@ fun SeriesListScreen(
                             }
                             .background(
                                 color = MaterialTheme.colorScheme.primaryContainer,
-                                shape = RoundedCornerShape(12.dp)
+                                shape = RoundedCornerShape(12.dp),
                             )
-                            .padding(8.dp)
+                            .padding(8.dp),
                     ) {
                         series.series.imagePath?.let {
                             val bitmap = viewModel.fetchImage(it)?.asImageBitmap()
@@ -96,7 +94,7 @@ fun SeriesListScreen(
                                     modifier = Modifier
                                         .size(80.dp)
                                         .aspectRatio(1f),
-                                    contentScale = ContentScale.Crop
+                                    contentScale = ContentScale.Crop,
                                 )
                             }
                         } ?: run {
@@ -104,7 +102,7 @@ fun SeriesListScreen(
                                 painter = painterResource(id = R.drawable.no_image),
                                 contentDescription = "サンプル画像",
                                 modifier = Modifier.size(80.dp),
-                                contentScale = ContentScale.Fit
+                                contentScale = ContentScale.Fit,
                             )
                         }
 
@@ -126,20 +124,18 @@ fun SeriesListScreen(
                                             .shadow(
                                                 elevation = 8.dp,
                                                 shape = RoundedCornerShape(8.dp),
-                                                clip = false
+                                                clip = false,
                                             ).background(category.color, RoundedCornerShape(8.dp))
-                                            .padding(5.dp)
+                                            .padding(5.dp),
                                     )
                                 }
                             }
                         }
-
                     }
                 }
             }
         }
 
         Spacer(modifier = Modifier.height(16.dp))
-
     }
 }

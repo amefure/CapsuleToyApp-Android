@@ -42,21 +42,21 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.layout.ContentScale
-import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.navigation.NavHostController
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavHostController
 import com.amefure.capsuletoyapp.models.Domain.Entity.Category
 import com.amefure.capsuletoyapp.models.Enum.AppScreen
-import com.amefure.capsuletoyapp.views.components.layout.HeaderView
-import com.amefure.capsuletoyapp.views.components.ui_parts.ThemeIconButton
-import com.amefure.capsuletoyapp.views.components.ui_parts.CustomText
-import com.amefure.capsuletoyapp.views.components.ui_parts.TextSize
-import com.amefure.capsuletoyapp.views.components.ui_parts.AlertType
-import com.amefure.capsuletoyapp.views.components.ui_parts.CustomAlertDialog
-import com.amefure.capsuletoyapp.view_models.SeriesInputScreenViewModel
 import com.amefure.capsuletoyapp.ui.theme.ExGold
 import com.amefure.capsuletoyapp.ui.theme.ExWhite
+import com.amefure.capsuletoyapp.view_models.SeriesInputScreenViewModel
+import com.amefure.capsuletoyapp.views.components.layout.HeaderView
+import com.amefure.capsuletoyapp.views.components.ui_parts.AlertType
+import com.amefure.capsuletoyapp.views.components.ui_parts.CustomAlertDialog
+import com.amefure.capsuletoyapp.views.components.ui_parts.CustomText
+import com.amefure.capsuletoyapp.views.components.ui_parts.TextSize
+import com.amefure.capsuletoyapp.views.components.ui_parts.ThemeIconButton
 import com.amefure.capsuletoyapp.views.components.ui_parts.ThemeInputBox
 
 @Composable
@@ -65,7 +65,6 @@ fun SeriesInputScreen(
     navController: NavHostController,
     viewModel: SeriesInputScreenViewModel = hiltViewModel(),
 ) {
-
     // Compositionされたタイミングで実行する
     // 1回だけ発火して欲しいのでKeyは不変とする
     LaunchedEffect(Unit) {
@@ -90,7 +89,7 @@ fun SeriesInputScreen(
 
     // カメラ起動ランチャー
     val cameraLauncher = rememberLauncherForActivityResult(
-        contract = ActivityResultContracts.TakePicture()
+        contract = ActivityResultContracts.TakePicture(),
     ) { success ->
         if (success) {
             viewModel.onCameraCaptured()
@@ -99,7 +98,7 @@ fun SeriesInputScreen(
 
     // ギャラリー起動ランチャー
     val imageLauncher = rememberLauncherForActivityResult(
-        contract = ActivityResultContracts.GetContent()
+        contract = ActivityResultContracts.GetContent(),
     ) { uri: Uri? ->
         uri?.let {
             viewModel.onGalleryImageSelected(it)
@@ -108,9 +107,8 @@ fun SeriesInputScreen(
 
     Column(
         Modifier
-            .padding(16.dp)
+            .padding(16.dp),
     ) {
-
         CustomAlertDialog(
             showFlag = viewModel.showSuccessDialog,
             rightAction = {
@@ -121,14 +119,14 @@ fun SeriesInputScreen(
                 "「${viewModel.name}」を登録しました。"
             } else {
                 "更新しました。"
-            }
+            },
         )
 
         CustomAlertDialog(
             showFlag = viewModel.showValidationDialog,
             type = AlertType.FAILED,
             rightAction = { viewModel.closeValidationAlert() },
-            message = "名前と種類は必須入力です。"
+            message = "名前と種類は必須入力です。",
         )
 
         HeaderView(
@@ -137,12 +135,12 @@ fun SeriesInputScreen(
             leftImageVector = Icons.AutoMirrored.Filled.ArrowBack,
             leftContentDescription = "画面を戻る",
             rightOnClick =
-                {
-                    viewModel.createOrUpdateSeries(
-                        capsuleToys = emptyList(),
-                        locations = emptyList()
-                    )
-                },
+            {
+                viewModel.createOrUpdateSeries(
+                    capsuleToys = emptyList(),
+                    locations = emptyList(),
+                )
+            },
             rightImageVector = Icons.Filled.Check,
             rightContentDescription = "シリーズ登録",
         )
@@ -150,9 +148,8 @@ fun SeriesInputScreen(
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(vertical = 16.dp)
+                .padding(vertical = 16.dp),
         ) {
-
             thumbnail?.let { bitmap ->
                 Button(
                     onClick = {
@@ -162,7 +159,7 @@ fun SeriesInputScreen(
                     modifier = Modifier
                         .fillMaxWidth(0.5f)
                         .aspectRatio(1f),
-                    contentPadding = PaddingValues(0.dp)
+                    contentPadding = PaddingValues(0.dp),
                 ) {
                     Image(
                         bitmap = bitmap.asImageBitmap(),
@@ -170,11 +167,11 @@ fun SeriesInputScreen(
                         modifier = Modifier
                             .fillMaxSize()
                             .aspectRatio(1f),
-                        contentScale = ContentScale.Crop
+                        contentScale = ContentScale.Crop,
                     )
                 }
             } ?: run {
-                OutlinedButton (
+                OutlinedButton(
                     onClick = {
                         viewModel.expanded = true
                     },
@@ -194,39 +191,38 @@ fun SeriesInputScreen(
 
             DropdownMenu(
                 expanded = viewModel.expanded,
-                onDismissRequest = { viewModel.expanded = false }
+                onDismissRequest = { viewModel.expanded = false },
             ) {
                 DropdownMenuItem(
                     text = {
                         Row(
                             verticalAlignment = Alignment.CenterVertically,
-                            horizontalArrangement = Arrangement.spacedBy(8.dp)
+                            horizontalArrangement = Arrangement.spacedBy(8.dp),
                         ) {
                             CustomText("カメラを起動する")
                             Icon(
                                 imageVector = Icons.Default.CameraAlt,
-                                contentDescription = "Camera"
+                                contentDescription = "Camera",
                             )
                         }
-
                     },
                     onClick = {
                         viewModel.expanded = false
                         // カメラ起動
                         viewModel.photoUri?.let { cameraLauncher.launch(it) }
-                    }
+                    },
                 )
 
                 DropdownMenuItem(
                     text = {
                         Row(
                             verticalAlignment = Alignment.CenterVertically,
-                            horizontalArrangement = Arrangement.spacedBy(8.dp)
+                            horizontalArrangement = Arrangement.spacedBy(8.dp),
                         ) {
                             CustomText("写真から選択する")
                             Icon(
                                 imageVector = Icons.Default.Image,
-                                contentDescription = "Gallery"
+                                contentDescription = "Gallery",
                             )
                         }
                     },
@@ -234,20 +230,19 @@ fun SeriesInputScreen(
                         viewModel.expanded = false
                         // ギャラリー起動
                         viewModel.photoUri?.let { imageLauncher.launch("image/*") }
-                    }
+                    },
                 )
             }
 
             Spacer(
                 modifier = Modifier
-                .padding(horizontal = 8.dp)
+                    .padding(horizontal = 8.dp),
             )
 
             Column(
                 modifier = Modifier
-                    .weight(1f)
+                    .weight(1f),
             ) {
-
                 ThemeInputBox(
                     title = "金額",
                     value = viewModel.amount?.toString() ?: "",
@@ -260,7 +255,7 @@ fun SeriesInputScreen(
 
                 Spacer(
                     modifier = Modifier
-                        .padding(vertical = 8.dp)
+                        .padding(vertical = 8.dp),
                 )
 
                 ThemeInputBox(
@@ -276,18 +271,18 @@ fun SeriesInputScreen(
         }
 
         ThemeInputBox(
-            title =  "シリーズ名",
+            title = "シリーズ名",
             value = viewModel.name,
             onValueChange = {
                 viewModel.name = it
             },
-            placeholder = "例：△△シリーズ"
+            placeholder = "例：△△シリーズ",
         )
 
         Spacer(
             Modifier
                 .fillMaxWidth()
-                .padding(16.dp)
+                .padding(16.dp),
         )
 
         CustomText(
@@ -298,12 +293,12 @@ fun SeriesInputScreen(
 
         Spacer(modifier = Modifier.height(8.dp))
 
-        LazyRow{
+        LazyRow {
             items(items = viewModel.categories) { category ->
                 Box(
                     modifier = Modifier
                         .padding(horizontal = 8.dp)
-                        .padding(vertical = 12.dp)
+                        .padding(vertical = 12.dp),
                 ) {
                     // カテゴリ名のUI
                     CustomText(
@@ -315,18 +310,18 @@ fun SeriesInputScreen(
                             .shadow(
                                 elevation = 8.dp,
                                 shape = RoundedCornerShape(8.dp),
-                                clip = false
+                                clip = false,
                             )
                             .background(category.color, RoundedCornerShape(8.dp))
                             .height(40.dp)
                             .padding(10.dp)
-                            .align(Alignment.CenterStart)
+                            .align(Alignment.CenterStart),
                     )
 
                     Box(
                         modifier = Modifier
                             .align(Alignment.TopEnd)
-                            .offset(x = 12.dp, y = (-16).dp)
+                            .offset(x = 12.dp, y = (-16).dp),
                     ) {
                         ThemeIconButton(
                             onClick = {
@@ -335,13 +330,13 @@ fun SeriesInputScreen(
                             imageVector = Icons.Default.Delete,
                             contentDescription = "削除",
                             baseSize = 36.dp,
-                            iconSize = 20.dp
+                            iconSize = 20.dp,
                         )
                     }
                 }
             }
             item {
-                OutlinedButton (
+                OutlinedButton(
                     onClick = { navController.navigate(AppScreen.CategoryInput.route()) },
                     shape = RoundedCornerShape(8.dp),
                     border = BorderStroke(2.dp, ExGold),
@@ -363,9 +358,8 @@ fun SeriesInputScreen(
         Spacer(
             Modifier
                 .fillMaxWidth()
-                .padding(16.dp)
+                .padding(16.dp),
         )
-
 
         ThemeInputBox(
             title = "MEMO",
@@ -373,13 +367,13 @@ fun SeriesInputScreen(
             onValueChange = {
                 viewModel.memo = it
             },
-            singleLine = false
+            singleLine = false,
         )
 
         Spacer(
             Modifier
                 .fillMaxWidth()
-                .padding(16.dp)
+                .padding(16.dp),
         )
 
         // 更新画面の場合は表示しない
@@ -387,9 +381,8 @@ fun SeriesInputScreen(
             CustomText(
                 text = "※ ガチャガチャのアイテムはシリーズを登録した後に、一覧からそのシリーズをタップすることで追加できます。",
                 textSize = TextSize.S,
-                maxLines = 3
+                maxLines = 3,
             )
         }
     }
 }
-
