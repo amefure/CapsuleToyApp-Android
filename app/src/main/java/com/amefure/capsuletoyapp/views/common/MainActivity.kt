@@ -42,6 +42,7 @@ import com.amefure.capsuletoyapp.views.mydata.MyDataScreen
 import com.amefure.capsuletoyapp.views.series.SeriesDetailScreen
 import com.amefure.capsuletoyapp.views.series.SeriesListScreen
 import com.amefure.capsuletoyapp.views.series.input.CategoryInputScreen
+import com.amefure.capsuletoyapp.views.series.input.LocationInputScreen
 import com.amefure.capsuletoyapp.views.series.input.SeriesInputScreen
 import com.amefure.capsuletoyapp.views.settings.SettingsScreen
 import dagger.hilt.android.AndroidEntryPoint
@@ -158,12 +159,14 @@ private fun TabBarBottomWithNav(
         startDestination = AppScreen.Tab.Series.route(),
         modifier = modifier,
     ) {
+        /** シリーズ一覧 */
         composable(
             route = AppScreen.Tab.Series.route(),
         ) {
             SeriesListScreen(navController)
         }
 
+        /** シリーズ詳細 */
         composable(
             route = AppScreen.SeriesDetail.route(),
             arguments = listOf(navArgument(AppScreen.SeriesDetail.ARG_ITEM_ID) { type = NavType.LongType }),
@@ -172,6 +175,7 @@ private fun TabBarBottomWithNav(
             SeriesDetailScreen(seriesId, navController)
         }
 
+        /** シリーズ登録・更新 */
         composable(
             route = AppScreen.SeriesInput.route(),
             arguments = listOf(navArgument(AppScreen.SeriesDetail.ARG_ITEM_ID) { type = NavType.LongType }),
@@ -192,6 +196,7 @@ private fun TabBarBottomWithNav(
             SeriesInputScreen(seriesId, navController)
         }
 
+        /** カテゴリ登録・更新 */
         composable(
             route = AppScreen.CategoryInput.route(),
             enterTransition = {
@@ -208,6 +213,27 @@ private fun TabBarBottomWithNav(
             },
         ) {
             CategoryInputScreen(navController)
+        }
+
+        /** ロケーション登録・更新 */
+        composable(
+            route = AppScreen.LocationInput.route(),
+            arguments = listOf(navArgument(AppScreen.LocationInput.ARG_ITEM_ID) { type = NavType.LongType }),
+            enterTransition = {
+                slideInVertically(
+                    // 下からスライド
+                    initialOffsetY = { fullHeight -> fullHeight },
+                ) + fadeIn()
+            },
+            exitTransition = {
+                slideOutVertically(
+                    // 下にスライド
+                    targetOffsetY = { fullHeight -> fullHeight },
+                ) + fadeOut()
+            },
+        ) { backStackEntry ->
+            val seriesId: Long = backStackEntry.arguments?.getLong(AppScreen.SeriesDetail.ARG_ITEM_ID) ?: 0
+            LocationInputScreen(seriesId, navController)
         }
 
         composable(route = AppScreen.Tab.MyData.route()) {

@@ -58,6 +58,10 @@ class SeriesInputScreenViewModel @Inject constructor(
     public var categories: SnapshotStateList<Category> = mutableStateListOf()
         private set
 
+    // コレクション型はSnapshotStateListで管理しないと要素の変化では再コンポーズされない
+    public var locations: SnapshotStateList<Location> = mutableStateListOf()
+        private set
+
     public var showSuccessDialog by mutableStateOf(false)
         private set
     public var showValidationDialog by mutableStateOf(false)
@@ -100,7 +104,6 @@ class SeriesInputScreenViewModel @Inject constructor(
     /** SeriesInput画面から新規作成・更新する */
     public fun createOrUpdateSeries(
         capsuleToys: List<CapsuleToy> = emptyList(),
-        locations: List<Location> = emptyList(),
     ) {
         if (name.isEmpty() || count == null || count == 0) {
             showValidationAlert()
@@ -159,6 +162,12 @@ class SeriesInputScreenViewModel @Inject constructor(
         category: Category,
     ) {
         categories.add(category)
+    }
+
+    public fun addLocation(
+        location: Location,
+    ) {
+        locations.add(location)
     }
 
     public fun removeCategory(

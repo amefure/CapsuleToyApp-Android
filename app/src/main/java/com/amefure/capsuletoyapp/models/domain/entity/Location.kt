@@ -4,6 +4,7 @@ import androidx.room.Entity
 import androidx.room.ForeignKey
 import androidx.room.Index
 import androidx.room.PrimaryKey
+import java.io.Serializable
 
 @Entity(
     tableName = Location.TABLE_NAME,
@@ -28,8 +29,9 @@ data class Location(
     var latitude: Double?,
     /** 経度 (オプション) */
     var longitude: Double?,
-) {
+) : Serializable {
     companion object {
         public const val TABLE_NAME = "locations"
+        public const val KEY = "location"
     }
 }

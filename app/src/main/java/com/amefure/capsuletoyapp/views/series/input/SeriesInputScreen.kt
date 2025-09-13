@@ -47,6 +47,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.amefure.capsuletoyapp.models.domain.entity.Category
+import com.amefure.capsuletoyapp.models.domain.entity.Location
 import com.amefure.capsuletoyapp.models.enum.AppScreen
 import com.amefure.capsuletoyapp.ui.theme.ExGold
 import com.amefure.capsuletoyapp.ui.theme.ExWhite
@@ -78,10 +79,22 @@ fun SeriesInputScreen(
         ?.collectAsState()
         ?.value
 
+    val location = savedStateHandle
+        ?.getStateFlow<Location?>(Location.KEY, null)
+        ?.collectAsState()
+        ?.value
+
     // 値が変わるたびにViewModel側に登録
     LaunchedEffect(category) {
         category?.let {
             viewModel.addCategory(it)
+        }
+    }
+
+    // 値が変わるたびにViewModel側に登録
+    LaunchedEffect(location) {
+        location?.let {
+            viewModel.addLocation(it)
         }
     }
 
@@ -138,7 +151,6 @@ fun SeriesInputScreen(
             {
                 viewModel.createOrUpdateSeries(
                     capsuleToys = emptyList(),
-                    locations = emptyList(),
                 )
             },
             rightImageVector = Icons.Filled.Check,
@@ -353,6 +365,35 @@ fun SeriesInputScreen(
                     )
                 }
             }
+        }
+
+        Spacer(
+            Modifier
+                .fillMaxWidth()
+                .padding(16.dp),
+        )
+
+        CustomText(
+            text = "ガチャガチャ設置場所" + viewModel.series?.locations?.size,
+            textSize = TextSize.S,
+            fontWeight = FontWeight.Bold,
+        )
+
+        OutlinedButton(
+            onClick = { navController.navigate(AppScreen.LocationInput.route(seriesId)) },
+            shape = RoundedCornerShape(8.dp),
+            border = BorderStroke(2.dp, ExGold),
+            modifier = Modifier
+                .padding(horizontal = 8.dp)
+                .padding(vertical = 12.dp)
+                .width(70.dp)
+                .height(40.dp),
+        ) {
+            Icon(
+                imageVector = Icons.Filled.Add,
+                contentDescription = "カテゴリ追加",
+                tint = ExGold,
+            )
         }
 
         Spacer(
