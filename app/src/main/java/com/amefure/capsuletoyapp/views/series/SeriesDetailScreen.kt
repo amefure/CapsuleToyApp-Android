@@ -13,10 +13,13 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Add
@@ -33,10 +36,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
+import com.amefure.capsuletoyapp.R
 import com.amefure.capsuletoyapp.models.enum.AppScreen
 import com.amefure.capsuletoyapp.ui.theme.ExGold
 import com.amefure.capsuletoyapp.ui.theme.ExWhite
@@ -47,6 +52,17 @@ import com.amefure.capsuletoyapp.views.components.uiParts.CustomAlertDialog
 import com.amefure.capsuletoyapp.views.components.uiParts.CustomText
 import com.amefure.capsuletoyapp.views.components.uiParts.TextSize
 import com.amefure.capsuletoyapp.views.components.uiParts.WhiteBackStackView
+import com.google.android.gms.maps.GoogleMap
+import com.google.android.gms.maps.model.CameraPosition
+import com.google.android.gms.maps.model.LatLng
+import com.google.maps.android.compose.GoogleMap
+import com.google.maps.android.compose.MapProperties
+import com.google.maps.android.compose.MapType
+import com.google.maps.android.compose.MapUiSettings
+import com.google.maps.android.compose.Marker
+import com.google.maps.android.compose.MarkerState
+import com.google.maps.android.compose.MarkerState.Companion.invoke
+import com.google.maps.android.compose.rememberCameraPositionState
 
 @Composable
 fun SeriesDetailScreen(
@@ -58,11 +74,13 @@ fun SeriesDetailScreen(
     LaunchedEffect(Unit) {
         viewModel.fetchSingleSeries(seriesId)
     }
+    val scrollState = rememberScrollState()
 
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = Modifier
             .fillMaxSize()
+            .verticalScroll(scrollState)
             .padding(16.dp),
     ) {
         CustomAlertDialog(
@@ -132,6 +150,18 @@ fun SeriesDetailScreen(
             }
         }
 
+        Spacer(
+            modifier = Modifier
+                .padding(vertical = 8.dp),
+        )
+
+        LocationsSection(viewModel)
+
+        Spacer(
+            modifier = Modifier
+                .padding(vertical = 8.dp),
+        )
+
         Button(
             onClick = {
                 viewModel.showConfirmAlert()
@@ -191,20 +221,14 @@ private fun ImageAndAmountSection(
                 )
             }
         } ?: run {
-            OutlinedButton(
-                onClick = { /* TODO */ },
-                shape = RoundedCornerShape(8.dp),
-                border = BorderStroke(2.dp, ExGold),
+            Image(
+                painter = painterResource(id = R.drawable.no_image),
+                contentDescription = "サンプル画像",
                 modifier = Modifier
                     .fillMaxWidth(0.5f)
                     .aspectRatio(1f),
-            ) {
-                Icon(
-                    imageVector = Icons.Filled.Add,
-                    contentDescription = "画像追加",
-                    tint = ExGold,
-                )
-            }
+                contentScale = ContentScale.Fit,
+            )
         }
 
         Spacer(
@@ -282,6 +306,47 @@ private fun ImageAndAmountSection(
                     textSize = TextSize.SS,
                 )
             }
+        }
+    }
+}
+
+
+@Composable
+private fun LocationsSection(
+    viewModel: SeriesDetailScreenViewModel
+) {
+    CustomText(
+        text = "設置場所",
+        textSize = TextSize.S,
+        fontWeight = FontWeight.Bold,
+        modifier = Modifier
+            .fillMaxWidth()
+    )
+
+    Spacer(
+        modifier = Modifier
+            .padding(vertical = 8.dp),
+    )
+
+    // 地図の初期位置
+    val cameraPositionState = rememberCameraPositionState {
+        position = CameraPosition.fromLatLngZoom(viewModel.initialLatLng, 15f)
+    }
+
+    GoogleMap(
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(300.dp),
+        cameraPositionState = cameraPositionState,
+        uiSettings = MapUiSettings(zoomControlsEnabled = false),
+        properties = MapProperties(mapType = MapType.NORMAL),
+    ) {
+        viewModel.series?.locations?.mapNotNull { it.getLatLng() }?.forEach {
+            Marker(
+                state = MarkerState(position = it.latLng),
+                title = it.name,
+                snippet = "緯度: ${it.latLng.latitude}, 経度: ${it.latLng.longitude}",
+            )
         }
     }
 }

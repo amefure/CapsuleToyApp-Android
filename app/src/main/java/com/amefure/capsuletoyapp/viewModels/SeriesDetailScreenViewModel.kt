@@ -10,6 +10,7 @@ import androidx.lifecycle.viewModelScope
 import com.amefure.capsuletoyapp.models.domain.entity.relation.SeriesWithRelations
 import com.amefure.capsuletoyapp.repositories.repositoryInterface.ImageRepository
 import com.amefure.capsuletoyapp.repositories.repositoryInterface.SeriesRepository
+import com.google.android.gms.maps.model.LatLng
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -33,6 +34,10 @@ class SeriesDetailScreenViewModel @Inject constructor(
     public var showSuccessDialog by mutableStateOf(false)
         private set
     public var showConfirmDialog by mutableStateOf(false)
+        private set
+
+    /** 初期位置：スカイツリー：LatLng(35.710063, 139.8107) */
+    public var initialLatLng: LatLng by mutableStateOf(LatLng(35.710063, 139.8107))
         private set
 
     public fun fetchImage(): Bitmap? =

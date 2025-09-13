@@ -4,6 +4,7 @@ import androidx.room.Entity
 import androidx.room.ForeignKey
 import androidx.room.Index
 import androidx.room.PrimaryKey
+import com.google.android.gms.maps.model.LatLng
 import java.io.Serializable
 
 @Entity(
@@ -34,4 +35,17 @@ data class Location(
         public const val TABLE_NAME = "locations"
         public const val KEY = "location"
     }
+
+    fun getLatLng(): NamedWrapLatLng? {
+        val latitude = latitude ?: return null
+        val longitude = longitude ?: return null
+        return NamedWrapLatLng(name, LatLng(latitude, longitude))
+    }
 }
+
+/** LatLngのnameプロパティを追加したラッパークラス */
+data class NamedWrapLatLng(
+    val name: String,
+    val latLng: LatLng,
+
+)
