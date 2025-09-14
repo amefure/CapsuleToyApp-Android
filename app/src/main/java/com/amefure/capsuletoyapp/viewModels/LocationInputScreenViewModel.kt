@@ -27,7 +27,7 @@ class LocationInputScreenViewModel @Inject constructor(
         private set
 
     /** 初期位置：スカイツリー：LatLng(35.710063, 139.8107) */
-    public var initialLatLng: LatLng? by mutableStateOf(LatLng(35.710063, 139.8107))
+    public var initialLatLng: LatLng by mutableStateOf(LatLng(35.710063, 139.8107))
         private set
     public var showValidationDialog by mutableStateOf(false)
         private set

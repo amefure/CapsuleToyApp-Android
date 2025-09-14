@@ -12,6 +12,7 @@ import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Check
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
@@ -23,6 +24,7 @@ import com.amefure.capsuletoyapp.views.components.layout.HeaderView
 import com.amefure.capsuletoyapp.views.components.uiParts.AlertType
 import com.amefure.capsuletoyapp.views.components.uiParts.CustomAlertDialog
 import com.amefure.capsuletoyapp.views.components.uiParts.ThemeInputBox
+import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.model.CameraPosition
 import com.google.maps.android.compose.GoogleMap
 import com.google.maps.android.compose.MapProperties
@@ -102,39 +104,43 @@ fun LocationInputScreen(
 private fun MapScreen(
     viewModel: LocationInputScreenViewModel,
 ) {
-    viewModel.initialLatLng?.let { initialLatLng ->
-        // 地図の初期位置
-        val cameraPositionState = rememberCameraPositionState {
-            // zoom=15fで拡大して表示
-            position = CameraPosition.fromLatLngZoom(initialLatLng, 15f)
-        }
-
-        GoogleMap(
-            modifier = Modifier.fillMaxSize(),
-            cameraPositionState = cameraPositionState,
-            uiSettings = MapUiSettings(
-                // 右下に表示される「＋ / －」のズームボタンを有効化するか
-                zoomControlsEnabled = false,
-                // 現在値ボタンを表示するかどうか
-                myLocationButtonEnabled = true,
-            ),
-            properties = MapProperties(
-                mapType = MapType.NORMAL,
-                // 現在値アイコン(青い丸)を表示するか
-                isMyLocationEnabled = true,
-            ),
-            onMapClick = { latLng ->
-                viewModel.onMapClick(latLng)
-            },
-        ) {
-            viewModel.selectedLatLng?.let { latLng ->
-                Marker(
-                    state = MarkerState(position = latLng),
-                    title = "選択した場所",
-                    snippet = "緯度: ${latLng.latitude}, 経度: ${latLng.longitude}",
-                )
-            }
-        }
+// 地図の初期位置
+    val cameraPositionState = rememberCameraPositionState {
+        // zoom=15fで拡大して表示
+        position = CameraPosition.fromLatLngZoom(viewModel.initialLatLng, 15f)
     }
 
+    GoogleMap(
+        modifier = Modifier.fillMaxSize(),
+        cameraPositionState = cameraPositionState,
+        uiSettings = MapUiSettings(
+            // 右下に表示される「＋ / －」のズームボタンを有効化するか
+            zoomControlsEnabled = false,
+            // 現在値ボタンを表示するかどうか
+            myLocationButtonEnabled = true,
+        ),
+        properties = MapProperties(
+            mapType = MapType.NORMAL,
+            // 現在値アイコン(青い丸)を表示するか
+            isMyLocationEnabled = true,
+        ),
+        onMapClick = { latLng ->
+            viewModel.onMapClick(latLng)
+        },
+        onMapLoaded = {
+            // Mapを読み込み終えてから現在値へ移動させる
+            // 読み込み前に移動させようとするとNullPointerExceptionになる
+            cameraPositionState.move(
+                CameraUpdateFactory.newLatLngZoom(viewModel.initialLatLng, 15f)
+            )
+        }
+    ) {
+        viewModel.selectedLatLng?.let { latLng ->
+            Marker(
+                state = MarkerState(position = latLng),
+                title = "選択した場所",
+                snippet = "緯度: ${latLng.latitude}, 経度: ${latLng.longitude}",
+            )
+        }
+    }
 }
