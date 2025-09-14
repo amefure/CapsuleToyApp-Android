@@ -110,4 +110,8 @@ dependencies {
 
     /** Google Maps Compose */
     implementation(libs.maps.compose)
+
+    /** Kotlin Coroutines */
+    implementation(libs.kotlinx.coroutines.play.services)
+
 }
