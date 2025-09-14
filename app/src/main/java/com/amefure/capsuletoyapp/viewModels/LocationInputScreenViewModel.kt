@@ -1,17 +1,24 @@
 package com.amefure.capsuletoyapp.viewModels
 
+import android.content.Context
 import androidx.annotation.MainThread
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.amefure.capsuletoyapp.models.domain.entity.Location
+import com.amefure.capsuletoyapp.services.LocationService
 import com.google.android.gms.maps.model.LatLng
 import dagger.hilt.android.lifecycle.HiltViewModel
+import dagger.hilt.android.qualifiers.ApplicationContext
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class LocationInputScreenViewModel @Inject constructor() : ViewModel() {
+class LocationInputScreenViewModel @Inject constructor(
+    @ApplicationContext private val context: Context,
+) : ViewModel() {
     /** UI連動プロパティ */
     public var locationName by mutableStateOf("")
 
@@ -20,10 +27,24 @@ class LocationInputScreenViewModel @Inject constructor() : ViewModel() {
         private set
 
     /** 初期位置：スカイツリー：LatLng(35.710063, 139.8107) */
-    public var initialLatLng: LatLng by mutableStateOf(LatLng(35.710063, 139.8107))
+    public var initialLatLng: LatLng? by mutableStateOf(LatLng(35.710063, 139.8107))
         private set
     public var showValidationDialog by mutableStateOf(false)
         private set
+
+    init {
+        fetchLastLocation()
+    }
+
+    private fun fetchLastLocation() {
+        val service = LocationService(context)
+        viewModelScope.launch {
+            val lastLocation = service.fetchLastLocation()
+            lastLocation?.let {
+                initialLatLng = LatLng(it.latitude, it.longitude)
+            }
+        }
+    }
 
     @MainThread
     public fun showValidationAlert() {

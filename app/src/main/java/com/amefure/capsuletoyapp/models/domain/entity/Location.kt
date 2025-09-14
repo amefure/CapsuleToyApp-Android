@@ -7,6 +7,10 @@ import androidx.room.PrimaryKey
 import com.google.android.gms.maps.model.LatLng
 import java.io.Serializable
 
+/**
+ * Location
+ * [android.location.Location]・・・クラス名が同じ
+ */
 @Entity(
     tableName = Location.TABLE_NAME,
     foreignKeys = [
