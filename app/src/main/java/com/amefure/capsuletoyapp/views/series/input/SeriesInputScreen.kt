@@ -19,10 +19,11 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Add
@@ -107,7 +108,9 @@ fun SeriesInputScreen(
 
     Column(
         Modifier
-            .padding(16.dp),
+            .padding(16.dp)
+            // 縦スクロール可能にする
+            .verticalScroll(rememberScrollState()) ,
     ) {
         CustomAlertDialog(
             showFlag = viewModel.showSuccessDialog,
@@ -455,35 +458,31 @@ private fun InputLocationSection(
             .padding(8.dp),
     )
 
-    LazyColumn(
-        contentPadding = PaddingValues(2.dp)
-    ) {
-        items(viewModel.locations) { location ->
-            WhiteBackStackView(
-                horizontalArrangement = Arrangement.SpaceBetween
+    viewModel.locations.forEach { location ->
+        WhiteBackStackView(
+            horizontalArrangement = Arrangement.SpaceBetween
+        ) {
+            Row {
+                Icon(
+                    modifier = Modifier.padding(horizontal = 4.dp),
+                    imageVector = if (location.getLatLng() == null) Icons.Filled.Map else Icons.Outlined.Map,
+                    contentDescription = "位置情報登録ずみ",
+                    tint = ExGold,
+                )
+
+                CustomText(location.name)
+            }
+
+            IconButton(
+                onClick = {
+                    viewModel.removeLocation(location)
+                }
             ) {
-                Row {
-                    Icon(
-                        modifier = Modifier.padding(horizontal = 4.dp),
-                        imageVector = if (location.getLatLng() == null) Icons.Filled.Map else Icons.Outlined.Map,
-                        contentDescription = "位置情報登録ずみ",
-                        tint = ExGold,
-                    )
-
-                    CustomText(location.name)
-                }
-
-                IconButton(
-                    onClick = {
-                        viewModel.removeLocation(location)
-                    }
-                ) {
-                    Icon(
-                        imageVector = Icons.Outlined.Delete,
-                        contentDescription = "位置情報削除",
-                        tint = ExRed,
-                    )
-                }
+                Icon(
+                    imageVector = Icons.Outlined.Delete,
+                    contentDescription = "位置情報削除",
+                    tint = ExRed,
+                )
             }
         }
     }
