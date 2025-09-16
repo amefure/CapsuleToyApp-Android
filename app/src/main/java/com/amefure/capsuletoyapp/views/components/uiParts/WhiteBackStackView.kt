@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -18,11 +19,12 @@ import androidx.compose.ui.unit.dp
  */
 @Composable
 fun WhiteBackStackView(
+    horizontalArrangement: Arrangement.Horizontal = Arrangement.Center,
     content: @Composable () -> Unit,
 ) {
     Row(
         verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.Center,
+        horizontalArrangement = horizontalArrangement,
         modifier = Modifier
             .fillMaxWidth()
             .height(55.dp)
@@ -31,7 +33,8 @@ fun WhiteBackStackView(
                 shape = RoundedCornerShape(8.dp),
                 clip = false,
             )
-            .background(Color.White, RoundedCornerShape(8.dp)),
+            .background(Color.White, RoundedCornerShape(8.dp))
+            .padding(8.dp),
     ) {
         content()
     }

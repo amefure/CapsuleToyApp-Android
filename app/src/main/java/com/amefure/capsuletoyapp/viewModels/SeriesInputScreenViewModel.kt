@@ -4,6 +4,7 @@ import android.content.Context
 import android.graphics.Bitmap
 import android.net.Uri
 import androidx.annotation.MainThread
+import androidx.compose.runtime.DisposableEffectResult
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
@@ -99,6 +100,9 @@ class SeriesInputScreenViewModel @Inject constructor(
         // SnapshotStateListなので上記では再Composeされないので明示的に空にして追加する
         categories.clear()
         categories.addAll(entity.categories)
+
+        locations.clear()
+        locations.addAll(entity.locations)
     }
 
     /** SeriesInput画面から新規作成・更新する */
@@ -164,16 +168,22 @@ class SeriesInputScreenViewModel @Inject constructor(
         categories.add(category)
     }
 
+    public fun removeCategory(
+        category: Category,
+    ) {
+        categories.remove(category)
+    }
+
     public fun addLocation(
         location: Location,
     ) {
         locations.add(location)
     }
 
-    public fun removeCategory(
-        category: Category,
+    public fun removeLocation(
+        location: Location,
     ) {
-        categories.remove(category)
+        locations.remove(location)
     }
 
     @MainThread

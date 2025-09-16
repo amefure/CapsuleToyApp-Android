@@ -52,6 +52,7 @@ import com.amefure.capsuletoyapp.views.components.uiParts.CustomAlertDialog
 import com.amefure.capsuletoyapp.views.components.uiParts.CustomText
 import com.amefure.capsuletoyapp.views.components.uiParts.TextSize
 import com.amefure.capsuletoyapp.views.components.uiParts.WhiteBackStackView
+import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.model.CameraPosition
 import com.google.android.gms.maps.model.LatLng
@@ -338,8 +339,23 @@ private fun LocationsSection(
             .fillMaxWidth()
             .height(300.dp),
         cameraPositionState = cameraPositionState,
-        uiSettings = MapUiSettings(zoomControlsEnabled = false),
-        properties = MapProperties(mapType = MapType.NORMAL),
+        uiSettings = MapUiSettings(
+            zoomControlsEnabled = false,
+            myLocationButtonEnabled = true,
+            ),
+        properties = MapProperties(
+            mapType = MapType.NORMAL,
+            isMyLocationEnabled = true,
+            ),
+
+        onMapLoaded = {
+            viewModel.series?.locations?.firstNotNullOfOrNull { it.getLatLng() }?.let {
+                // 位置情報が登録されていれば最初に登録されている位置情報を地図の初期表示位置にする
+                cameraPositionState.move(
+                    CameraUpdateFactory.newLatLngZoom(it.latLng,15f)
+                )
+            }
+        }
     ) {
         viewModel.series?.locations?.mapNotNull { it.getLatLng() }?.forEach {
             Marker(
