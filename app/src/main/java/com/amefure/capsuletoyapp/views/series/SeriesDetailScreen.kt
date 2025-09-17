@@ -21,6 +21,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
@@ -32,6 +33,7 @@ import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.automirrored.filled.ListAlt
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.Map
+import androidx.compose.material.icons.outlined.Contrast
 import androidx.compose.material.icons.outlined.Map
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
@@ -46,6 +48,8 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.rotate
+import androidx.compose.ui.draw.scale
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.asImageBitmap
@@ -59,7 +63,6 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.amefure.capsuletoyapp.R
 import com.amefure.capsuletoyapp.models.enum.AppScreen
-import com.amefure.capsuletoyapp.ui.theme.ExGold
 import com.amefure.capsuletoyapp.ui.theme.ExRed
 import com.amefure.capsuletoyapp.ui.theme.ExWhite
 import com.amefure.capsuletoyapp.viewModels.SeriesDetailScreenViewModel
@@ -142,34 +145,23 @@ fun SeriesDetailScreen(
             (viewModel.series?.series?.count ?: 0).toString(),
         )
 
-        LazyRow(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(vertical = 10.dp),
-        ) {
-            items(items = viewModel.series?.categories ?: emptyList()) { category ->
-                CustomText(
-                    text = category.name,
-                    textSize = TextSize.S,
-                    color = ExWhite,
-                    modifier = Modifier
-                        .padding(horizontal = 8.dp)
-                        .shadow(
-                            elevation = 8.dp,
-                            shape = RoundedCornerShape(8.dp),
-                            clip = false,
-                        ).background(category.color, RoundedCornerShape(8.dp))
-                        .height(40.dp)
-                        .padding(10.dp),
-                )
-            }
-        }
+        // カテゴリセクション
+        CategoriesSection(viewModel)
 
         Spacer(
             modifier = Modifier
                 .padding(vertical = 8.dp),
         )
 
+        // 位置情報セクション
+        TotalCountSection(viewModel)
+
+        Spacer(
+            modifier = Modifier
+                .padding(vertical = 8.dp),
+        )
+
+        // 位置情報セクション
         LocationsSection(viewModel)
 
         Spacer(
@@ -326,6 +318,76 @@ private fun ImageAndAmountSection(
 }
 
 @Composable
+private fun CategoriesSection(
+    viewModel: SeriesDetailScreenViewModel,
+) {
+    LazyRow(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(vertical = 10.dp),
+    ) {
+        items(items = viewModel.series?.categories ?: emptyList()) { category ->
+            CustomText(
+                text = category.name,
+                textSize = TextSize.S,
+                color = ExWhite,
+                modifier = Modifier
+                    .padding(horizontal = 8.dp)
+                    .shadow(
+                        elevation = 8.dp,
+                        shape = RoundedCornerShape(8.dp),
+                        clip = false,
+                    ).background(category.color, RoundedCornerShape(8.dp))
+                    .height(40.dp)
+                    .padding(10.dp),
+            )
+        }
+    }
+}
+
+/** 総数 / 所持数セクション */
+@Composable
+private fun TotalCountSection(
+    viewModel: SeriesDetailScreenViewModel,
+) {
+    CustomText(
+        text = "所持数",
+        textSize = TextSize.S,
+        fontWeight = FontWeight.Bold,
+        modifier = Modifier
+            .fillMaxWidth(),
+    )
+
+    Spacer(
+        modifier = Modifier
+            .padding(vertical = 8.dp),
+    )
+
+    WhiteBackStackView {
+        LazyRow(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(vertical = 10.dp),
+        ) {
+            val isOwnedCount = viewModel.fetchIsOwnedCount()
+            items(count = viewModel.fetchTotalCount()) { index ->
+                val color = if (index + 1 <= isOwnedCount) ExRed else ExRed.copy(alpha = 0.3f)
+                Icon(
+                    modifier = Modifier
+                        .padding(horizontal = 8.dp)
+                        .scale(1.4f)
+                        .rotate(90f),
+                    imageVector = Icons.Outlined.Contrast,
+                    contentDescription = "所持数アイコン",
+                    tint = color,
+                )
+            }
+        }
+    }
+}
+
+/** ローケーションセクション */
+@Composable
 private fun LocationsSection(
     viewModel: SeriesDetailScreenViewModel,
 ) {
@@ -402,7 +464,7 @@ private fun LocationsSection(
                             modifier = Modifier.padding(horizontal = 4.dp),
                             imageVector = if (location.getLatLng() == null) Icons.Filled.Map else Icons.Outlined.Map,
                             contentDescription = "位置情報登録ずみ",
-                            tint = ExGold,
+                            tint = ExRed,
                         )
 
                         CustomText(location.name)
