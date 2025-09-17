@@ -1,19 +1,26 @@
 package com.amefure.capsuletoyapp.views.series
 
 import android.graphics.Bitmap
+import androidx.compose.animation.animateColorAsState
+import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
@@ -22,28 +29,38 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
-import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.automirrored.filled.ListAlt
 import androidx.compose.material.icons.filled.Edit
+import androidx.compose.material.icons.filled.Map
+import androidx.compose.material.icons.outlined.Map
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.asImageBitmap
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.times
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.amefure.capsuletoyapp.R
 import com.amefure.capsuletoyapp.models.enum.AppScreen
 import com.amefure.capsuletoyapp.ui.theme.ExGold
+import com.amefure.capsuletoyapp.ui.theme.ExRed
 import com.amefure.capsuletoyapp.ui.theme.ExWhite
 import com.amefure.capsuletoyapp.viewModels.SeriesDetailScreenViewModel
 import com.amefure.capsuletoyapp.views.components.layout.HeaderView
@@ -53,16 +70,13 @@ import com.amefure.capsuletoyapp.views.components.uiParts.CustomText
 import com.amefure.capsuletoyapp.views.components.uiParts.TextSize
 import com.amefure.capsuletoyapp.views.components.uiParts.WhiteBackStackView
 import com.google.android.gms.maps.CameraUpdateFactory
-import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.model.CameraPosition
-import com.google.android.gms.maps.model.LatLng
 import com.google.maps.android.compose.GoogleMap
 import com.google.maps.android.compose.MapProperties
 import com.google.maps.android.compose.MapType
 import com.google.maps.android.compose.MapUiSettings
 import com.google.maps.android.compose.Marker
 import com.google.maps.android.compose.MarkerState
-import com.google.maps.android.compose.MarkerState.Companion.invoke
 import com.google.maps.android.compose.rememberCameraPositionState
 
 @Composable
@@ -311,17 +325,16 @@ private fun ImageAndAmountSection(
     }
 }
 
-
 @Composable
 private fun LocationsSection(
-    viewModel: SeriesDetailScreenViewModel
+    viewModel: SeriesDetailScreenViewModel,
 ) {
     CustomText(
         text = "設置場所",
         textSize = TextSize.S,
         fontWeight = FontWeight.Bold,
         modifier = Modifier
-            .fillMaxWidth()
+            .fillMaxWidth(),
     )
 
     Spacer(
@@ -329,40 +342,148 @@ private fun LocationsSection(
             .padding(vertical = 8.dp),
     )
 
-    // 地図の初期位置
-    val cameraPositionState = rememberCameraPositionState {
-        position = CameraPosition.fromLatLngZoom(viewModel.initialLatLng, 15f)
-    }
+    var selectedTab by remember { mutableStateOf(LocationTab.MAP) }
 
-    GoogleMap(
+    SegmentedLocationPicker(
+        selectedTab = selectedTab,
+        onOptionSelected = { selectedTab = it },
+    )
+
+    Spacer(
         modifier = Modifier
-            .fillMaxWidth()
-            .height(300.dp),
-        cameraPositionState = cameraPositionState,
-        uiSettings = MapUiSettings(
-            zoomControlsEnabled = false,
-            myLocationButtonEnabled = true,
-            ),
-        properties = MapProperties(
-            mapType = MapType.NORMAL,
-            isMyLocationEnabled = true,
-            ),
+            .padding(vertical = 8.dp),
+    )
 
-        onMapLoaded = {
-            viewModel.series?.locations?.firstNotNullOfOrNull { it.getLatLng() }?.let {
-                // 位置情報が登録されていれば最初に登録されている位置情報を地図の初期表示位置にする
-                cameraPositionState.move(
-                    CameraUpdateFactory.newLatLngZoom(it.latLng,15f)
-                )
+    when (selectedTab) {
+        LocationTab.MAP -> {
+            // 地図の初期位置
+            val cameraPositionState = rememberCameraPositionState {
+                position = CameraPosition.fromLatLngZoom(viewModel.initialLatLng, 15f)
+            }
+
+            GoogleMap(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(300.dp),
+                cameraPositionState = cameraPositionState,
+                uiSettings = MapUiSettings(
+                    zoomControlsEnabled = false,
+                    myLocationButtonEnabled = true,
+                ),
+                properties = MapProperties(
+                    mapType = MapType.NORMAL,
+                    isMyLocationEnabled = true,
+                ),
+                onMapLoaded = {
+                    viewModel.series?.locations?.firstNotNullOfOrNull { it.getLatLng() }?.let {
+                        // 位置情報が登録されていれば最初に登録されている位置情報を地図の初期表示位置にする
+                        cameraPositionState.move(
+                            CameraUpdateFactory.newLatLngZoom(it.latLng, 15f),
+                        )
+                    }
+                },
+            ) {
+                viewModel.series?.locations?.mapNotNull { it.getLatLng() }?.forEach {
+                    Marker(
+                        state = MarkerState(position = it.latLng),
+                        title = it.name,
+                        snippet = "緯度: ${it.latLng.latitude}, 経度: ${it.latLng.longitude}",
+                    )
+                }
             }
         }
-    ) {
-        viewModel.series?.locations?.mapNotNull { it.getLatLng() }?.forEach {
-            Marker(
-                state = MarkerState(position = it.latLng),
-                title = it.name,
-                snippet = "緯度: ${it.latLng.latitude}, 経度: ${it.latLng.longitude}",
+        LocationTab.LIST -> {
+            viewModel.series?.locations?.forEach { location ->
+                WhiteBackStackView(
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                ) {
+                    Row {
+                        Icon(
+                            modifier = Modifier.padding(horizontal = 4.dp),
+                            imageVector = if (location.getLatLng() == null) Icons.Filled.Map else Icons.Outlined.Map,
+                            contentDescription = "位置情報登録ずみ",
+                            tint = ExGold,
+                        )
+
+                        CustomText(location.name)
+                    }
+                }
+            }
+        }
+    }
+}
+
+/** ローケーションタブ */
+private enum class LocationTab(
+    val title: String,
+    val icon: ImageVector,
+) {
+    MAP("Location Map", Icons.Outlined.Map),
+    LIST("Location List", Icons.AutoMirrored.Filled.ListAlt),
+}
+
+/** セグメントロケーションピッカー */
+@Composable
+private fun SegmentedLocationPicker(
+    tabs: List<LocationTab> = LocationTab.entries,
+    selectedTab: LocationTab,
+    onOptionSelected: (LocationTab) -> Unit,
+) {
+    val selectedIndex = tabs.indexOf(selectedTab)
+
+    BoxWithConstraints(
+        modifier = Modifier
+            .height(40.dp)
+            .fillMaxWidth()
+            .shadow(
+                elevation = 8.dp,
+                shape = RoundedCornerShape(8.dp),
+                clip = false,
             )
+            .clip(RoundedCornerShape(16))
+            .background(Color.White),
+    ) {
+        // タブのサイズ数に応じてインジケータの横幅を計算
+        val tabWidth = maxWidth / tabs.size
+        val indicatorOffset by animateDpAsState(
+            targetValue = selectedIndex * tabWidth,
+            label = "IndicatorOffset",
+        )
+
+        // 背面でアニメーション移動するインジケーターView
+        Box(
+            modifier = Modifier
+                .offset(x = indicatorOffset)
+                .width(tabWidth)
+                .fillMaxHeight()
+                .background(ExRed, RoundedCornerShape(16)),
+        )
+
+        // タブアイコンView
+        Row(
+            modifier = Modifier.fillMaxSize(),
+            verticalAlignment = Alignment.CenterVertically,
+        ) {
+            tabs.forEach { tab ->
+                val isSelected = tab == selectedTab
+                val iconTint by animateColorAsState(
+                    targetValue = if (isSelected) Color.White else ExRed,
+                    label = "IconTint",
+                )
+
+                Box(
+                    modifier = Modifier
+                        .weight(1f)
+                        .clickable { onOptionSelected(tab) },
+                    contentAlignment = Alignment.Center,
+                ) {
+                    Icon(
+                        imageVector = tab.icon,
+                        contentDescription = tab.title,
+                        tint = iconTint,
+                    )
+                }
+            }
         }
     }
 }

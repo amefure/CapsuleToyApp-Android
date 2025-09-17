@@ -113,5 +113,4 @@ dependencies {
 
     /** Kotlin Coroutines */
     implementation(libs.kotlinx.coroutines.play.services)
-
 }

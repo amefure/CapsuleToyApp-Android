@@ -12,7 +12,6 @@ import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Check
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
@@ -131,9 +130,9 @@ private fun MapScreen(
             // Mapを読み込み終えてから現在値へ移動させる
             // 読み込み前に移動させようとするとNullPointerExceptionになる
             cameraPositionState.move(
-                CameraUpdateFactory.newLatLngZoom(viewModel.initialLatLng, 15f)
+                CameraUpdateFactory.newLatLngZoom(viewModel.initialLatLng, 15f),
             )
-        }
+        },
     ) {
         viewModel.selectedLatLng?.let { latLng ->
             Marker(

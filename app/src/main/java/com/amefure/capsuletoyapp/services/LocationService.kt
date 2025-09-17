@@ -9,15 +9,14 @@ import android.util.Log
 import androidx.core.content.ContextCompat
 import com.google.android.gms.location.LocationServices
 import kotlinx.coroutines.tasks.await
-import java.util.logging.Logger
 
 /**
  * [android.location.Location]の管理クラス
  * 端末の位置情報取得
  */
 class LocationService(
-    private val context: Context
-){
+    private val context: Context,
+) {
     private var fusedLocationClient = LocationServices.getFusedLocationProviderClient(context)
 
     /** 位置情報関係のパーミッション申請が許可済みかどうか */

@@ -110,7 +110,7 @@ fun SeriesInputScreen(
         Modifier
             .padding(16.dp)
             // 縦スクロール可能にする
-            .verticalScroll(rememberScrollState()) ,
+            .verticalScroll(rememberScrollState()),
     ) {
         CustomAlertDialog(
             showFlag = viewModel.showSuccessDialog,
@@ -178,7 +178,7 @@ fun SeriesInputScreen(
         InputLocationSection(
             seriesId = seriesId,
             viewModel = viewModel,
-            navController = navController
+            navController = navController,
         )
 
         Spacer(
@@ -215,9 +215,8 @@ fun SeriesInputScreen(
 
 @Composable
 private fun InputImageAndAmountSection(
-    viewModel: SeriesInputScreenViewModel
+    viewModel: SeriesInputScreenViewModel,
 ) {
-
     val thumbnail = viewModel.thumbnail
 
     // カメラ起動ランチャー
@@ -367,7 +366,7 @@ private fun InputImageAndAmountSection(
 @Composable
 private fun InputCategoriesSection(
     viewModel: SeriesInputScreenViewModel,
-    navController: NavHostController
+    navController: NavHostController,
 ) {
     CustomText(
         text = "カテゴリ",
@@ -444,7 +443,7 @@ private fun InputCategoriesSection(
 private fun InputLocationSection(
     seriesId: Long,
     viewModel: SeriesInputScreenViewModel,
-    navController: NavHostController
+    navController: NavHostController,
 ) {
     CustomText(
         text = "ガチャガチャ設置場所",
@@ -460,7 +459,7 @@ private fun InputLocationSection(
 
     viewModel.locations.forEach { location ->
         WhiteBackStackView(
-            horizontalArrangement = Arrangement.SpaceBetween
+            horizontalArrangement = Arrangement.SpaceBetween,
         ) {
             Row {
                 Icon(
@@ -476,7 +475,7 @@ private fun InputLocationSection(
             IconButton(
                 onClick = {
                     viewModel.removeLocation(location)
-                }
+                },
             ) {
                 Icon(
                     imageVector = Icons.Outlined.Delete,
