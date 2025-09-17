@@ -31,6 +31,7 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.automirrored.filled.ListAlt
+import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.Map
 import androidx.compose.material.icons.outlined.Contrast
@@ -71,6 +72,7 @@ import com.amefure.capsuletoyapp.views.components.uiParts.AlertType
 import com.amefure.capsuletoyapp.views.components.uiParts.CustomAlertDialog
 import com.amefure.capsuletoyapp.views.components.uiParts.CustomText
 import com.amefure.capsuletoyapp.views.components.uiParts.TextSize
+import com.amefure.capsuletoyapp.views.components.uiParts.ThemeIconButton
 import com.amefure.capsuletoyapp.views.components.uiParts.WhiteBackStackView
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.model.CameraPosition
@@ -163,6 +165,17 @@ fun SeriesDetailScreen(
 
         // 位置情報セクション
         LocationsSection(viewModel)
+
+        Spacer(
+            modifier = Modifier
+                .padding(vertical = 8.dp),
+        )
+
+        ToysSection(
+            seriesId,
+            navController,
+            viewModel
+        )
 
         Spacer(
             modifier = Modifier
@@ -549,4 +562,38 @@ private fun SegmentedLocationPicker(
             }
         }
     }
+}
+
+
+@Composable
+private fun ToysSection(
+    seriesId: Long,
+    navController: NavHostController,
+    viewModel: SeriesDetailScreenViewModel
+) {
+    Row(
+        horizontalArrangement = Arrangement.SpaceBetween,
+        verticalAlignment = Alignment.CenterVertically,
+        modifier = Modifier
+            .fillMaxWidth(),
+    ) {
+        CustomText(
+            text = "ガチャガチャアイテム一覧",
+            textSize = TextSize.S,
+            fontWeight = FontWeight.Bold,
+        )
+
+        ThemeIconButton(
+            onClick = {
+                navController.navigate(AppScreen.ToyInput.route(seriesId))
+            },
+            imageVector = Icons.Filled.Add,
+            contentDescription = "ガチャガチャアイテム登録画面へ遷移",
+        )
+    }
+
+    Spacer(
+        modifier = Modifier
+            .padding(vertical = 8.dp),
+    )
 }

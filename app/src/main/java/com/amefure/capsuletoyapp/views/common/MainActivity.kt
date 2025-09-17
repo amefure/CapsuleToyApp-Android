@@ -44,6 +44,7 @@ import com.amefure.capsuletoyapp.views.series.SeriesListScreen
 import com.amefure.capsuletoyapp.views.series.input.CategoryInputScreen
 import com.amefure.capsuletoyapp.views.series.input.LocationInputScreen
 import com.amefure.capsuletoyapp.views.series.input.SeriesInputScreen
+import com.amefure.capsuletoyapp.views.series.input.ToyInputScreen
 import com.amefure.capsuletoyapp.views.settings.SettingsScreen
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -234,6 +235,27 @@ private fun TabBarBottomWithNav(
         ) { backStackEntry ->
             val seriesId: Long = backStackEntry.arguments?.getLong(AppScreen.LocationInput.ARG_ITEM_ID) ?: 0
             LocationInputScreen(seriesId, navController)
+        }
+
+        /** カプセルトイ登録・更新 */
+        composable(
+            route = AppScreen.ToyInput.route(),
+            arguments = listOf(navArgument(AppScreen.ToyInput.ARG_ITEM_ID) { type = NavType.LongType }),
+            enterTransition = {
+                slideInVertically(
+                    // 下からスライド
+                    initialOffsetY = { fullHeight -> fullHeight },
+                ) + fadeIn()
+            },
+            exitTransition = {
+                slideOutVertically(
+                    // 下にスライド
+                    targetOffsetY = { fullHeight -> fullHeight },
+                ) + fadeOut()
+            },
+        ) { backStackEntry ->
+            val seriesId: Long = backStackEntry.arguments?.getLong(AppScreen.ToyInput.ARG_ITEM_ID) ?: 0
+            ToyInputScreen(seriesId, navController)
         }
 
         composable(route = AppScreen.Tab.MyData.route()) {
