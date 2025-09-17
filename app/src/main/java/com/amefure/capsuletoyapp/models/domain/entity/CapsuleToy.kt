@@ -32,7 +32,7 @@ data class CapsuleToy(
     /** メモ */
     val memo: String,
     /** 画像パス */
-    val imagePath: String?,
+    var imagePath: String?,
     /** 取得日 */
     val isGetAt: Date?,
 ) {

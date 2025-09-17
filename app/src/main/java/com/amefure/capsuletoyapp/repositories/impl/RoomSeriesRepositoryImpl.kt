@@ -62,7 +62,6 @@ class RoomSeriesRepositoryImpl
         return seriesId
     }
 
-
     /**
      * [capsuleToys]はシリーズのアップデートでは更新されないため対象外
      */
@@ -136,5 +135,13 @@ class RoomSeriesRepositoryImpl
 
     override suspend fun deleteSeries(series: Series) {
         seriesDao.deleteSeriesById(series.id)
+    }
+
+    override suspend fun insertCapsuleToy(capsuleToy: CapsuleToy): Long {
+        return capsuleToyDao.insertCapsuleToy(capsuleToy)
+    }
+
+    override suspend fun updateImagePathCapsuleToy(capsuleToyId: Long, imagePath: String) {
+        capsuleToyDao.updateImagePath(capsuleToyId, imagePath)
     }
 }

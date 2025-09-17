@@ -174,7 +174,7 @@ fun SeriesDetailScreen(
         ToysSection(
             seriesId,
             navController,
-            viewModel
+            viewModel,
         )
 
         Spacer(
@@ -564,12 +564,11 @@ private fun SegmentedLocationPicker(
     }
 }
 
-
 @Composable
 private fun ToysSection(
     seriesId: Long,
     navController: NavHostController,
-    viewModel: SeriesDetailScreenViewModel
+    viewModel: SeriesDetailScreenViewModel,
 ) {
     Row(
         horizontalArrangement = Arrangement.SpaceBetween,

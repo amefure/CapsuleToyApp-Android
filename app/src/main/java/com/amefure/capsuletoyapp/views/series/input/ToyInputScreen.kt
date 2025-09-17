@@ -42,8 +42,10 @@ import androidx.navigation.NavHostController
 import com.amefure.capsuletoyapp.ui.theme.ExGold
 import com.amefure.capsuletoyapp.viewModels.ToyInputScreenViewModel
 import com.amefure.capsuletoyapp.views.components.layout.HeaderView
+import com.amefure.capsuletoyapp.views.components.uiParts.CustomAlertDialog
 import com.amefure.capsuletoyapp.views.components.uiParts.CustomText
 import com.amefure.capsuletoyapp.views.components.uiParts.TextSize
+import com.amefure.capsuletoyapp.views.components.uiParts.ThemeInputBox
 
 @Composable
 fun ToyInputScreen(
@@ -51,7 +53,6 @@ fun ToyInputScreen(
     navController: NavHostController,
     viewModel: ToyInputScreenViewModel = hiltViewModel(),
 ) {
-
     // Compositionされたタイミングで実行する
     // 1回だけ発火して欲しいのでKeyは不変とする
     LaunchedEffect(Unit) {
@@ -65,30 +66,56 @@ fun ToyInputScreen(
             .padding(16.dp)
             .background(MaterialTheme.colorScheme.background),
     ) {
+        CustomAlertDialog(
+            showFlag = viewModel.isShowValidationDialog,
+            rightAction = {
+                viewModel.closeSuccessAlert()
+                navController.popBackStack()
+            },
+            message = if (seriesId == 0L) {
+                "「${viewModel.name}」を登録しました。"
+            } else {
+                "更新しました。"
+            },
+        )
+
         HeaderView(
             title = "ガチャガチャアイテム登録",
             leftOnClick = { navController.popBackStack() },
             leftImageVector = Icons.AutoMirrored.Filled.ArrowBack,
             leftContentDescription = "画面を戻る",
             rightOnClick =
-                {
-//                    val location = viewModel.createLocation(
-//                        seriesId = seriesId,
-//                    ) ?: return@HeaderView
-//                    // 入力した値を戻り先にセット
-//                    navController.previousBackStackEntry
-//                        ?.savedStateHandle
-//                        ?.set(Location.KEY, location)
-
-                    navController.popBackStack()
-                },
+            {
+                viewModel.createCapsuleToy(
+                    seriesId = seriesId,
+                )
+            },
             rightImageVector = Icons.Filled.Check,
             rightContentDescription = "ガチャガチャ登録",
         )
 
         InputImageAndAmountSection(viewModel)
+
+        ThemeInputBox(
+            title = "アイテム名",
+            value = viewModel.name,
+            onValueChange = {
+                viewModel.name = it
+            },
+            placeholder = "例：△△シリーズ",
+        )
+
+        ThemeInputBox(
+            title = "MEMO",
+            value = viewModel.memo,
+            onValueChange = {
+                viewModel.memo = it
+            },
+            singleLine = false,
+        )
     }
 }
+
 @Composable
 private fun InputImageAndAmountSection(
     viewModel: ToyInputScreenViewModel,

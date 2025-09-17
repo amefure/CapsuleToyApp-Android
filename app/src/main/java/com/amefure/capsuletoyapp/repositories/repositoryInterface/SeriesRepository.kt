@@ -39,4 +39,14 @@ interface SeriesRepository {
     )
 
     suspend fun deleteSeries(series: Series)
+
+    /** CapsuleToy登録処理　*/
+    suspend fun insertCapsuleToy(
+        capsuleToy: CapsuleToy,
+    ): Long
+
+    suspend fun updateImagePathCapsuleToy(
+        capsuleToyId: Long,
+        imagePath: String,
+    )
 }

@@ -8,12 +8,16 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.amefure.capsuletoyapp.models.domain.entity.CapsuleToy
 import com.amefure.capsuletoyapp.repositories.repositoryInterface.ImageRepository
 import com.amefure.capsuletoyapp.repositories.repositoryInterface.SeriesRepository
 import com.amefure.capsuletoyapp.services.ImageService
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.util.Date
 import javax.inject.Inject
 
@@ -36,7 +40,10 @@ class ToyInputScreenViewModel @Inject constructor(
     /** カメラで撮影した画像を保持 */
     public var thumbnail: Bitmap? by mutableStateOf(null)
 
-    public var showValidationDialog by mutableStateOf(false)
+    public var isShowSuccessDialog by mutableStateOf(false)
+        private set
+
+    public var isShowValidationDialog by mutableStateOf(false)
         private set
 
     /** 一時保存用のURI */
@@ -63,10 +70,10 @@ class ToyInputScreenViewModel @Inject constructor(
 
     public fun createCapsuleToy(
         seriesId: Long,
-    ): CapsuleToy? {
+    ) {
         if (name.isEmpty()) {
             showValidationAlert()
-            return null
+            return
         }
 
         val capsuleToy = CapsuleToy(
@@ -79,22 +86,36 @@ class ToyInputScreenViewModel @Inject constructor(
             isGetAt = Date(),
         )
 
-//        val seriesId = repository.insertSeries()
-//        val imagePath = imageFileRepository.saveBitmapToInternalStorage(thumbnail, seriesId.toString())
-//        imagePath?.let {
-//            series.imagePath = imagePath
-//            repository.updateImagePathSeries(seriesId, imagePath)
-//        }
-        return capsuleToy
+        viewModelScope.launch(Dispatchers.IO) {
+            val capsuleToyId = repository.insertCapsuleToy(capsuleToy)
+            val imagePath = imageFileRepository.saveBitmapToInternalStorage(thumbnail, seriesId.toString() + "-" + capsuleToyId.toString())
+            imagePath?.let {
+                capsuleToy.imagePath = imagePath
+                repository.updateImagePathCapsuleToy(capsuleToyId, imagePath)
+            }
+            withContext(Dispatchers.Main) {
+                showSuccessAlert()
+            }
+        }
+    }
+
+    @MainThread
+    public fun showSuccessAlert() {
+        isShowSuccessDialog = true
+    }
+
+    @MainThread
+    public fun closeSuccessAlert() {
+        isShowSuccessDialog = false
     }
 
     @MainThread
     public fun showValidationAlert() {
-        showValidationDialog = true
+        isShowValidationDialog = true
     }
 
     @MainThread
     public fun closeValidationAlert() {
-        showValidationDialog = false
+        isShowValidationDialog = false
     }
 }
