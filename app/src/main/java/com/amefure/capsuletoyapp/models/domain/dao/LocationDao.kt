@@ -9,6 +9,11 @@ import com.amefure.capsuletoyapp.models.domain.entity.Location
 
 @Dao
 interface LocationDao {
+
+    /** 対象シリーズIDのLocationを全て取得 */
+    @Query("SELECT * FROM ${Location.TABLE_NAME} WHERE seriesId = :seriesId")
+    suspend fun fetchLocations(seriesId: Long): List<Location>
+
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insertLocations(locations: List<Location>): List<Long>
 

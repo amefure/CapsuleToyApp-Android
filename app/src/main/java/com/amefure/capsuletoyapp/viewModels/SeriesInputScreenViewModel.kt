@@ -57,9 +57,9 @@ class SeriesInputScreenViewModel @Inject constructor(
     // コレクション型はSnapshotStateListで管理しないと要素の変化では再コンポーズされない
     public var categories: SnapshotStateList<Category> = mutableStateListOf()
         private set
-
-    // コレクション型はSnapshotStateListで管理しないと要素の変化では再コンポーズされない
     public var locations: SnapshotStateList<Location> = mutableStateListOf()
+        private set
+    public var capsuleToys: SnapshotStateList<CapsuleToy> = mutableStateListOf()
         private set
 
     public var showSuccessDialog by mutableStateOf(false)
@@ -102,12 +102,13 @@ class SeriesInputScreenViewModel @Inject constructor(
 
         locations.clear()
         locations.addAll(entity.locations)
+
+        capsuleToys.clear()
+        capsuleToys.addAll(entity.capsuleToys)
     }
 
     /** SeriesInput画面から新規作成・更新する */
-    public fun createOrUpdateSeries(
-        capsuleToys: List<CapsuleToy> = emptyList(),
-    ) {
+    public fun createOrUpdateSeries() {
         if (name.isEmpty() || count == null || count == 0) {
             showValidationAlert()
             return
@@ -122,7 +123,7 @@ class SeriesInputScreenViewModel @Inject constructor(
                 series.amount = amount
                 series.memo = memo
                 series.imagePath = imagePath
-                repository.updateSeries(series, capsuleToys, locations, categories)
+                repository.updateSeries(series, locations, categories)
             } ?: run {
                 // 新規追加
                 val series = Series(
@@ -132,7 +133,7 @@ class SeriesInputScreenViewModel @Inject constructor(
                     memo = memo,
                     imagePath = null,
                 )
-                val seriesId = repository.insertSeries(series, capsuleToys, locations, categories)
+                val seriesId = repository.insertSeries(series, locations, categories)
                 val imagePath = imageFileRepository.saveBitmapToInternalStorage(thumbnail, seriesId.toString())
                 imagePath?.let {
                     series.imagePath = imagePath

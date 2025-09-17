@@ -153,7 +153,7 @@ fun SeriesDetailScreen(
                 .padding(vertical = 8.dp),
         )
 
-        // 位置情報セクション
+        // 総数 / 所持数セクション
         TotalCountSection(viewModel)
 
         Spacer(
@@ -337,7 +337,8 @@ private fun CategoriesSection(
                         elevation = 8.dp,
                         shape = RoundedCornerShape(8.dp),
                         clip = false,
-                    ).background(category.color, RoundedCornerShape(8.dp))
+                    )
+                    .background(category.color, RoundedCornerShape(8.dp))
                     .height(40.dp)
                     .padding(10.dp),
             )

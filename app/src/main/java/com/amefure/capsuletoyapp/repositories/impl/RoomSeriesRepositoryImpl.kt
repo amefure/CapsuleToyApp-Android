@@ -38,21 +38,22 @@ class RoomSeriesRepositoryImpl
     override suspend fun fetchAllSeries(): List<SeriesWithRelations> =
         seriesDao.fetchAll()
 
+    /**
+     * [capsuleToys]はシリーズのインサートでは登録されないため対象外
+     */
     override suspend fun insertSeries(
         series: Series,
-        capsuleToys: List<CapsuleToy>,
         locations: List<Location>,
         categories: List<Category>,
     ): Long {
         val seriesId = seriesDao.insertSeries(series)
-        if (capsuleToys.isNotEmpty()) {
-            capsuleToyDao.insertCapsuleToys(capsuleToys.map { it.copy(seriesId = seriesId) })
-        }
 
+        // Locationは一対多の関係性
         if (locations.isNotEmpty()) {
             locationDao.insertLocations(locations.map { it.copy(seriesId = seriesId) })
         }
 
+        // Categoryは多対多の関係性
         if (categories.isNotEmpty()) {
             val categoryIds = categoryDao.insertCategories(categories)
             val crossRefs = categoryIds.map { SeriesCategoryCrossRef(seriesId, it) }
@@ -61,22 +62,45 @@ class RoomSeriesRepositoryImpl
         return seriesId
     }
 
+
+    /**
+     * [capsuleToys]はシリーズのアップデートでは更新されないため対象外
+     */
     override suspend fun updateSeries(
         series: Series,
-        capsuleToys: List<CapsuleToy>,
         locations: List<Location>,
         categories: List<Category>,
     ) {
         seriesDao.updateSeries(series)
 
-        if (capsuleToys.isNotEmpty()) {
-            capsuleToyDao.upsertCapsuleToys(capsuleToys)
+        // Locationは一対多の関係性
+        if (locations.isNotEmpty()) {
+            // 存在しないものは新規追加
+            // 存在していたものは更新
+            // 存在していたのにリストにないものは削除する
+
+            // Upsertで更新 or 新規追加を行い新規追加したIDを取得する
+            // 更新されたものは-1が返るため除外する
+            val insertIds = locationDao.upsertLocations(locations).filter { it != -1L }
+            // 更新対象だったIDを取得(新規追加はIDが0になっている)
+            val updateIds = locations.map { it.id }.filter { it != 0L }
+            // 追加・更新したIDリスト
+            val locationIds = (insertIds + updateIds).toSet()
+            // すでに登録済みの対象のseriesIdのLocationを取得
+            val existingLocationIds = locationDao.fetchLocations(series.id).map { it.id }
+            // 今回削除対象となる LocationId
+            val toDeleteCategoryIds = existingLocationIds - locationIds
+            toDeleteCategoryIds.forEach { locationId ->
+                locationDao.deleteLocationById(locationId)
+            }
         }
 
-        if (locations.isNotEmpty()) {
-            locationDao.upsertLocations(locations)
-        }
+        // Categoryは多対多の関係性
         if (categories.isNotEmpty()) {
+            // 存在しないものは新規追加
+            // 存在していたものは更新
+            // 存在していたのにリストにないものは削除する
+
             // Upsertで更新 or 新規追加を行い新規追加したIDを取得する
             // 更新されたものは-1が返るため除外する
             val insertIds = categoryDao.upsertCategories(categories).filter { it != -1L }

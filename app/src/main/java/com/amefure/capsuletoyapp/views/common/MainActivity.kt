@@ -232,7 +232,7 @@ private fun TabBarBottomWithNav(
                 ) + fadeOut()
             },
         ) { backStackEntry ->
-            val seriesId: Long = backStackEntry.arguments?.getLong(AppScreen.SeriesDetail.ARG_ITEM_ID) ?: 0
+            val seriesId: Long = backStackEntry.arguments?.getLong(AppScreen.LocationInput.ARG_ITEM_ID) ?: 0
             LocationInputScreen(seriesId, navController)
         }
 

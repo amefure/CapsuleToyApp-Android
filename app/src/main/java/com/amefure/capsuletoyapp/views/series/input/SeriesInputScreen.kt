@@ -139,9 +139,7 @@ fun SeriesInputScreen(
             leftContentDescription = "画面を戻る",
             rightOnClick =
             {
-                viewModel.createOrUpdateSeries(
-                    capsuleToys = emptyList(),
-                )
+                viewModel.createOrUpdateSeries()
             },
             rightImageVector = Icons.Filled.Check,
             rightContentDescription = "シリーズ登録",
