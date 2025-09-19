@@ -16,9 +16,10 @@ import com.amefure.capsuletoyapp.models.domain.entity.Category
 import com.amefure.capsuletoyapp.models.domain.entity.Location
 import com.amefure.capsuletoyapp.models.domain.entity.Series
 import com.amefure.capsuletoyapp.models.domain.entity.relation.SeriesWithRelations
-import com.amefure.capsuletoyapp.repositories.repositoryInterface.ImageRepository
-import com.amefure.capsuletoyapp.repositories.repositoryInterface.SeriesRepository
+import com.amefure.capsuletoyapp.repositories.interfaces.ImageRepository
+import com.amefure.capsuletoyapp.repositories.interfaces.SeriesRepository
 import com.amefure.capsuletoyapp.services.ImageService
+import com.amefure.capsuletoyapp.viewModels.interfaces.CameraInterface
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.Dispatchers
@@ -31,7 +32,7 @@ class SeriesInputScreenViewModel @Inject constructor(
     private val repository: SeriesRepository,
     private val imageFileRepository: ImageRepository,
     @ApplicationContext private val context: Context,
-) : ViewModel() {
+) : ViewModel(), CameraInterface {
 
     /**
      *  ComposeなのでStateFlowではなくStateで保持する
@@ -49,10 +50,14 @@ class SeriesInputScreenViewModel @Inject constructor(
     public var memo by mutableStateOf("")
 
     /** ドロップダウンメニューの開閉フラグ */
-    public var expanded by mutableStateOf(false)
+    override var expanded by mutableStateOf(false)
 
     /** カメラで撮影した画像を保持 */
-    public var thumbnail: Bitmap? by mutableStateOf(null)
+    override var thumbnail: Bitmap? by mutableStateOf(null)
+
+    /** 一時保存用のURI */
+    override var photoUri: Uri? = null
+        private set
 
     // コレクション型はSnapshotStateListで管理しないと要素の変化では再コンポーズされない
     public var categories: SnapshotStateList<Category> = mutableStateListOf()
@@ -65,10 +70,6 @@ class SeriesInputScreenViewModel @Inject constructor(
     public var showSuccessDialog by mutableStateOf(false)
         private set
     public var showValidationDialog by mutableStateOf(false)
-        private set
-
-    /** 一時保存用のURI */
-    public var photoUri: Uri? = null
         private set
 
     private val imageService = ImageService(context)
@@ -147,18 +148,18 @@ class SeriesInputScreenViewModel @Inject constructor(
     }
 
     /** 一時保存用のURIを構築 */
-    public fun preparePhotoUri() {
+    override fun preparePhotoUri() {
         photoUri = imageService.createTempPhotoUri()
     }
 
     /** カメラで撮影した画像を格納 */
-    public fun onCameraCaptured() {
+    override fun onCameraCaptured() {
         val photoUri = photoUri ?: return
         thumbnail = imageService.decodeUriToBitmap(photoUri)
     }
 
     /** ギャラリーから選択された画像を格納 */
-    public fun onGalleryImageSelected(uri: Uri) {
+    override fun onGalleryImageSelected(uri: Uri) {
         thumbnail = imageService.decodeUriToBitmap(uri)
     }
 

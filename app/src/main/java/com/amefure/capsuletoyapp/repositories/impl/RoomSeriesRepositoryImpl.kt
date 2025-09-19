@@ -13,7 +13,7 @@ import com.amefure.capsuletoyapp.models.domain.entity.Location
 import com.amefure.capsuletoyapp.models.domain.entity.Series
 import com.amefure.capsuletoyapp.models.domain.entity.relation.SeriesCategoryCrossRef
 import com.amefure.capsuletoyapp.models.domain.entity.relation.SeriesWithRelations
-import com.amefure.capsuletoyapp.repositories.repositoryInterface.SeriesRepository
+import com.amefure.capsuletoyapp.repositories.interfaces.SeriesRepository
 import dagger.hilt.android.qualifiers.ApplicationContext
 import javax.inject.Inject
 

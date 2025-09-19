@@ -17,7 +17,7 @@ interface CapsuleToyDao {
     @Upsert
     suspend fun upsertCapsuleToys(capsuleToys: List<CapsuleToy>): List<Long>
 
-    @Query("UPDATE ${CapsuleToy.TABLE_NAME} SET imagePath = :imagePath WHERE id = :id")
+    @Query("UPDATE ${CapsuleToy.TABLE_NAME} SET imagePath = :imagePath WHERE id = :capsuleToyId")
     suspend fun updateImagePath(capsuleToyId: Long, imagePath: String)
 
     @Query("DELETE FROM ${CapsuleToy.TABLE_NAME} WHERE id = :capsuleToyId")

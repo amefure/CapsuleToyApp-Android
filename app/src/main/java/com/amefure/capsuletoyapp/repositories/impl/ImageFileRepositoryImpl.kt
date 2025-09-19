@@ -3,7 +3,7 @@ package com.amefure.capsuletoyapp.repositories.impl
 import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
-import com.amefure.capsuletoyapp.repositories.repositoryInterface.ImageRepository
+import com.amefure.capsuletoyapp.repositories.interfaces.ImageRepository
 import dagger.hilt.android.qualifiers.ApplicationContext
 import java.io.File
 import java.io.FileOutputStream

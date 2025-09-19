@@ -2,8 +2,8 @@ package com.amefure.capsuletoyapp.repositories.di
 
 import com.amefure.capsuletoyapp.repositories.impl.ImageFileRepositoryImpl
 import com.amefure.capsuletoyapp.repositories.impl.RoomSeriesRepositoryImpl
-import com.amefure.capsuletoyapp.repositories.repositoryInterface.ImageRepository
-import com.amefure.capsuletoyapp.repositories.repositoryInterface.SeriesRepository
+import com.amefure.capsuletoyapp.repositories.interfaces.ImageRepository
+import com.amefure.capsuletoyapp.repositories.interfaces.SeriesRepository
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

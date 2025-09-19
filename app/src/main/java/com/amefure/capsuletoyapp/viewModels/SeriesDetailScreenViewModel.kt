@@ -8,8 +8,8 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.amefure.capsuletoyapp.models.domain.entity.relation.SeriesWithRelations
-import com.amefure.capsuletoyapp.repositories.repositoryInterface.ImageRepository
-import com.amefure.capsuletoyapp.repositories.repositoryInterface.SeriesRepository
+import com.amefure.capsuletoyapp.repositories.interfaces.ImageRepository
+import com.amefure.capsuletoyapp.repositories.interfaces.SeriesRepository
 import com.google.android.gms.maps.model.LatLng
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers

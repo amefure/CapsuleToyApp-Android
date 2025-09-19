@@ -1,4 +1,4 @@
-package com.amefure.capsuletoyapp.repositories.repositoryInterface
+package com.amefure.capsuletoyapp.repositories.interfaces
 
 import com.amefure.capsuletoyapp.models.domain.entity.CapsuleToy
 import com.amefure.capsuletoyapp.models.domain.entity.Category
