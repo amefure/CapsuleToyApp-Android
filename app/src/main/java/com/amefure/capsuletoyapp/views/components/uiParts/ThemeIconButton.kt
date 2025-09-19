@@ -10,6 +10,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
@@ -22,6 +23,7 @@ fun ThemeIconButton(
     onClick: () -> Unit,
     imageVector: ImageVector,
     contentDescription: String?,
+    containerColor: Color = MaterialTheme.colorScheme.primary,
     baseSize: Dp = 50.dp,
     iconSize: Dp = 24.dp,
 ) {
@@ -29,7 +31,7 @@ fun ThemeIconButton(
         onClick = onClick,
         colors = IconButtonDefaults.iconButtonColors(
             // 背景色
-            containerColor = MaterialTheme.colorScheme.primary,
+            containerColor = containerColor,
             // テキスト/Iconの色
             contentColor = MaterialTheme.colorScheme.onPrimary,
         ),
