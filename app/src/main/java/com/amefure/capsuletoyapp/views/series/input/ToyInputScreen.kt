@@ -40,6 +40,7 @@ import com.amefure.capsuletoyapp.views.components.uiParts.ThemeInputBox
 @Composable
 fun ToyInputScreen(
     seriesId: Long,
+    toyId: Long,
     navController: NavHostController,
     viewModel: ToyInputScreenViewModel = hiltViewModel(),
 ) {
@@ -47,6 +48,7 @@ fun ToyInputScreen(
     // 1回だけ発火して欲しいのでKeyは不変とする
     LaunchedEffect(Unit) {
         viewModel.preparePhotoUri()
+        viewModel.fetchSingleToy(toyId)
     }
 
     Column(
@@ -62,7 +64,7 @@ fun ToyInputScreen(
                 viewModel.closeSuccessAlert()
                 navController.popBackStack()
             },
-            message = if (seriesId == 0L) {
+            message = if (toyId == 0L) {
                 "「${viewModel.name}」を登録しました。"
             } else {
                 "更新しました。"
@@ -83,7 +85,7 @@ fun ToyInputScreen(
             leftContentDescription = "画面を戻る",
             rightOnClick =
             {
-                viewModel.createCapsuleToy(
+                viewModel.createOrUpdateCapsuleToy(
                     seriesId = seriesId,
                 )
             },

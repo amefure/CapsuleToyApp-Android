@@ -240,7 +240,10 @@ private fun TabBarBottomWithNav(
         /** カプセルトイ登録・更新 */
         composable(
             route = AppScreen.ToyInput.route(),
-            arguments = listOf(navArgument(AppScreen.ToyInput.ARG_ITEM_ID) { type = NavType.LongType }),
+            arguments = listOf(
+                navArgument(AppScreen.ToyInput.ARG_SERIES_ID) { type = NavType.LongType },
+                navArgument(AppScreen.ToyInput.ARG_TOY_ID) { type = NavType.LongType },
+            ),
             enterTransition = {
                 slideInVertically(
                     // 下からスライド
@@ -254,8 +257,9 @@ private fun TabBarBottomWithNav(
                 ) + fadeOut()
             },
         ) { backStackEntry ->
-            val seriesId: Long = backStackEntry.arguments?.getLong(AppScreen.ToyInput.ARG_ITEM_ID) ?: 0
-            ToyInputScreen(seriesId, navController)
+            val seriesId: Long = backStackEntry.arguments?.getLong(AppScreen.ToyInput.ARG_SERIES_ID) ?: 0
+            val toyId: Long = backStackEntry.arguments?.getLong(AppScreen.ToyInput.ARG_TOY_ID) ?: 0
+            ToyInputScreen(seriesId, toyId, navController)
         }
 
         composable(route = AppScreen.Tab.MyData.route()) {

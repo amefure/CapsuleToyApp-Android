@@ -608,13 +608,12 @@ private fun ToysSection(
                         modifier = Modifier
                             .weight(1f)
                             .aspectRatio(1f)
-                            .padding(4.dp)
+                            .padding(8.dp)
                             .background(Color.White, RoundedCornerShape(8.dp))
                             .shadow(8.dp, RoundedCornerShape(8.dp), clip = false)
                             .shadow(8.dp, RoundedCornerShape(8.dp), clip = false)
-                            .padding(4.dp)
                             .clickable {
-                                
+                                navController.navigate(AppScreen.ToyInput.route(seriesId, toy.id))
                             },
                         contentAlignment = Alignment.Center,
                     ) {
@@ -626,7 +625,7 @@ private fun ToysSection(
                             baseSize = 40.dp,
                             modifier = Modifier
                                 .align(Alignment.TopStart)
-                                .offset(x= (-12).dp, y= (-12).dp)
+                                .offset(x = (-12).dp, y = (-12).dp)
                                 .zIndex(1f),
                         )
 

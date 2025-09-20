@@ -40,10 +40,20 @@ interface SeriesRepository {
 
     suspend fun deleteSeries(series: Series)
 
+    /** CapsuleToy取得処理　*/
+    suspend fun fetchSingleToy(
+        capsuleToyId: Long,
+    ): CapsuleToy?
+
     /** CapsuleToy登録処理　*/
     suspend fun insertCapsuleToy(
         capsuleToy: CapsuleToy,
     ): Long
+
+    /** CapsuleToy更新処理　*/
+    suspend fun updateCapsuleToy(
+        capsuleToy: CapsuleToy,
+    )
 
     suspend fun updateImagePathCapsuleToy(
         capsuleToyId: Long,

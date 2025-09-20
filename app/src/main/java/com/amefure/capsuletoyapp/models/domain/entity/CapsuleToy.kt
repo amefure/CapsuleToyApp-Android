@@ -24,17 +24,17 @@ data class CapsuleToy(
     /** シリーズID */
     val seriesId: Long,
     /** 名称 */
-    val name: String,
+    var name: String,
     /** 所持フラグ */
-    val isOwned: Boolean,
+    var isOwned: Boolean,
     /** シークレットフラグ */
-    val isSecret: Boolean,
+    var isSecret: Boolean,
     /** メモ */
-    val memo: String,
+    var memo: String,
     /** 画像パス */
     var imagePath: String?,
     /** 取得日 */
-    val isGetAt: Date?,
+    var isGetAt: Date?,
 ) {
     companion object {
         public const val TABLE_NAME = "capsule_toys"

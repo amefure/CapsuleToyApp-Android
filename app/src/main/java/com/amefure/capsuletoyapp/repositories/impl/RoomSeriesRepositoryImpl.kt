@@ -137,8 +137,15 @@ class RoomSeriesRepositoryImpl
         seriesDao.deleteSeriesById(series.id)
     }
 
+    override suspend fun fetchSingleToy(capsuleToyId: Long): CapsuleToy? =
+        capsuleToyDao.fetchSingleCapsuleToy(capsuleToyId)
+
     override suspend fun insertCapsuleToy(capsuleToy: CapsuleToy): Long {
         return capsuleToyDao.insertCapsuleToy(capsuleToy)
+    }
+
+    override suspend fun updateCapsuleToy(capsuleToy: CapsuleToy) {
+        capsuleToyDao.updateCapsuleToy(capsuleToy)
     }
 
     override suspend fun updateImagePathCapsuleToy(capsuleToyId: Long, imagePath: String) {

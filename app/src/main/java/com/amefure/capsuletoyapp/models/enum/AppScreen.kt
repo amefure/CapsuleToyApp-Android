@@ -58,9 +58,10 @@ sealed class AppScreen {
     }
 
     data object ToyInput : AppScreen() {
-        const val ARG_ITEM_ID = "itemId"
-        override fun route() = "toy_input/{${ARG_ITEM_ID}}"
-        fun route(seriesId: Long) = "toy_input/$seriesId"
+        const val ARG_SERIES_ID = "seriesId"
+        const val ARG_TOY_ID = "toyId"
+        override fun route() = "toy_input/{${ARG_SERIES_ID}}/{${ARG_TOY_ID}}"
+        fun route(seriesId: Long, toyId: Long = 0) = "toy_input/$seriesId/$toyId"
         override val title = "ガチャガチャ登録"
     }
 }

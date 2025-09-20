@@ -32,6 +32,9 @@ class ToyInputScreenViewModel @Inject constructor(
     @ApplicationContext private val context: Context,
 ) : ViewModel(), CameraInterface {
 
+    public var toy: CapsuleToy? by mutableStateOf(null)
+        private set
+
     /** UI連動プロパティ */
     public var name by mutableStateOf("")
     public var memo by mutableStateOf("")
@@ -73,6 +76,27 @@ class ToyInputScreenViewModel @Inject constructor(
         thumbnail = imageService.decodeUriToBitmap(uri)
     }
 
+    public fun fetchSingleToy(toyId: Long) {
+        viewModelScope.launch(Dispatchers.IO) {
+            val entity = repository.fetchSingleToy(toyId) ?: return@launch
+            toy = entity
+            withContext(Dispatchers.Main) {
+                applySeries(entity)
+            }
+        }
+    }
+
+    /** Toy情報をUIに反映する */
+    @MainThread
+    private fun applySeries(entity: CapsuleToy) {
+        name = entity.name
+        isOwned = entity.isOwned
+        isSecret = entity.isSecret
+        isGetDate = entity.isGetAt?.time
+        memo = entity.memo
+        thumbnail = imageFileRepository.fetchImage(entity.imagePath)
+    }
+
     public fun convertDate(epochMilli: Long?): LocalDate? {
         val epochMilli = epochMilli ?: return null
         return Instant.ofEpochMilli(epochMilli)
@@ -80,31 +104,45 @@ class ToyInputScreenViewModel @Inject constructor(
             .toLocalDate()
     }
 
-    public fun createCapsuleToy(
+    public fun createOrUpdateCapsuleToy(
         seriesId: Long,
     ) {
         if (name.isEmpty()) {
             showValidationAlert()
             return
         }
-
-        val capsuleToy = CapsuleToy(
-            seriesId = seriesId,
-            name = name,
-            isOwned = isOwned,
-            isSecret = isSecret,
-            memo = memo,
-            imagePath = null,
-            isGetAt = isGetDate?.let { Date(it) },
-        )
-
         viewModelScope.launch(Dispatchers.IO) {
-            val capsuleToyId = repository.insertCapsuleToy(capsuleToy)
-            val imagePath = imageFileRepository.saveBitmapToInternalStorage(thumbnail, seriesId.toString() + "-" + capsuleToyId.toString())
-            imagePath?.let {
-                capsuleToy.imagePath = imagePath
-                repository.updateImagePathCapsuleToy(capsuleToyId, imagePath)
+            toy?.let { toy ->
+                // 更新
+                val fileName = "$seriesId-${toy.id}"
+                val imagePath = imageFileRepository.saveBitmapToInternalStorage(thumbnail, fileName)
+                toy.name = name
+                toy.isOwned = isOwned
+                toy.isSecret = isSecret
+                toy.memo = memo
+                toy.imagePath = imagePath
+                toy.isGetAt = isGetDate?.let { Date(it) }
+                repository.updateCapsuleToy(toy)
+            } ?: run {
+                // 新規登録
+                val capsuleToy = CapsuleToy(
+                    seriesId = seriesId,
+                    name = name,
+                    isOwned = isOwned,
+                    isSecret = isSecret,
+                    memo = memo,
+                    imagePath = null,
+                    isGetAt = isGetDate?.let { Date(it) },
+                )
+                val capsuleToyId = repository.insertCapsuleToy(capsuleToy)
+                val fileName = "$seriesId-$capsuleToyId"
+                val imagePath = imageFileRepository.saveBitmapToInternalStorage(thumbnail, fileName)
+                imagePath?.let {
+                    capsuleToy.imagePath = imagePath
+                    repository.updateImagePathCapsuleToy(capsuleToyId, imagePath)
+                }
             }
+
             withContext(Dispatchers.Main) {
                 showSuccessAlert()
             }
