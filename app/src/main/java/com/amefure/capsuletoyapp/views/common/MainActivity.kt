@@ -41,6 +41,7 @@ import com.amefure.capsuletoyapp.views.components.uiParts.CustomAlertDialog
 import com.amefure.capsuletoyapp.views.mydata.MyDataScreen
 import com.amefure.capsuletoyapp.views.series.SeriesDetailScreen
 import com.amefure.capsuletoyapp.views.series.SeriesListScreen
+import com.amefure.capsuletoyapp.views.series.ToyDetailScreen
 import com.amefure.capsuletoyapp.views.series.input.CategoryInputScreen
 import com.amefure.capsuletoyapp.views.series.input.LocationInputScreen
 import com.amefure.capsuletoyapp.views.series.input.SeriesInputScreen
@@ -260,6 +261,31 @@ private fun TabBarBottomWithNav(
             val seriesId: Long = backStackEntry.arguments?.getLong(AppScreen.ToyInput.ARG_SERIES_ID) ?: 0
             val toyId: Long = backStackEntry.arguments?.getLong(AppScreen.ToyInput.ARG_TOY_ID) ?: 0
             ToyInputScreen(seriesId, toyId, navController)
+        }
+
+        /** カプセルトイ詳細 */
+        composable(
+            route = AppScreen.ToyDetail.route(),
+            arguments = listOf(
+                navArgument(AppScreen.ToyDetail.ARG_SERIES_ID) { type = NavType.LongType },
+                navArgument(AppScreen.ToyDetail.ARG_TOY_ID) { type = NavType.LongType },
+            ),
+            enterTransition = {
+                slideInVertically(
+                    // 下からスライド
+                    initialOffsetY = { fullHeight -> fullHeight },
+                ) + fadeIn()
+            },
+            exitTransition = {
+                slideOutVertically(
+                    // 下にスライド
+                    targetOffsetY = { fullHeight -> fullHeight },
+                ) + fadeOut()
+            },
+        ) { backStackEntry ->
+            val seriesId: Long = backStackEntry.arguments?.getLong(AppScreen.ToyInput.ARG_SERIES_ID) ?: 0
+            val toyId: Long = backStackEntry.arguments?.getLong(AppScreen.ToyInput.ARG_TOY_ID) ?: 0
+            ToyDetailScreen(seriesId, toyId, navController)
         }
 
         composable(route = AppScreen.Tab.MyData.route()) {

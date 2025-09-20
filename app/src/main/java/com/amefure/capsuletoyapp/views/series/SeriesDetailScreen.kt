@@ -167,6 +167,30 @@ fun SeriesDetailScreen(
                 .padding(vertical = 8.dp),
         )
 
+        // MEMOセクション
+        if (!viewModel.series?.series?.memo.isNullOrEmpty()) {
+            CustomText(
+                text = "MEMO",
+                textSize = TextSize.S,
+                fontWeight = FontWeight.Bold,
+                modifier = Modifier
+                    .fillMaxWidth(),
+            )
+
+            Spacer(
+                modifier = Modifier
+                    .padding(vertical = 8.dp),
+            )
+            WhiteBackStackView {
+                CustomText(viewModel.series?.series?.memo!!)
+            }
+        }
+
+        Spacer(
+            modifier = Modifier
+                .padding(vertical = 8.dp),
+        )
+
         // 位置情報セクション
         LocationsSection(viewModel)
 
@@ -613,7 +637,7 @@ private fun ToysSection(
                             .shadow(8.dp, RoundedCornerShape(8.dp), clip = false)
                             .shadow(8.dp, RoundedCornerShape(8.dp), clip = false)
                             .clickable {
-                                navController.navigate(AppScreen.ToyInput.route(seriesId, toy.id))
+                                navController.navigate(AppScreen.ToyDetail.route(seriesId, toy.id))
                             },
                         contentAlignment = Alignment.Center,
                     ) {

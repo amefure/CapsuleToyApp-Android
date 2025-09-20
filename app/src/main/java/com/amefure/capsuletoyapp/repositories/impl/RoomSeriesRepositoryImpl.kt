@@ -151,4 +151,8 @@ class RoomSeriesRepositoryImpl
     override suspend fun updateImagePathCapsuleToy(capsuleToyId: Long, imagePath: String) {
         capsuleToyDao.updateImagePath(capsuleToyId, imagePath)
     }
+
+    override suspend fun deleteCapsuleToy(capsuleToy: CapsuleToy) {
+        capsuleToyDao.deleteCapsuleToyById(capsuleToy.id)
+    }
 }

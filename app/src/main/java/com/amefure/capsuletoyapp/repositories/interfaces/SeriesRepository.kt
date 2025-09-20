@@ -59,4 +59,6 @@ interface SeriesRepository {
         capsuleToyId: Long,
         imagePath: String,
     )
+
+    suspend fun deleteCapsuleToy(capsuleToy: CapsuleToy)
 }

@@ -121,7 +121,12 @@ class ToyInputScreenViewModel @Inject constructor(
                 toy.isSecret = isSecret
                 toy.memo = memo
                 toy.imagePath = imagePath
-                toy.isGetAt = isGetDate?.let { Date(it) }
+                // 所持フラグが解除されていれば明示的にisGetAtもリセットする
+                if (isOwned) {
+                    toy.isGetAt = isGetDate?.let { Date(it) }
+                } else {
+                    toy.isGetAt = null
+                }
                 repository.updateCapsuleToy(toy)
             } ?: run {
                 // 新規登録
