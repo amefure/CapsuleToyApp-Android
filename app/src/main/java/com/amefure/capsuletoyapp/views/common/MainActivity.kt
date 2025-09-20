@@ -15,15 +15,19 @@ import androidx.compose.animation.fadeOut
 import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.Icon
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
+import androidx.compose.material3.NavigationBarItemDefaults
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.rotate
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
@@ -35,9 +39,11 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.amefure.capsuletoyapp.models.enum.AppScreen
 import com.amefure.capsuletoyapp.ui.theme.CapsuleToyAppTheme
+import com.amefure.capsuletoyapp.ui.theme.ExRed
 import com.amefure.capsuletoyapp.viewModels.RootEnvironment
 import com.amefure.capsuletoyapp.views.components.uiParts.AlertType
 import com.amefure.capsuletoyapp.views.components.uiParts.CustomAlertDialog
+import com.amefure.capsuletoyapp.views.components.uiParts.CustomText
 import com.amefure.capsuletoyapp.views.mydata.MyDataScreen
 import com.amefure.capsuletoyapp.views.series.SeriesDetailScreen
 import com.amefure.capsuletoyapp.views.series.SeriesListScreen
@@ -117,10 +123,9 @@ private fun RootNavContent(
         bottomBar = {
             NavigationBar {
                 AppScreen.Tab.entries.forEach { tab ->
-                    // 　最新の画面ルート情報を取得(変化したら再コンポーズされる)
+                    // 最新の画面ルート情報を取得(変化したら再コンポーズされる)
                     val currentDestination = navController
                         .currentBackStackEntryAsState().value?.destination
-
                     NavigationBarItem(
                         // 選択状態は現在のタブ状態で識別
                         selected = currentDestination?.route == tab.route(),
@@ -137,8 +142,28 @@ private fun RootNavContent(
                                 restoreState = true
                             }
                         },
-                        label = { Text(tab.title) },
-                        icon = { /* アイコンを追加したければここに */ },
+                        label = {
+                            CustomText(
+                                tab.title,
+                                color = if (currentDestination?.route == tab.route()) ExRed else Color.Gray,
+                            )
+                        },
+                        icon = {
+                            val color = if (currentDestination?.route == tab.route()) ExRed else Color.Gray
+                            Icon(
+                                modifier = Modifier
+                                    .padding(horizontal = 8.dp)
+                                    .rotate(90f),
+                                imageVector = tab.icon,
+                                contentDescription = tab.title,
+                                tint = color,
+                            )
+                        },
+                        colors = NavigationBarItemDefaults.colors(
+                            // ボタンタップ後の選択背景を透明化
+                            // タップ時の波紋(リップル)は非表示にならない
+                            indicatorColor = Color.Transparent,
+                        ),
                     )
                 }
             }

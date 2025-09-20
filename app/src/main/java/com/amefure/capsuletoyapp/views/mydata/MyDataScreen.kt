@@ -10,6 +10,7 @@ import androidx.navigation.NavHostController
 import com.amefure.capsuletoyapp.views.components.layout.HeaderView
 import com.amefure.capsuletoyapp.views.components.uiParts.DataEmptyView
 
+// TODO：MyDataは未実装のため未使用
 @Composable
 fun MyDataScreen(
     navController: NavHostController,

@@ -1,5 +1,11 @@
 package com.amefure.capsuletoyapp.models.enum
 
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.AddChart
+import androidx.compose.material.icons.outlined.Contrast
+import androidx.compose.material.icons.outlined.Settings
+import androidx.compose.ui.graphics.vector.ImageVector
+
 sealed class AppScreen {
     abstract fun route(): String
     abstract val title: String
@@ -7,23 +13,30 @@ sealed class AppScreen {
     /** タブ画面 */
     sealed class Tab : AppScreen() {
 
+        abstract val icon: ImageVector
+
         data object Series : Tab() {
             override fun route() = "series"
             override val title = "ガチャガチャ"
+            override val icon = Icons.Outlined.Contrast
         }
 
+        // TODO：MyDataは未実装のため未使用
         data object MyData : Tab() {
             override fun route() = "my_data"
             override val title = "MyData"
+            override val icon = Icons.Outlined.AddChart
         }
 
         data object Settings : Tab() {
             override fun route() = "settings"
             override val title = "Setting"
+            override val icon = Icons.Outlined.Settings
         }
 
         companion object {
-            val entries = listOf(Series, MyData, Settings)
+            // TODO：MyDataは未実装のため除外
+            val entries = listOf(Series, Settings)
         }
     }
 
