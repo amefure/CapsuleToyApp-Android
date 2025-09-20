@@ -41,8 +41,8 @@ class SeriesDetailScreenViewModel @Inject constructor(
     public var initialLatLng: LatLng by mutableStateOf(LatLng(35.710063, 139.8107))
         private set
 
-    public fun fetchImage(): Bitmap? =
-        imageFileRepository.fetchImage(series?.series?.imagePath)
+    public fun fetchImage(photoPath: String?): Bitmap? =
+        imageFileRepository.fetchImage(photoPath)
 
     /** 総数カウント */
     public fun fetchTotalCount(): Int {

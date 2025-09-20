@@ -23,7 +23,9 @@ import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -32,6 +34,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.automirrored.filled.ListAlt
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.Map
 import androidx.compose.material.icons.outlined.Contrast
@@ -60,6 +63,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.times
+import androidx.compose.ui.zIndex
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.amefure.capsuletoyapp.R
@@ -142,7 +146,7 @@ fun SeriesDetailScreen(
 
         // 画像表示と金額種類数表示セクション
         ImageAndAmountSection(
-            viewModel.fetchImage(),
+            viewModel.fetchImage(viewModel.series?.series?.imagePath),
             (viewModel.series?.series?.amount ?: 0).toString(),
             (viewModel.series?.series?.count ?: 0).toString(),
         )
@@ -595,4 +599,85 @@ private fun ToysSection(
         modifier = Modifier
             .padding(vertical = 8.dp),
     )
+
+    Column {
+        viewModel.series?.capsuleToys.orEmpty().chunked(2).forEach { rowItems -> // 2列ずつに分割
+            Row(modifier = Modifier.fillMaxWidth()) {
+                rowItems.forEach { toy ->
+                    Box(
+                        modifier = Modifier
+                            .weight(1f)
+                            .aspectRatio(1f)
+                            .padding(4.dp)
+                            .background(Color.White, RoundedCornerShape(8.dp))
+                            .shadow(8.dp, RoundedCornerShape(8.dp), clip = false)
+                            .shadow(8.dp, RoundedCornerShape(8.dp), clip = false)
+                            .padding(4.dp)
+                            .clickable {
+                                
+                            },
+                        contentAlignment = Alignment.Center,
+                    ) {
+                        ThemeIconButton(
+                            onClick = {},
+                            imageVector = Icons.Filled.Check,
+                            contentDescription = "所持済みフラグ",
+                            containerColor = if (toy.isOwned) MaterialTheme.colorScheme.primary else Color.Gray,
+                            baseSize = 40.dp,
+                            modifier = Modifier
+                                .align(Alignment.TopStart)
+                                .offset(x= (-12).dp, y= (-12).dp)
+                                .zIndex(1f),
+                        )
+
+                        toy.imagePath?.let {
+                            val bitmap = viewModel.fetchImage(it)?.asImageBitmap()
+                            bitmap?.let {
+                                Image(
+                                    bitmap = it,
+                                    contentDescription = "撮影した写真",
+                                    modifier = Modifier
+                                        .fillMaxSize()
+                                        .aspectRatio(1f)
+                                        .zIndex(0f),
+                                    contentScale = ContentScale.Crop,
+                                )
+                            }
+                        } ?: run {
+                            Image(
+                                painter = painterResource(id = R.drawable.no_image),
+                                contentDescription = "サンプル画像",
+                                modifier = Modifier
+                                    .fillMaxSize()
+                                    .zIndex(0f),
+                                contentScale = ContentScale.Fit,
+                            )
+                        }
+
+                        CustomText(
+                            toy.name,
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .background(Color.White.copy(0.5f))
+                                .height(40.dp)
+                                // Box内の配置位置
+                                .align(Alignment.BottomEnd)
+                                // View内のテキスト配置位置
+                                .wrapContentSize(Alignment.Center),
+                            fontWeight = FontWeight.Bold,
+                        )
+                    }
+                }
+                // もし要素が1個だけなら、もう1列を空Boxで埋める
+                if (rowItems.size < 2) {
+                    Box(
+                        modifier = Modifier
+                            .weight(1f)
+                            .aspectRatio(1f)
+                            .padding(4.dp),
+                    )
+                }
+            }
+        }
+    }
 }

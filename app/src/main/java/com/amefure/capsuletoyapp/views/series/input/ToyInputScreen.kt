@@ -1,6 +1,5 @@
 package com.amefure.capsuletoyapp.views.series.input
 
-import android.app.DatePickerDialog
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -31,13 +30,12 @@ import androidx.navigation.NavHostController
 import com.amefure.capsuletoyapp.viewModels.ToyInputScreenViewModel
 import com.amefure.capsuletoyapp.views.components.layout.HeaderView
 import com.amefure.capsuletoyapp.views.components.uiParts.AddImageButton
+import com.amefure.capsuletoyapp.views.components.uiParts.AlertType
 import com.amefure.capsuletoyapp.views.components.uiParts.CustomAlertDialog
 import com.amefure.capsuletoyapp.views.components.uiParts.CustomText
 import com.amefure.capsuletoyapp.views.components.uiParts.TextSize
 import com.amefure.capsuletoyapp.views.components.uiParts.ThemeIconButton
 import com.amefure.capsuletoyapp.views.components.uiParts.ThemeInputBox
-import java.time.Instant
-import java.time.ZoneId
 
 @Composable
 fun ToyInputScreen(
@@ -59,7 +57,7 @@ fun ToyInputScreen(
             .background(MaterialTheme.colorScheme.background),
     ) {
         CustomAlertDialog(
-            showFlag = viewModel.isShowValidationDialog,
+            showFlag = viewModel.isShowSuccessDialog,
             rightAction = {
                 viewModel.closeSuccessAlert()
                 navController.popBackStack()
@@ -69,6 +67,13 @@ fun ToyInputScreen(
             } else {
                 "更新しました。"
             },
+        )
+
+        CustomAlertDialog(
+            showFlag = viewModel.isShowValidationDialog,
+            type = AlertType.FAILED,
+            rightAction = { viewModel.closeValidationAlert() },
+            message = "名前は必須入力です。",
         )
 
         HeaderView(
@@ -154,12 +159,13 @@ private fun GetAndSecretSection(
                 viewModel.isOwned = !viewModel.isOwned
             },
             imageVector = Icons.Filled.Check,
-            contentDescription = "",
+            contentDescription = "所持済みフラグ",
             containerColor = if (viewModel.isOwned) MaterialTheme.colorScheme.primary else Color.Gray,
+            baseSize = 40.dp,
         )
 
         if (viewModel.isOwned) {
-            MaterialDatePickerSample()
+            MaterialDatePickerSample(viewModel)
         }
 
         Spacer(
@@ -180,22 +186,24 @@ private fun GetAndSecretSection(
                 viewModel.isSecret = !viewModel.isSecret
             },
             imageVector = Icons.Filled.Check,
-            contentDescription = "",
+            contentDescription = "シークレットフラグ",
             containerColor = if (viewModel.isSecret) MaterialTheme.colorScheme.primary else Color.Gray,
+            baseSize = 40.dp,
         )
     }
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun MaterialDatePickerSample() {
+private fun MaterialDatePickerSample(
+    viewModel: ToyInputScreenViewModel,
+) {
     val openDialog = remember { mutableStateOf(false) }
-    val selectedDate = remember { mutableStateOf<Long?>(null) }
     val datePickerState = rememberDatePickerState()
 
     Column(
         modifier = Modifier
-            .padding(16.dp),
+            .padding(vertical = 8.dp),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
@@ -203,17 +211,16 @@ fun MaterialDatePickerSample() {
             onClick = {
                 openDialog.value = true
             },
+            modifier = Modifier,
         ) {
-            val text: String = if (selectedDate.value == null) {
-                "日付を選択"
-            } else {
-                Instant.ofEpochMilli(selectedDate.value!!)
-                    .atZone(ZoneId.systemDefault())
-                    .toLocalDate()
-                    .toString()
-            }
+            val text = viewModel.isGetDate?.let { date ->
+                viewModel.convertDate(date).toString()
+            } ?: "日付を選択"
 
-            CustomText(text)
+            CustomText(
+                text,
+                color = Color.White,
+            )
         }
     }
 
@@ -223,16 +230,22 @@ fun MaterialDatePickerSample() {
             confirmButton = {
                 Button(
                     onClick = {
-                        selectedDate.value = datePickerState.selectedDateMillis
+                        viewModel.isGetDate = datePickerState.selectedDateMillis
                         openDialog.value = false
                     },
                 ) {
-                    CustomText("OK")
+                    CustomText(
+                        "OK",
+                        color = Color.White,
+                    )
                 }
             },
             dismissButton = {
                 Button(onClick = { openDialog.value = false }) {
-                    CustomText("キャンセル")
+                    CustomText(
+                        "キャンセル",
+                        color = Color.White,
+                    )
                 }
             },
         ) {

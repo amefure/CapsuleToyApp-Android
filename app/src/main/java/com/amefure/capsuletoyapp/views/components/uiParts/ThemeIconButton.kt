@@ -1,5 +1,6 @@
 package com.amefure.capsuletoyapp.views.components.uiParts
 
+import android.annotation.SuppressLint
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.Icon
@@ -26,6 +27,8 @@ fun ThemeIconButton(
     containerColor: Color = MaterialTheme.colorScheme.primary,
     baseSize: Dp = 50.dp,
     iconSize: Dp = 24.dp,
+    @SuppressLint("ModifierParameter")
+    modifier: Modifier = Modifier,
 ) {
     IconButton(
         onClick = onClick,
@@ -35,7 +38,7 @@ fun ThemeIconButton(
             // テキスト/Iconの色
             contentColor = MaterialTheme.colorScheme.onPrimary,
         ),
-        modifier = Modifier
+        modifier = modifier
             .size(baseSize)
             // 影を2重でかけて濃くする
             .shadow(8.dp, CircleShape, clip = false)

@@ -19,6 +19,9 @@ import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import java.time.Instant
+import java.time.LocalDate
+import java.time.ZoneId
 import java.util.Date
 import javax.inject.Inject
 
@@ -34,6 +37,7 @@ class ToyInputScreenViewModel @Inject constructor(
     public var memo by mutableStateOf("")
     public var isOwned by mutableStateOf(false)
     public var isSecret by mutableStateOf(false)
+    public var isGetDate: Long? by mutableStateOf(null)
 
     /** ドロップダウンメニューの開閉フラグ */
     override var expanded by mutableStateOf(false)
@@ -69,6 +73,13 @@ class ToyInputScreenViewModel @Inject constructor(
         thumbnail = imageService.decodeUriToBitmap(uri)
     }
 
+    public fun convertDate(epochMilli: Long?): LocalDate? {
+        val epochMilli = epochMilli ?: return null
+        return Instant.ofEpochMilli(epochMilli)
+            .atZone(ZoneId.systemDefault())
+            .toLocalDate()
+    }
+
     public fun createCapsuleToy(
         seriesId: Long,
     ) {
@@ -84,7 +95,7 @@ class ToyInputScreenViewModel @Inject constructor(
             isSecret = isSecret,
             memo = memo,
             imagePath = null,
-            isGetAt = Date(),
+            isGetAt = isGetDate?.let { Date(it) },
         )
 
         viewModelScope.launch(Dispatchers.IO) {
