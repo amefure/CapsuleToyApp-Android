@@ -22,7 +22,7 @@ data class CapsuleToy(
     @PrimaryKey(autoGenerate = true)
     val id: Long = 0L,
     /** シリーズID */
-    val seriesId: Long,
+    var seriesId: Long,
     /** 名称 */
     var name: String,
     /** 所持フラグ */

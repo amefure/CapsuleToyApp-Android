@@ -6,6 +6,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.amefure.capsuletoyapp.models.domain.entity.relation.SeriesMockFactory
 import com.amefure.capsuletoyapp.models.domain.entity.relation.SeriesWithRelations
 import com.amefure.capsuletoyapp.repositories.interfaces.ImageRepository
 import com.amefure.capsuletoyapp.repositories.interfaces.SeriesRepository
@@ -34,6 +35,22 @@ class SeriesListScreenViewModel @Inject constructor(
         viewModelScope.launch(Dispatchers.IO) {
             val data = repository.fetchAllSeries()
             series = data
+        }
+    }
+
+    private fun createMockData() {
+        val seriesList = SeriesMockFactory.mockList()
+        viewModelScope.launch(Dispatchers.IO) {
+            val data = repository.fetchAllSeries()
+            // すでにデータが存在するなら再度モックを登録しない
+            if (data.isNotEmpty()) return@launch
+            seriesList.forEach {
+                val seriesId = repository.insertSeries(it.series, it.locations, it.categories)
+                it.capsuleToys.forEach {
+                    it.seriesId = seriesId
+                    repository.insertCapsuleToy(it)
+                }
+            }
         }
     }
 
