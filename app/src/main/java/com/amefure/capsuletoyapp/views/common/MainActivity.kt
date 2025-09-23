@@ -55,6 +55,7 @@ import com.amefure.capsuletoyapp.views.series.input.SeriesInputScreen
 import com.amefure.capsuletoyapp.views.series.input.ToyInputScreen
 import com.amefure.capsuletoyapp.views.settings.CustomWebView
 import com.amefure.capsuletoyapp.views.settings.SettingsScreen
+import com.google.android.gms.ads.MobileAds
 import dagger.hilt.android.AndroidEntryPoint
 
 /** アプリのエントリーポイント */
@@ -62,6 +63,10 @@ import dagger.hilt.android.AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        // AdMobの有効化
+        MobileAds.initialize(this)
+
         // EdgeToEdgeの有効化
         enableEdgeToEdge()
         setContent {

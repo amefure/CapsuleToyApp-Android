@@ -29,11 +29,16 @@ android {
         versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+
+        // AdMob Banner Id
+        buildConfigField("String", "ADMOB_BANNER_ID_TEST", secretProperties["ADMOB_BANNER_ID_TEST"].toString())
+        buildConfigField("String", "ADMOB_BANNER_ID_PROD", secretProperties["ADMOB_BANNER_ID_PROD"].toString())
     }
 
     buildTypes {
         debug {
-            applicationIdSuffix = ".debug"
+            // google-service.jsonでエラーになるため変更しない
+            // applicationIdSuffix = ".debug"
             isDebuggable = true
             manifestPlaceholders["ADMOB_APP_ID"] = secretProperties["ADMOB_APP_ID_TEST"] ?: ""
             manifestPlaceholders["GOOGLE_MAP_API_KEY"] = secretProperties["GOOGLE_MAP_API_KEY"] ?: ""
@@ -60,6 +65,9 @@ android {
         jvmTarget = "11"
     }
     buildFeatures {
+        /** BuildConfigの有効化 */
+        buildConfig = true
+        /** Composeを有効化 */
         compose = true
     }
 }
