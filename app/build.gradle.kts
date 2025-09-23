@@ -8,6 +8,8 @@ plugins {
     id("com.google.devtools.ksp")
     /** Hilt */
     id("com.google.dagger.hilt.android")
+    /** Firebase */
+    id("com.google.gms.google-services")
 }
 
 // 秘匿情報を読み込む
@@ -113,4 +115,7 @@ dependencies {
 
     /** Kotlin Coroutines */
     implementation(libs.kotlinx.coroutines.play.services)
+
+    implementation(libs.firebase.bom)
+    implementation(libs.firebase.analytics)
 }

@@ -9,6 +9,8 @@ plugins {
     id("com.google.dagger.hilt.android") version "2.56.2" apply false
     /** Spotless */
     id("com.diffplug.spotless") version "7.2.1"
+    /** Firebase */
+    id("com.google.gms.google-services") version "4.4.3" apply false
 }
 
 // Spotless + ktlint の設定
