@@ -116,6 +116,7 @@ dependencies {
     /** Kotlin Coroutines */
     implementation(libs.kotlinx.coroutines.play.services)
 
-    implementation(libs.firebase.bom)
+    /** Firebase */
+    implementation(platform(libs.firebase.bom))
     implementation(libs.firebase.analytics)
 }
