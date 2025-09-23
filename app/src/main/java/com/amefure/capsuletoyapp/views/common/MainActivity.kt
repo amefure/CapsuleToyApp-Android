@@ -38,6 +38,7 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.amefure.capsuletoyapp.models.enum.AppScreen
+import com.amefure.capsuletoyapp.models.enum.SettingItems
 import com.amefure.capsuletoyapp.ui.theme.CapsuleToyAppTheme
 import com.amefure.capsuletoyapp.ui.theme.ExRed
 import com.amefure.capsuletoyapp.viewModels.RootEnvironment
@@ -52,6 +53,7 @@ import com.amefure.capsuletoyapp.views.series.input.CategoryInputScreen
 import com.amefure.capsuletoyapp.views.series.input.LocationInputScreen
 import com.amefure.capsuletoyapp.views.series.input.SeriesInputScreen
 import com.amefure.capsuletoyapp.views.series.input.ToyInputScreen
+import com.amefure.capsuletoyapp.views.settings.CustomWebView
 import com.amefure.capsuletoyapp.views.settings.SettingsScreen
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -319,6 +321,15 @@ private fun TabBarBottomWithNav(
 
         composable(route = AppScreen.Tab.Settings.route()) {
             SettingsScreen(navController)
+        }
+
+        composable(
+            route = AppScreen.WebView.route(),
+            arguments = listOf(navArgument(AppScreen.WebView.ARG_SETTING_ITEM) { type = NavType.StringType }),
+        ) { backStackEntry ->
+            val itemName: String = backStackEntry.arguments?.getString(AppScreen.WebView.ARG_SETTING_ITEM).orEmpty()
+            val item = SettingItems.valueOf(itemName)
+            CustomWebView(item, navController)
         }
     }
 }

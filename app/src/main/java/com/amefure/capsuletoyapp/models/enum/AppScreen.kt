@@ -85,4 +85,11 @@ sealed class AppScreen {
         fun route(seriesId: Long, toyId: Long = 0) = "toy_detail/$seriesId/$toyId"
         override val title = "ガチャガチャ詳細"
     }
+
+    data object WebView : AppScreen() {
+        const val ARG_SETTING_ITEM = "settingItem"
+        override fun route() = "web_view/{${ARG_SETTING_ITEM}}"
+        fun route(settingItemName: String) = "web_view/$settingItemName"
+        override val title = "WebView"
+    }
 }
