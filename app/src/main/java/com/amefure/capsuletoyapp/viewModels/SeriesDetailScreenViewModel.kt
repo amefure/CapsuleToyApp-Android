@@ -68,6 +68,12 @@ class SeriesDetailScreenViewModel @Inject constructor(
     public fun deleteSeries() {
         val series = series ?: return
         viewModelScope.launch(Dispatchers.IO) {
+            // シリーズのサムネイル画像があれば削除
+            imageFileRepository.deleteBitmapFromInternalStorage(series.series.imagePath)
+            // カプセルトイの画像があれば全て削除
+            series.capsuleToys.forEach { toy ->
+                imageFileRepository.deleteBitmapFromInternalStorage(toy.imagePath)
+            }
             repository.deleteSeries(series.series)
         }
     }

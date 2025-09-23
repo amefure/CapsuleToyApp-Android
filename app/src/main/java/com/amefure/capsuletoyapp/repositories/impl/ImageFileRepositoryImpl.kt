@@ -3,6 +3,7 @@ package com.amefure.capsuletoyapp.repositories.impl
 import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import android.util.Log
 import com.amefure.capsuletoyapp.repositories.interfaces.ImageRepository
 import dagger.hilt.android.qualifiers.ApplicationContext
 import java.io.File
@@ -26,6 +27,15 @@ class ImageFileRepositoryImpl @Inject constructor(
     override fun fetchImage(filePath: String?): Bitmap? {
         val filePath = filePath ?: return null
         val file = File(filePath)
-        return if (file.exists()) BitmapFactory.decodeFile(filePath) else null
+        if (!file.exists()) return null
+        return BitmapFactory.decodeFile(filePath)
+    }
+
+    override fun deleteBitmapFromInternalStorage(filePath: String?): Boolean {
+        val filePath = filePath ?: return false
+        val file = File(filePath)
+        if (!file.exists()) return false
+        Log.d("画像操作", "画像を削除しました。")
+        return file.delete()
     }
 }

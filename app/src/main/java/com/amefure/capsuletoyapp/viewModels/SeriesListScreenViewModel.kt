@@ -13,6 +13,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import javax.inject.Inject
+import kotlin.math.max
 
 @HiltViewModel
 class SeriesListScreenViewModel @Inject constructor(
@@ -38,4 +39,18 @@ class SeriesListScreenViewModel @Inject constructor(
 
     public fun fetchImage(imagePath: String?): Bitmap? =
         imageFileRepository.fetchImage(imagePath)
+
+    /** 総数カウント */
+    public fun fetchTotalCount(series: SeriesWithRelations): Int {
+        // ユーザー登録カウント
+        val userRegisterCount = series.series.count
+        // 登録Toyカウント
+        val toysCount = series.capsuleToys.size
+        return max(userRegisterCount, toysCount)
+    }
+
+    /** 所持数カウント */
+    public fun fetchIsOwnedCount(series: SeriesWithRelations): Int {
+        return series.capsuleToys.filter { it.isOwned }.size
+    }
 }

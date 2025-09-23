@@ -45,6 +45,8 @@ class ToyDetailScreenViewModel @Inject constructor(
     public fun deleteToy() {
         val toy = toy ?: return
         viewModelScope.launch(Dispatchers.IO) {
+            // カプセルトイのサムネイル画像があれば削除
+            imageFileRepository.deleteBitmapFromInternalStorage(toy.imagePath)
             repository.deleteCapsuleToy(toy)
         }
     }

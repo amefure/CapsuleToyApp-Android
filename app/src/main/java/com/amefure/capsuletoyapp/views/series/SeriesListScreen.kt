@@ -18,10 +18,13 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.outlined.Contrast
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.layout.ContentScale
@@ -32,6 +35,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.amefure.capsuletoyapp.R
 import com.amefure.capsuletoyapp.models.enum.AppScreen
+import com.amefure.capsuletoyapp.ui.theme.ExRed
 import com.amefure.capsuletoyapp.ui.theme.ExWhite
 import com.amefure.capsuletoyapp.viewModels.SeriesListScreenViewModel
 import com.amefure.capsuletoyapp.views.components.layout.HeaderView
@@ -106,7 +110,10 @@ fun SeriesListScreen(
                             )
                         }
 
-                        Column {
+                        Column(
+                            modifier = Modifier
+                                .padding(horizontal = 8.dp),
+                        ) {
                             CustomText(
                                 text = series.series.name,
                                 fontWeight = FontWeight.Bold,
@@ -127,6 +134,25 @@ fun SeriesListScreen(
                                                 clip = false,
                                             ).background(category.color, RoundedCornerShape(8.dp))
                                             .padding(5.dp),
+                                    )
+                                }
+                            }
+
+                            LazyRow(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(vertical = 10.dp),
+                            ) {
+                                val isOwnedCount = viewModel.fetchIsOwnedCount(series)
+                                items(count = viewModel.fetchTotalCount(series)) { index ->
+                                    val color = if (index + 1 <= isOwnedCount) ExRed else ExRed.copy(alpha = 0.3f)
+                                    Icon(
+                                        modifier = Modifier
+                                            .padding(horizontal = 3.dp)
+                                            .rotate(90f),
+                                        imageVector = Icons.Outlined.Contrast,
+                                        contentDescription = "所持数アイコン",
+                                        tint = color,
                                     )
                                 }
                             }
