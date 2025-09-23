@@ -119,4 +119,7 @@ dependencies {
     /** Firebase */
     implementation(platform(libs.firebase.bom))
     implementation(libs.firebase.analytics)
+
+    /** AdMob */
+    implementation(libs.play.services.ads)
 }
