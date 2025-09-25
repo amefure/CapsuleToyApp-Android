@@ -39,9 +39,11 @@ import com.amefure.capsuletoyapp.ui.theme.ExRed
 import com.amefure.capsuletoyapp.ui.theme.ExWhite
 import com.amefure.capsuletoyapp.viewModels.SeriesListScreenViewModel
 import com.amefure.capsuletoyapp.views.components.layout.HeaderView
+import com.amefure.capsuletoyapp.views.components.uiParts.BannerAdView
 import com.amefure.capsuletoyapp.views.components.uiParts.CustomText
 import com.amefure.capsuletoyapp.views.components.uiParts.DataEmptyView
 import com.amefure.capsuletoyapp.views.components.uiParts.TextSize
+import com.google.android.gms.ads.AdSize
 
 @Composable
 fun SeriesListScreen(
@@ -158,6 +160,14 @@ fun SeriesListScreen(
                             }
                         }
                     }
+                }
+
+                item {
+                    BannerAdView(
+                        size = AdSize.LARGE_BANNER,
+                        modifier = Modifier
+                            .padding(vertical = 16.dp),
+                    )
                 }
             }
         }

@@ -4,12 +4,11 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
@@ -20,6 +19,7 @@ import com.amefure.capsuletoyapp.models.enum.AppScreen
 import com.amefure.capsuletoyapp.models.enum.SettingItems
 import com.amefure.capsuletoyapp.ui.theme.ExRed
 import com.amefure.capsuletoyapp.views.components.layout.HeaderView
+import com.amefure.capsuletoyapp.views.components.uiParts.BannerAdView
 import com.amefure.capsuletoyapp.views.components.uiParts.CustomText
 
 @Composable
@@ -35,7 +35,7 @@ fun SettingsScreen(
 
         Column(
             modifier = Modifier
-                .verticalScroll(rememberScrollState())
+                // .verticalScroll(rememberScrollState())
                 .fillMaxSize()
                 .padding(16.dp),
         ) {
@@ -63,6 +63,13 @@ fun SettingsScreen(
                     CustomText(item.title)
                 }
             }
+
+            Spacer(
+                modifier = Modifier
+                    .weight(1f),
+            )
+
+            BannerAdView()
         }
     }
 }
