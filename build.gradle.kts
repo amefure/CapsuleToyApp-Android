@@ -10,7 +10,7 @@ plugins {
     /** Spotless */
     id("com.diffplug.spotless") version "7.2.1"
     /** Firebase */
-    id("com.google.gms.google-services") version "4.4.3" apply false
+    id("com.google.gms.google-services") version "4.5.0" apply false
 }
 
 // Spotless + ktlint の設定
